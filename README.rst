@@ -73,6 +73,7 @@ As with any shell command that we wish to run in our container, this is done usi
 
     $ docker-compose -f local.yml run --rm django python manage.py migrate
     $ docker-compose -f local.yml run --rm django python manage.py createsuperuser
+    $ docker-compose -f local.yml run --rm django python manage.py collectstatic
 
     $ docker-compose -f local.yml run --rm quasar npm i && npm rebuild node-sass
 

@@ -57,10 +57,29 @@ Prerequisites
 
 .. _`installation instructions`: https://docs.docker.com/install/#supported-platforms
 
-Run the Stack
+Build the Stack
 -------------
 
 This brings up both Django and PostgreSQL. The first time it is run it might take a while to get started, but subsequent runs will occur quickly.
+
+Open a terminal at the project root and run the following for local development::
+
+    $ docker-compose -f local.yml build
+
+Execute Management Commands
+---------------------------
+
+As with any shell command that we wish to run in our container, this is done using the ``run --rm`` command: ::
+
+    $ docker-compose -f local.yml run --rm django python manage.py migrate
+    $ docker-compose -f local.yml run --rm django python manage.py createsuperuser
+
+    $ docker-compose -f local.yml run --rm quasar npm i && npm rebuild node-sass
+
+Here, ``django`` is the target service we are executing the commands against.
+
+Build the Stack
+-------------
 
 Open a terminal at the project root and run the following for local development::
 
@@ -68,18 +87,7 @@ Open a terminal at the project root and run the following for local development:
 
 Run on
 
-    http://localhost:8081
-
-
-Execute Management Commands
----------------------------
-
-As with any shell command that we wish to run in our container, this is done using the ``docker-compose -f local.yml run --rm`` command: ::
-
-    $ docker-compose -f local.yml run --rm django python manage.py migrate
-    $ docker-compose -f local.yml run --rm django python manage.py createsuperuser
-
-Here, ``django`` is the target service we are executing the commands against.
+    http://localhost:9000
 
 
 Execute PORTAINER.io

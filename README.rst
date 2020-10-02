@@ -87,7 +87,7 @@ Open a terminal at the project root and run the following for local development:
 
 Run on
 
-    http://localhost:9000
+    http://localhost:8081
 
 
 Execute PORTAINER.io

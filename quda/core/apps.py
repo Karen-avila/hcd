@@ -1,9 +1,8 @@
-from django.apps import AppConfig
-from django.utils.translation import gettext_lazy as _
+from .appsBase import *
 
 class CoreConfig(AppConfig):
     name = "quda.core"
-    verbose_name = _("QUDA")
+    verbose_name = ("CORE")
     def ready(self):
         try:
             import quda.core.signals

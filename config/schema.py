@@ -1,5 +1,5 @@
 import quda.core.schema
-from quda.core.schema import UserNode
+import quda.quda.schema
 
 import graphene
 
@@ -11,6 +11,7 @@ class Query(
 
 class Mutation(
         quda.core.schema.Mutation,
+        quda.quda.schema.Mutation,
         graphene.ObjectType
     ):
     pass

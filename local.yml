@@ -98,8 +98,6 @@ services:
   quasar:
     container_name: quasar
     image: quda_local_quasar
-    depends_on:
-      - django
     working_dir: /app
     volumes:
       - ./quasar:/app:z

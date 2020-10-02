@@ -6,35 +6,36 @@ import os
 
 ############################################################
 class DirectoryNode(graphene.ObjectType):
-    structure = graphene.JSONString()
+    get_structure = graphene.JSONString(
+        path=graphene.String(default_value="/app/temp/"),
+        user=graphene.ID(default_value=""),
+        action=graphene.String(default_value="")
+    )
+    get_hello = graphene.String()
     class Meta:
         description = 'Regresa el directorio completo de archivos en una dirección'
-    def get_structure(self, path):
+    def resolve_get_structure(root, info, path, user, action):
         structure = {'name': os.path.basename(path)}
         if os.path.isdir(path):
             structure['type'] = "directory"
-            structure['children'] = [self.get_structure(os.path.join(path,x)) for x in os.listdir(path)]
+            structure['children'] = [root.resolve_get_structure(info, os.path.join(path,x, user, action), user, action) for x in os.listdir(path)]
         else:
             structure['type'] = "file"
         return structure
+    def resolve_get_hello(root, info):
+        return "Hola mundo"
 
 class DirectoryMutation(graphene.Mutation):
-    class Arguments:
-        action = graphene.String(description="Se requiere para diferenciar los archivos necesarios para esa acción")
-        user = graphene.ID()
+    # class Arguments:
+        # action = graphene.String(description="Se requiere para diferenciar los archivos necesarios para esa acción")
+        # user = graphene.ID()
     directory = graphene.Field(DirectoryNode)
     def mutate(self, info, **kwargs):
-        directory = DirectoryNode()
-        directory.structure = directory.get_structure('/app/temp/')
-        return DirectoryMutation(directory=directory)
-def holaMundo(self, info, **kwargs):
-    directory = DirectoryNode()
-    directory.structure = "{mensaje:'hola mundo'}"
-    return DirectoryMutation(directory=directory)
+        return DirectoryMutation(DirectoryNode())
 
 ############################################################
 
 class Mutation(object):
     qudagetdirectory = DirectoryMutation.Field()
-    qudadirectoryholaMundo = DirectoryMutation.Field(resolver=holaMundo)
+    #qudadirectoryholaMundo = DirectoryMutation.Field(resolver=holaMundo)
 

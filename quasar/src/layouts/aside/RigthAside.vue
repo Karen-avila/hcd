@@ -7,7 +7,7 @@
     hr
     q-scroll-area(style='height:100%;')
       q-list(padding='')
-        q-item.q-ma-sm.navigation-item(active-class='tab-active', to='/profiling', exact='', clickable='', v-ripple='')
+        q-item.q-ma-sm.navigation-item(active-class='tab-active', :to="{ name: 'profilingList' }", exact='', clickable='', v-ripple='')
           q-item-section(avatar='')
             q-icon(name='dashboard')
           q-item-section

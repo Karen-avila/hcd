@@ -24,7 +24,7 @@ if settings.DEBUG:
 urlpatterns += [
     # GRAPHQL url
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True))),
-    path('playground/', GraphQLPlaygroundView.as_view(endpoint="http://localhost:8000/graphql/")),
+    path('playground/', GraphQLPlaygroundView.as_view(endpoint="http://localhost:8081/graphql/")),
     # API base url
     path("api/", include("config.api_router")),
     # DRF auth token

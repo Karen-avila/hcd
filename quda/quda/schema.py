@@ -4,6 +4,12 @@ from .forms import *
 
 import os
 
+
+class LogNode(graphene.ObjectType):
+    get_log = graphene.String()
+    def resolve_get_log(root, info):
+        return "Soy el log"
+
 ############################################################
 class DirectoryNode(graphene.ObjectType):
     get_structure = graphene.JSONString(
@@ -25,13 +31,15 @@ class DirectoryNode(graphene.ObjectType):
     def resolve_get_hello(root, info):
         return "Hola mundo"
 
+
 class DirectoryMutation(graphene.Mutation):
     # class Arguments:
         # action = graphene.String(description="Se requiere para diferenciar los archivos necesarios para esa acción")
         # user = graphene.ID()
     directory = graphene.Field(DirectoryNode)
+    log = graphene.Field(LogNode)
     def mutate(self, info, **kwargs):
-        return DirectoryMutation(DirectoryNode())
+        return DirectoryMutation(DirectoryNode(), LogNode())
 
 ############################################################
 

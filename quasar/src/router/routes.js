@@ -6,7 +6,9 @@ const routes = [
   {
     path: '', component: () => import('layouts/Layout.vue'),
     children: [
-      { path: '/', name: 'dashboard', component: () => import('pages/Dashboard.vue') }
+      { path: '/', name: 'dashboard', component: () => import('pages/Dashboard.vue') },
+      { path: '/profiling/list', name: 'profilingList', component: () => import('pages/profiling/ProfilingList.vue') },
+      { path: '/profiling/add', name: 'profilingAdd', component: () => import('pages/profiling/ProfilingAdd.vue') }
     ]
   },
   // Always leave this as last one,

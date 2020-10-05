@@ -1,7 +1,7 @@
 {
   "files.exclude": {
 
-    ".vscode": true,
+    ".vscode": false,
 
     "**/*.pyc": true,
     "**/__main__.py": true,
@@ -52,7 +52,8 @@
     "temp/": false,
     "database": true,
     "logs/": true,
-    "docs/": true
+    "docs/": true,
+    ".ipython": true
 
 
 

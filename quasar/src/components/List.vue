@@ -1,10 +1,9 @@
 <template lang="pug">
-  #q-app
-    router-view
+  h1 Im a List
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'List'
 }
 </script>

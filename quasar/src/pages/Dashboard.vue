@@ -1,6 +1,6 @@
 <template lang='pug'>
   q-page.flex.flex-center
-    h1
+    router-view
 </template>
 
 <script>

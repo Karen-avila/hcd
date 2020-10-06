@@ -9,7 +9,7 @@
       @lazy-load='onLazyLoad'
     )
       template(v-slot:header-generic='prop')
-        .row.items-center.q-py-sm
+        .row.items-center.q-py-xs
           q-icon.q-mr-sm(:name='prop.node.icon' color='secondary')
           span {{ prop.node.name }}
 </template>

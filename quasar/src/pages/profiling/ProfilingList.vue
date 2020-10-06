@@ -4,8 +4,7 @@
       template(v-slot:separator='')
         q-icon(size='1.2em', name='arrow_forward', color='accent')
       q-breadcrumbs-el(label='Inicio', icon='home', :to="{ name: 'dashboard'}")
-      q-breadcrumbs-el(label='Perfilamiento', icon='widgets')
-      q-breadcrumbs-el(label='Lista')
+      q-breadcrumbs-el(label='Perfilamiento')
     .bg-white
       q-toolbar
         q-toolbar-title PERFILAMIENTO
@@ -14,7 +13,7 @@
             q-icon(left='', size='2em', name='add')
             div NUEVO PERFILAMIENTO
     .row
-      q-card.my-card
+      //q-card.my-card
         q-card-section.bg-primary.text-white
           .text-h6 Our Changing Plane
           .text-subtitle2 by John Doe

@@ -5,19 +5,20 @@ volumes:
 
 services:
 
-  # portainer:
-  #   container_name: portainer
-  #   image: portainer/portainer
-  #   command: -H unix:///var/run/docker.sock
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - portainer_data:/data
-  #   ports:
-  #     - 9000:9000
-  #     - 8000:8000
-  #   restart: always
-  #   logging:
-  #     driver: none
+  portainer:
+    container_name: portainer
+    user: usr_dev_quality
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    ports:
+      - 9000:9000
+      - 8000:8000
+    restart: always
+    logging:
+      driver: none
 
   django: &django
     container_name: django
@@ -60,9 +61,9 @@ services:
     logging:
       driver: none
 
-  # mongo:
-  #   container_name: mongo
-  #   image: mongo:4.2
+  mongo:
+    container_name: mongo
+    image: mongo:4.2
 
   celeryworker:
     <<: *django
@@ -89,15 +90,16 @@ services:
     logging:
       driver: none
 
-  # flower:
-  #   <<: *django
-  #   container_name: flower
-  #   image: quda_local_flower
-  #   depends_on:
-  #     - celeryworker
-  #   ports:
-  #     - "5555:5555"
-  #   command: /start-flower
+  flower:
+    <<: *django
+    container_name: flower
+    user: usr_dev_quality
+    image: quda_local_flower
+    depends_on:
+      - celeryworker
+    ports:
+      - "5555:5555"
+    command: /start-flower
 
   quasar:
     container_name: quasar

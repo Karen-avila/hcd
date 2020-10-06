@@ -14,7 +14,7 @@ services:
       - portainer_data:/data
     ports:
       - 9000:9000
-      - 8000:8000
+      - 8002:8002
     restart: always
     logging:
       driver: none

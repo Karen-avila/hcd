@@ -21,6 +21,7 @@ services:
 
   django: &django
     container_name: django
+    user: usr_dev_quality
     image: quda_local_django
     depends_on:
       - redis
@@ -54,6 +55,7 @@ services:
 
   redis:
     container_name: redis
+    user: usr_dev_quality
     image: redis:5.0
     logging:
       driver: none
@@ -65,6 +67,7 @@ services:
   celeryworker:
     <<: *django
     container_name: celeryworker
+    user: usr_dev_quality
     image: quda_local_celeryworker
     depends_on:
       - redis
@@ -76,6 +79,7 @@ services:
   celerybeat:
     <<: *django
     container_name: celerybeat
+    user: usr_dev_quality
     image: quda_local_celerybeat
     depends_on:
       - redis
@@ -97,6 +101,7 @@ services:
 
   quasar:
     container_name: quasar
+    user: usr_dev_quality
     image: quda_local_quasar
     working_dir: /app
     volumes:
@@ -113,6 +118,7 @@ services:
 
   nginx:
     container_name: nginx
+    user: usr_dev_quality
     image: nginx:alpine
     ports:
       - "8081:80"

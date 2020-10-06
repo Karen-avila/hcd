@@ -29,6 +29,8 @@ django-imagekit
 django-localflavor
 django-mptt
 
+django-kerberos
+
 graphene_django
 django-graphql-playground
 django-filter

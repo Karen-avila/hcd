@@ -2,8 +2,22 @@ version: '3'
 
 volumes:
   portainer_data: {}
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
 
 services:
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: quda_local_postgres
+    container_name: postgres
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data:Z
+      - local_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.local/.postgres
 
   portainer:
     container_name: portainer
@@ -24,6 +38,7 @@ services:
     image: quda_local_django
     depends_on:
       - redis
+      - postgres
     volumes:
       - .:/app:z
     working_dir: /app
@@ -35,22 +50,6 @@ services:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
     command: /start
-
-  # docs:
-  #   container_name: docs
-  #   image: quda_local_docs
-  #   volumes:
-  #     - ./docs:/docs:z
-  #     - ./config:/app/config:z
-  #     - ./quda:/app/quda:z
-  #   ports:
-  #     - "7000:7000"
-  #   build:
-  #     context: .
-  #     dockerfile: ./compose/local/docs/Dockerfile
-  #   env_file:
-  #     - ./.envs/.local/.django
-  #   working_dir: /docs
 
   redis:
     container_name: redis
@@ -68,6 +67,7 @@ services:
     image: quda_local_celeryworker
     depends_on:
       - redis
+      - postgres
     ports: []
     command: /start-celeryworker
     logging:

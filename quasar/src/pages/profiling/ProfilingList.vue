@@ -17,12 +17,6 @@
       q-card.my-card
         q-card-section.bg-primary.text-white
           .text-h6 Our Changing Plane
-            router-link(:to="{ name: 'profilingAdd'}")
-              q-btn.float-right(color='secondary')
-                q-icon(left='', size='2em', name='add')
-                div NUEVO PERFILAMIENTO
-            q-btn.float-right(flat='', dense='', icon='fa fa-download', color="white")
-              q-tooltip Download
           .text-subtitle2 by John Doe
         q-separator
         q-markup-table

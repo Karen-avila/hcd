@@ -7,7 +7,7 @@
       q-breadcrumbs-el(label='Perfilamiento', icon='widgets')
       q-breadcrumbs-el(label='Agregar')
     .row
-      .q-pa-md
+      .q-pa-md.col-12
         q-card.my-card
           q-card-section.bg-primary.text-white
             .text-h6 Nuevo Perfilamiento
@@ -24,25 +24,15 @@
               icon='create_new_folder'
               :done='step > 1'
             )
-              .q-pa-md
-                q-form.q-gutter-md(@submit='onSubmit', @reset='onReset')
-                  q-file(
-                    filled=''
-                    bottom-slots=''
-                    v-model='model'
-                    label='//'
-                    counter=''
-                    max-files='12'
-                    disable=true
-                  )
-                    template(v-slot:before='')
-                      q-icon(name='folder_open')
-                    template(v-slot:hint='')
-                      | Elije un archivo de la lista
-                    template(v-slot:append='')
-                      q-btn(round='', dense='', flat='', icon='add', @click.stop='')
-              p Selecciona una archivo de la lista ://app/
-              TreeFiles
+              p Archivos seleccionados ({{selectedFiles.length}}):
+                span.text-weight-bolder
+                  template(v-for="file in selectedFiles")
+                    span.q-pa-xs {{file.split('/').pop()}}
+              p.text-weight-bold Selecciona uno o más archivos de la lista:
+              TreeFiles.q-py-lg(
+                :selectedFiles.sync="selectedFiles"
+                :selectedFilesNames.sync="selectedFilesNames"
+              )
             q-step(:name='2', title='Create an ad group', caption='Optional', icon='create_new_folder', :done='step > 2')
               | An ad group contains one or more ads which target a shared set of keywords.
             q-step(:name='3', title='Ad template', icon='create_new_folder', disable='')
@@ -66,7 +56,8 @@ export default {
   },
   data () {
     return {
-      step: 1
+      step: 1,
+      selectedFiles: []
     }
   }
 }

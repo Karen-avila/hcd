@@ -13,7 +13,7 @@ class LogNode(graphene.ObjectType):
 ############################################################
 class DirectoryNode(graphene.ObjectType):
     get_structure = graphene.JSONString(
-        path=graphene.String(default_value="/app/tmp"),
+        path=graphene.String(default_value="/app/tmp/"),
         user=graphene.ID(default_value=""),
         action=graphene.String(default_value="")
     )
@@ -21,11 +21,15 @@ class DirectoryNode(graphene.ObjectType):
     class Meta:
         description = 'Regresa el directorio completo de archivos en una dirección'
     def resolve_get_structure(root, info, path, user, action):
-        structure = {'name': os.path.basename(path)}
-        if os.path.isdir(path):
-            structure['type'] = "file"
-            structure['files']=[x for x in os.listdir(path) if os.path.isfile(path+'/'+x)]
-        return structure
+        files = []
+        for x in os.listdir(path):
+            structure = {'label': os.path.basename(x)}
+            if os.path.isdir(path + x):
+                structure['type'] = "directory"
+            else:
+                structure['type'] = "file"
+            files.append(structure)
+        return {'directory': files, 'path': path}
     def resolve_get_hello(root, info):
         return "Hola mundo"
 

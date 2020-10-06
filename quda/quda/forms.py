@@ -1,1 +1,1 @@
-from core.formsBase import *
+from quda.core.formsBase import *

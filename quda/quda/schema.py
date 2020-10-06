@@ -1,4 +1,4 @@
-from core.schemaBase import *
+from quda.core.schemaBase import *
 from .models import *
 from .forms import *
 

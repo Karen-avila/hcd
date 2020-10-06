@@ -1,4 +1,4 @@
-from core.signalsBase import *
+from quda.core.signalsBase import *
 from .models import *
 
 

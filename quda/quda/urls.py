@@ -1,4 +1,4 @@
-from core.urlsBase import *
+from quda.core.urlsBase import *
 from .views import *
 
 app_name = "quda"

@@ -1,1 +1,1 @@
-from core.modelsBase import *
+from quda.core.modelsBase import *

@@ -1,4 +1,4 @@
-from core.apps import *
+from quda.core.apps import *
 
 class QudaConfig(AppConfig):
     name = "quda.quda"

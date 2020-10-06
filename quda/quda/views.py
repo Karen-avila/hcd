@@ -1,2 +1,2 @@
-from core.viewsBase import *
+from quda.core.viewsBase import *
 from .models import *

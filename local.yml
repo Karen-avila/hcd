@@ -44,6 +44,7 @@ services:
     working_dir: /app
     env_file:
       - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
     ports:
       - "8001:8001"
     build:

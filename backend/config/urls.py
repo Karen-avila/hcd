@@ -26,7 +26,6 @@ if settings.DEBUG:
 
 # API URLS
 urlpatterns += [
-    path("accounts/kerberos/", include('django_kerberos.urls')),
     # GRAPHQL url
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True))),
     path('playground/', GraphQLPlaygroundView.as_view(endpoint="http://localhost:8081/graphql/")),

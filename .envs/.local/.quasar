@@ -1,4 +1,4 @@
-# PostgreSQL
+# QUASAR
 # ------------------------------------------------------------------------------
 APOLLOHTTP = 'http://localhost:8001/graphql'
 APOLLOWS = 'ws://localhost:8001/graphql'

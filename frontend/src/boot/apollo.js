@@ -7,8 +7,8 @@ import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import JwtService from '@/core/services/jwt.service'
 
-const GRAPHQL_URL = 'http://localhost:8001/graphql/'
-const GRAPHQLWS_URL = 'ws://localhost:8001/graphql/'
+const GRAPHQL_URL = process.env.APOLLOHTTP
+const GRAPHQLWS_URL = process.env.APOLLOWS
 
 const getHeaders = () => {
   const headers = {

@@ -1,63 +1,124 @@
 version: '3'
 
 volumes:
+  portainer_data: {}
   production_postgres_data: {}
   production_postgres_data_backups: {}
-  production_traefik: {}
 
 services:
-  django: &django
-    build:
-      context: .
-      dockerfile: ./compose/production/django/Dockerfile
-    image: quda_production_django
+
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - "8001:80"
     depends_on:
-      - postgres
+      - django
+      - quasar
+    volumes:
+      - ./backend/quda/media/:/media/
+      - ./backend/quda/staticfiles/:/static/
+      - ./nginx/local.conf:/etc/nginx/nginx.conf:ro
+    restart: on-failure
+
+  django: &django
+    container_name: django
+    image: hcd_production_django
+    depends_on:
       - redis
+      - postgres
+    volumes:
+      - ./backend:/app:z
+    working_dir: /app
     env_file:
       - ./.envs/.production/.django
       - ./.envs/.production/.postgres
+    ports:
+      - "8002:8002"
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
     command: /start
+
+  quasar:
+    container_name: quasar
+    image: hcd_production_quasar
+    working_dir: /app
+    volumes:
+      - ./frontend:/app:z
+    env_file:
+      - ./.envs/.production/.quasar
+    ports:
+      - "8003:8003"
+    build:
+      context: .
+      dockerfile: ./docker/local/quasar/Dockerfile
+    command: npm run serve
+    restart: on-failure
 
   postgres:
     build:
       context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
-    image: quda_production_postgres
+      dockerfile: ./docker/production/postgres/Dockerfile
+    image: hcd_production_postgres
+    container_name: postgres
     volumes:
       - production_postgres_data:/var/lib/postgresql/data:Z
       - production_postgres_data_backups:/backups:z
     env_file:
-      - ./.envs/.production/.postgres
-
-  traefik:
-    build:
-      context: .
-      dockerfile: ./compose/production/traefik/Dockerfile
-    image: quda_production_traefik
-    depends_on:
-      - django
-    volumes:
-      - production_traefik:/etc/traefik/acme:z
-    ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
-      - "0.0.0.0:5555:5555"
+      - ./.envs/.local/.postgres
 
   redis:
+    container_name: redis
     image: redis:5.0
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.2
 
   celeryworker:
     <<: *django
-    image: quda_production_celeryworker
+    container_name: celeryworker
+    image: hcd_production_celeryworker
+    depends_on:
+      - redis
+      - postgres
+      - django
+    ports: []
     command: /start-celeryworker
 
   celerybeat:
     <<: *django
-    image: quda_production_celerybeat
+    container_name: celerybeat
+    image: hcd_production_celerybeat
+    depends_on:
+      - redis
+      - celeryworker
+      - django
+    ports: []
     command: /start-celerybeat
 
   flower:
     <<: *django
-    image: quda_production_flower
+    container_name: flower
+    image: hcd_production_flower
+    depends_on:
+      - celeryworker
+      - django
+    ports:
+      - "5555:5555"
     command: /start-flower
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    ports:
+      - 9000:9000
+      - 8009:8009
+    restart: always
+    logging:
+      driver: none

@@ -47,8 +47,8 @@ module.exports = function (/* ctx */) {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 
       env: {
-        APOLLOHTTP: process.env.APOLLOHTTP ? process.env.APOLLOHTTP : 'http://localhost:8000/graphql',
-        APOLLOWS: process.env.APOLLOWS ? process.env.APOLLOWS : 'ws://localhost:8000/graphql',
+        APOLLOHTTP: process.env.APOLLOHTTP ? process.env.APOLLOHTTP : 'http://localhost:8002/graphql',
+        APOLLOWS: process.env.APOLLOWS ? process.env.APOLLOWS : 'ws://localhost:8002/graphql',
       },
 
       // transpile: false,

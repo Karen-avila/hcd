@@ -5,10 +5,14 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
+
 from rest_framework.authtoken.views import obtain_auth_token
+
 from django.views.decorators.csrf import csrf_exempt
+
 from graphene_django.views import GraphQLView
 from graphql_playground.views import GraphQLPlaygroundView
+
 
 urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
@@ -22,6 +26,7 @@ if settings.DEBUG:
 
 # API URLS
 urlpatterns += [
+    path("accounts/kerberos/", include('django_kerberos.urls')),
     # GRAPHQL url
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True))),
     path('playground/', GraphQLPlaygroundView.as_view(endpoint="http://localhost:8081/graphql/")),

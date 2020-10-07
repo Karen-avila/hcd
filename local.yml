@@ -7,29 +7,19 @@ volumes:
 
 services:
 
-  postgres:
-    build:
-      context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
-    image: quda_local_postgres
-    container_name: postgres
-    volumes:
-      - local_postgres_data:/var/lib/postgresql/data:Z
-      - local_postgres_data_backups:/backups:z
-    env_file:
-      - ./.envs/.local/.postgres
-
-  portainer:
-    container_name: portainer
-    image: portainer/portainer
-    command: -H unix:///var/run/docker.sock
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
     ports:
-      - 9000:9000
-      - 8002:8002
-    restart: always
+      - "8001:80"
+    depends_on:
+      - django
+      - quasar
+    volumes:
+      - ./quda/media/:/media/
+      - ./quda/staticfiles/:/static/
+      - ./nginx/local.conf:/etc/nginx/nginx.conf:ro
+    restart: on-failure
     logging:
       driver: none
 
@@ -46,17 +36,46 @@ services:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
     ports:
-      - "8001:8001"
+      - "8002:8002"
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
     command: /start
+
+  quasar:
+    container_name: quasar
+    image: quda_local_quasar
+    working_dir: /app
+    volumes:
+      - ./quasar:/app:z
+    env_file:
+      - ./.envs/.local/.quasar
+    ports:
+      - "8003:8003"
+    build:
+      context: .
+      dockerfile: ./compose/local/quasar/Dockerfile
+    command: npm run serve
+    restart: on-failure
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: quda_local_postgres
+    container_name: postgres
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data:Z
+      - local_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.local/.postgres
 
   redis:
     container_name: redis
     image: redis:5.0
     logging:
       driver: none
+
 
   mongo:
     container_name: mongo
@@ -93,37 +112,21 @@ services:
     depends_on:
       - celeryworker
     ports:
-      - "5555:5555"
+      - "8009:8009"
     command: /start-flower
 
-  quasar:
-    container_name: quasar
-    image: quda_local_quasar
-    working_dir: /app
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
     volumes:
-      - ./quasar:/app:z
-    env_file:
-      - ./.envs/.local/.quasar
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
     ports:
-      - "8080:8080"
-    build:
-      context: .
-      dockerfile: ./compose/local/quasar/Dockerfile
-    command: npm run serve
-    restart: on-failure
-
-  nginx:
-    container_name: nginx
-    image: nginx:alpine
-    ports:
-      - "8081:80"
-    depends_on:
-      - django
-      - quasar
-    volumes:
-      - ./quda/media/:/media/
-      - ./quda/staticfiles/:/static/
-      - ./nginx/local.conf:/etc/nginx/nginx.conf:ro
-    restart: on-failure
+      - 9000:9000
+      - 8010:8010
+    restart: always
     logging:
       driver: none
+
+

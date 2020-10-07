@@ -68,6 +68,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "channels",
     "crispy_forms",
+    #"django_kerberos",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -101,8 +102,15 @@ MIGRATION_MODULES = {"sites": "quda.contrib.sites.migrations"}
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
-    'graphql_jwt.backends.JSONWebTokenBackend',
+    "graphql_jwt.backends.JSONWebTokenBackend",
 ]
+
+# KERBEROS_BACKANED
+# ------------------------------------------------------------------------------
+# https://pypi.org/project/django-kerberos/
+# KERBEROS_HOSTNAME = "HTTP/10.100.6.85@DEFAULT_REAML"
+# KERBEROS_BACKEND_CREATE = False
+
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),

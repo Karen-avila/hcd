@@ -16,8 +16,8 @@ services:
       - django
       - quasar
     volumes:
-      - ./quda/media/:/media/
-      - ./quda/staticfiles/:/static/
+      - ./backend/media/:/media/
+      - ./backend/staticfiles/:/static/
       - ./nginx/local.conf:/etc/nginx/nginx.conf:ro
     restart: on-failure
     logging:
@@ -25,12 +25,12 @@ services:
 
   django: &django
     container_name: django
-    image: quda_local_django
+    image: hcd_local_django
     depends_on:
       - redis
       - postgres
     volumes:
-      - .:/app:z
+      - ./backend:/app:z
     working_dir: /app
     env_file:
       - ./.envs/.local/.django
@@ -39,30 +39,30 @@ services:
       - "8002:8002"
     build:
       context: .
-      dockerfile: ./compose/local/django/Dockerfile
+      dockerfile: ./docker/local/django/Dockerfile
     command: /start
 
   quasar:
     container_name: quasar
-    image: quda_local_quasar
+    image: hcd_local_quasar
     working_dir: /app
     volumes:
-      - ./quasar:/app:z
+      - ./frontend:/app:z
     env_file:
       - ./.envs/.local/.quasar
     ports:
       - "8003:8003"
     build:
       context: .
-      dockerfile: ./compose/local/quasar/Dockerfile
+      dockerfile: ./docker/local/quasar/Dockerfile
     command: npm run serve
     restart: on-failure
 
   postgres:
     build:
       context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
-    image: quda_local_postgres
+      dockerfile: ./docker/production/postgres/Dockerfile
+    image: hcd_local_postgres
     container_name: postgres
     volumes:
       - local_postgres_data:/var/lib/postgresql/data:Z
@@ -76,7 +76,6 @@ services:
     logging:
       driver: none
 
-
   mongo:
     container_name: mongo
     image: mongo:4.2
@@ -84,10 +83,11 @@ services:
   celeryworker:
     <<: *django
     container_name: celeryworker
-    image: quda_local_celeryworker
+    image: hcd_local_celeryworker
     depends_on:
       - redis
       - postgres
+      - django
     ports: []
     command: /start-celeryworker
     logging:
@@ -96,10 +96,11 @@ services:
   celerybeat:
     <<: *django
     container_name: celerybeat
-    image: quda_local_celerybeat
+    image: hcd_local_celerybeat
     depends_on:
       - redis
       - celeryworker
+      - django
     ports: []
     command: /start-celerybeat
     logging:
@@ -108,11 +109,12 @@ services:
   flower:
     <<: *django
     container_name: flower
-    image: quda_local_flower
+    image: hcd_local_flower
     depends_on:
       - celeryworker
+      - django
     ports:
-      - "8009:8009"
+      - "5555:5555"
     command: /start-flower
 
   portainer:

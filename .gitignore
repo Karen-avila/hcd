@@ -277,6 +277,9 @@ quda/media/
 .envs/*
 !.envs/.local/
 
+.vscode_
+.vscode
+
 database
 quasar/.quasar/
 logs/*

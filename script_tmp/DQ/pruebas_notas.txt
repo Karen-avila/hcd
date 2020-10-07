@@ -1,0 +1,137 @@
+
+#############################
+error:
+python connection_test.py
+2020-08-25 18:57:44.810155, p15821, th140050826467136, ERROR Handle Exception: FileSystem.cpp: 108: HdfsIOException: FileSystem: Failed to extract principal from ticket cache: Credentials cache permissions incorrect (filename: /tmp/krb5cc_1000)
+        @       Unknown
+
+#############################
+kinit jaga1
+     pass jaga123_
+    genera el ticket para la conexion de kerberos
+    chmod 777 /tmp/krb5cc_1000
+    ) with centos
+#############################
+
+user centos
+pass centos
+#############################
+
+marco.monroy
+Yr00TsXZ
+
+#############################
+
+
+repo IMSS bitacoras
+miguel.almanza  M1gu3l_D41A
+
+#############################
+
+request ppo :3966808
+
+
+##############
+nuevo servidor temporal
+
+Hostname: cnvpraphado07
+IP: 10.100.6.97
+
+user: DQ  pwd: 1Calidad
+
+/data/DQ/desarrollo/Limpieza/
+######################################################
+
+ ./bin/spark-submit mypythonfile.py
+
+django superuser miguel / miguel migue559.mc
+
+
+ /dev/la/test/test_million.csv
+
+
+
+
+ https://stackoverflow.com/questions/35835649/reading-a-file-in-hdfs-from-pyspark
+ https://stackoverflow.com/questions/16870663/how-do-i-validate-a-date-string-format-in-python
+ https://hdfs3.readthedocs.io/en/latest/
+ https://hdfs3.readthedocs.io/en/latest/api.html#hdfs3.core.HDFileSystem.open
+ https://stackoverrun.com/es/q/8311086
+ https://realpython.com/pyspark-intro/
+ https://stackoverflow.com/questions/49081211/submit-python-script-into-spark-cluster
+ https://stackoverflow.com/questions/16513573/if-var-false
+ https://blog.exxactcorp.com/the-benefits-examples-of-using-apache-spark-with-pyspark-using-python/
+ https://sparkbyexamples.com/apache-spark-rdd/spark-rdd-reduce-function-example/
+ https://stackoverflow.com/questions/19943766/hadoop-unable-to-load-native-hadoop-library-for-your-platform-warning
+ https://stackoverrun.com/es/q/1253496
+ https://github.com/cookiecutter/cookiecutter
+ https://stackoverflow.com/questions/4709655/how-to-output-every-line-in-a-file-python
+ https://stackoverflow.com/questions/41144218/pyspark-creating-a-data-frame-from-text-file
+ https://stackoverflow.com/questions/43406299/load-a-file-from-sftp-server-into-spark-rdd
+ https://stackoverflow.com/questions/52067494/how-to-add-any-new-library-like-spark-sftp-into-my-pyspark-code
+ https://github.com/springml/spark-sftp
+
+
+ https://es.stackoverflow.com/questions/108778/ping-cmd-con-un-n%C3%BAmero-de-hops-traceroute
+ https://onesofttek-my.sharepoint.com/personal/jaime_garcia_softtek_com/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fjaime%5Fgarcia%5Fsofttek%5Fcom%2FDocuments%2FIMSS%2DData%20Quality%2FDocumentos%20info&originalPath=aHR0cHM6Ly9vbmVzb2Z0dGVrLW15LnNoYXJlcG9pbnQuY29tLzpmOi9nL3BlcnNvbmFsL2phaW1lX2dhcmNpYV9zb2Z0dGVrX2NvbS9FdWNXV29HTzRISk92akE2LUR4em9WQUJSQWJCTUVJZlRaMUZLM1JoV3BSNzZ3P3J0aW1lPVotSm1YVWhRMkVn
+
+#############################
+
+
+
+ejemplo de parametros en pyspark
+
+udf_menu_funciones
+
+   v_leyenda_menu = 'limpiar'
+    # Generamos el diccionario de campos desde el DataFrame del archivo.
+    #cambio para que no se tome fecha de carga ultimo proceso
+    for i in range(len(p_df_in.columns)-1):
+        dict_opc_campos[str(i)] = p_df_in.columns[i]
+
+
+conda install six -- para acceder a https://docs.databricks.com/dev-tools/databricks-connect.html
+
+
+ ps aux | more | grep miguel 
+ 
+spark-submit --master spark://127.0.0.1:7077 \
+             --num-executors 2 \
+             --executor-cores 8 \
+             --executor-memory 3g \
+             --class <Class name> \
+             $JAR_FILE_NAME or path \
+             /path-to-input \
+             /path-to-output \
+
+
+
+spark-submit --num-executors 2 --executor-cores 4 --executor-memory 3g trn_arc_pyspark_bkp_pruebas_tbalteracion.py
+
+spark-submit --num-executors 2 --executor-cores 4 --executor-memory 3g menu/udf/lan_prc_pysk/trn_arc_pyspark.py tmp/par/pars_0_PATRONES_TEMP_INC.txt.json
+
+bin\spark-class org.apache.spark.deploy.master.Master  lanzar master spark en windows
+
+import os
+print('SPARK_HOME:  ',os.environ['SPARK_HOME'])
+print('JAVA_HOME:  ',os.environ['JAVA_HOME'])
+print('PATH:  ',os.environ['PATH'])
+
+
+
+from pyspark import SparkContext, SparkConf
+"""
+from pyspark.sql import SparkSession
+conf = pyspark.SparkConf().setAppName('appName').setMaster('local')
+sc = pyspark.SparkContext(conf=conf)
+spark = SparkSession(sc)
+"""
+
+
+
+hector sampallo
+
+
+
+
+

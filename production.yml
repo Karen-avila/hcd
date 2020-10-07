@@ -61,5 +61,3 @@ services:
     <<: *django
     image: quda_production_flower
     command: /start-flower
-
-  

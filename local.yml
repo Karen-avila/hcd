@@ -16,8 +16,8 @@ services:
       - django
       - quasar
     volumes:
-      - ./backend/media/:/media/
-      - ./backend/staticfiles/:/static/
+      - ./backend/quda/media/:/media/
+      - ./backend/quda/staticfiles/:/static/
       - ./nginx/local.conf:/etc/nginx/nginx.conf:ro
     restart: on-failure
 

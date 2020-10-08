@@ -3,6 +3,8 @@ FROM python:3.8-slim-buster
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
+COPY ./backend/krb5.conf /etc/krb5.conf
+
 RUN apt-get update \
   # dependencies for building Python packages
   && apt-get install -y build-essential \
@@ -39,8 +41,6 @@ RUN chmod +x /start-celerybeat
 COPY ./docker/local/django/celery/flower/start /start-flower
 RUN sed -i 's/\r$//g' /start-flower
 RUN chmod +x /start-flower
-
-COPY ./backend/krb5.conf /etc/krb5.conf
 
 WORKDIR /app
 

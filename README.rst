@@ -1,4 +1,4 @@
-QUDA PROJECT / DOCKER EDITION
+HCD PROJECT / DOCKER EDITION
 =======================
 
 .. image:: https://travis-ci.org/pydanny/cookiecutter-django.svg?branch=master

@@ -7,11 +7,60 @@ volumes:
 
 services:
 
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - "8001:80"
+    depends_on:
+      - django
+      - quasar
+    volumes:
+      - ./backend/quda/media/:/media/
+      - ./backend/quda/staticfiles/:/static/
+      - ./nginx/local.conf:/etc/nginx/nginx.conf:ro
+    restart: on-failure
+
+  django: &django
+    container_name: django
+    image: hcd_local_django
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./backend:/app:z
+    working_dir: /app
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "8002:8002"
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start
+
+  quasar:
+    container_name: quasar
+    image: hcd_local_quasar
+    working_dir: /app
+    volumes:
+      - ./frontend:/app:z
+    env_file:
+      - ./.envs/.local/.quasar
+    ports:
+      - "8003:8003"
+    build:
+      context: .
+      dockerfile: ./docker/local/quasar/Dockerfile
+    command: npm run serve
+    restart: on-failure
+
   postgres:
     build:
       context: .
-      dockerfile: ./compose/production/postgres/Dockerfile
-    image: quda_local_postgres
+      dockerfile: ./docker/production/postgres/Dockerfile
+    image: hcd_local_postgres
     container_name: postgres
     volumes:
       - local_postgres_data:/var/lib/postgresql/data:Z
@@ -19,44 +68,9 @@ services:
     env_file:
       - ./.envs/.local/.postgres
 
-  portainer:
-    container_name: portainer
-    image: portainer/portainer
-    command: -H unix:///var/run/docker.sock
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    ports:
-      - 9000:9000
-      - 8002:8002
-    restart: always
-    logging:
-      driver: none
-
-  django: &django
-    container_name: django
-    image: quda_local_django
-    depends_on:
-      - redis
-      - postgres
-    volumes:
-      - .:/app:z
-    working_dir: /app
-    env_file:
-      - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
-    ports:
-      - "8001:8001"
-    build:
-      context: .
-      dockerfile: ./compose/local/django/Dockerfile
-    command: /start
-
   redis:
     container_name: redis
     image: redis:5.0
-    logging:
-      driver: none
 
   mongo:
     container_name: mongo
@@ -65,65 +79,48 @@ services:
   celeryworker:
     <<: *django
     container_name: celeryworker
-    image: quda_local_celeryworker
+    image: hcd_local_celeryworker
     depends_on:
       - redis
       - postgres
+      - django
     ports: []
     command: /start-celeryworker
-    logging:
-      driver: none
 
   celerybeat:
     <<: *django
     container_name: celerybeat
-    image: quda_local_celerybeat
+    image: hcd_local_celerybeat
     depends_on:
       - redis
       - celeryworker
+      - django
     ports: []
     command: /start-celerybeat
-    logging:
-      driver: none
 
   flower:
     <<: *django
     container_name: flower
-    image: quda_local_flower
+    image: hcd_local_flower
     depends_on:
       - celeryworker
+      - django
     ports:
       - "5555:5555"
     command: /start-flower
 
-  quasar:
-    container_name: quasar
-    image: quda_local_quasar
-    working_dir: /app
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce
+    command: -H unix:///var/run/docker.sock
     volumes:
-      - ./quasar:/app:z
-    env_file:
-      - ./.envs/.local/.quasar
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
     ports:
-      - "8080:8080"
-    build:
-      context: .
-      dockerfile: ./compose/local/quasar/Dockerfile
-    command: npm run serve
-    restart: on-failure
-
-  nginx:
-    container_name: nginx
-    image: nginx:alpine
-    ports:
-      - "8081:80"
-    depends_on:
-      - django
-      - quasar
-    volumes:
-      - ./quda/media/:/media/
-      - ./quda/staticfiles/:/static/
-      - ./nginx/local.conf:/etc/nginx/nginx.conf:ro
-    restart: on-failure
+      - 9000:9000
+      - 8009:8009
+    restart: always
     logging:
       driver: none
+
+

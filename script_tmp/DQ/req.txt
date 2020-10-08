@@ -1,5 +1,0 @@
-certifi==2019.11.28
-hdfs3==0.3.1
-py4j==0.10.9
-pyspark==3.0.1
-wincertstore==0.2

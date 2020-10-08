@@ -30,6 +30,8 @@ django-localflavor
 django-mptt
 
 django-kerberos
+kerberos
+requests-kerberos
 
 graphene_django
 django-graphql-playground

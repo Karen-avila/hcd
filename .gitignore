@@ -275,6 +275,7 @@ tags
 
 .vscode
 .vscode_
+.idea
 
 package-lock.json
 
@@ -282,3 +283,5 @@ frontend/.quasar/
 backend/quda/media/
 backend/quda/staticfiles/
 temp/
+tmp/
+script_tmp/

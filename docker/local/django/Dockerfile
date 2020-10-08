@@ -11,7 +11,7 @@ RUN apt-get update \
   # Translations dependencies
   && apt-get install -y gettext \
   # Kerberos dependencies
-  && apt install -y libkrb5-dev \
+  && apt install -y libkrb5-dev krb5-config krb5-user \
   # cleaning up unused files
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && rm -rf /var/lib/apt/lists/*
@@ -39,6 +39,8 @@ RUN chmod +x /start-celerybeat
 COPY ./docker/local/django/celery/flower/start /start-flower
 RUN sed -i 's/\r$//g' /start-flower
 RUN chmod +x /start-flower
+
+COPY ./backend/krb5.conf /etc/krb5.conf
 
 WORKDIR /app
 

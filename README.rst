@@ -75,7 +75,8 @@ As with any shell command that we wish to run in our container, this is done usi
     $ docker-compose -f local.yml run --rm django python manage.py createsuperuser
     $ docker-compose -f local.yml run --rm django python manage.py collectstatic
 
-    $ docker-compose -f local.yml run --rm quasar npm i && npm rebuild node-sass
+    $ docker-compose -f local.yml run --rm quasar npm i
+    $ docker-compose -f local.yml run --rm quasar npm rebuild node-sass
 
 Here, ``django`` is the target service we are executing the commands against.
 

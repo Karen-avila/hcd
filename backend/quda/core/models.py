@@ -1,4 +1,7 @@
 from .modelsBase import *
+from graphql import GraphQLError
+from django.conf import settings
+from rest_framework.authtoken.models import Token
 
 ########################################################################################
 ########################################################################################
@@ -46,6 +49,7 @@ class OrganizationSerializer(Basic_Serializer):
     class Meta(Basic_Serializer.Meta):
         model = Organization
         fields = ['code','name','getModules','getDomains']
+
 ########################################################################################
 ########################################################################################
 VARS = {
@@ -55,15 +59,29 @@ VARS = {
 }
 class User(AbstractUser, ModelBase):
     organization = models.ForeignKey('Organization', blank=True, null=True, on_delete=models.SET_NULL, related_name='+',)
-    visibleUsername = models.CharField(max_length=100)
+    kerberosPassword = models.CharField(max_length=100)
     VARS = VARS
     class Meta():
         verbose_name = VARS['name']
         verbose_name_plural = VARS['plural']
         permissions = MakePermissions(VARS)
-    def getVisibleUsername(self):
-        return self.username.split("__", 1)[1]
-    def getProfiles(self):
-        return 'Nuevo Perfil'
-
-
+    def getUsername(self):
+        return self.username.split('__')[1]
+    def getUser(self, username, password, organization, backend):
+        try:
+            organization = Organization.objects.get(code=organization)
+        except Organization.DoesNotExist:
+            raise Exception('Organization {0} not found'.format(organization))
+        if backend == 'kerberos':
+            return self.getKerberosUser(username, password, organization)
+    def getKerberosUser(self, username, password, organization):
+        try:
+            user = User.objects.get(username=organization.code + '__' + username, organization=organization)
+        except User.DoesNotExist:
+            user = User()
+            user.username = organization.code + '__' + username
+            user.organization = organization
+            user.kerberosPassword = password
+            user.set_password(settings.SECRET_KEY)
+            user.save()
+        return user

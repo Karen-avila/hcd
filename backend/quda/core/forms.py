@@ -6,7 +6,7 @@ from .formsBase import *
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['password', 'username', 'visibleUsername']
+        fields = ['password', 'username']
 
 class UserChangeForm(forms.UserChangeForm):
     class Meta(forms.UserChangeForm.Meta):

@@ -53,8 +53,8 @@ export default {
   data () {
     return {
       form: {
-        username: '',
-        password: '',
+        username: 'jaga1',
+        password: 'jaga123_',
         remember: true
       },
       isPwd: 'password'
@@ -73,7 +73,7 @@ export default {
     },
     onSubmit () {
       if (this.validate()) {
-        const username = this.form.username
+        const username = process.env.ORGANIZATION + '__' + this.form.username
         const password = this.form.password
         this.$store.dispatch('logout')
         this.$store.dispatch('login', { username, password })

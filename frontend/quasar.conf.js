@@ -49,6 +49,7 @@ module.exports = function (/* ctx */) {
       env: {
         APOLLOHTTP: process.env.APOLLOHTTP ? process.env.APOLLOHTTP : 'http://localhost:8002/graphql',
         APOLLOWS: process.env.APOLLOWS ? process.env.APOLLOWS : 'ws://localhost:8002/graphql',
+        ORGANIZATION: process.env.ORGANIZATION ? process.env.ORGANIZATION : 'hcd',
       },
 
       // transpile: false,
@@ -117,7 +118,10 @@ module.exports = function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'LocalStorage',
+        'SessionStorage'
+      ]
     },
 
     // animations: 'all', // --- includes all animations

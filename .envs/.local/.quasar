@@ -1,4 +1,5 @@
 # QUASAR
 # ------------------------------------------------------------------------------
-APOLLOHTTP = 'http://localhost:8002/graphql/'
-APOLLOWS = 'ws://localhost:8002/graphql/'
+APOLLOHTTP=http://localhost:8002/graphql/
+APOLLOWS=ws://localhost:8002/graphql/
+ORGANIZATION=hcd

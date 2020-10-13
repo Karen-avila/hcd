@@ -22,7 +22,7 @@ const actions = {
       .mutate({
         mutation: gql`
           mutation {
-            tokenAuth (
+            kerberosAuth (
               username:"${credentials.username}"
               password:"${credentials.password}"
             )
@@ -33,7 +33,7 @@ const actions = {
           }
         `
       }).then(({ data }) => {
-        context.commit('setAuth', data.tokenAuth)
+        context.commit('setAuth', data.kerberosAuth)
       }).catch((error) => {
         context.commit('setErrors', error)
       })
@@ -42,9 +42,9 @@ const actions = {
     const token = JwtService.getToken()
     if (!token) return 0
     apollo
-      .query({
-        query: gql`
-          query {
+      .mutate({
+        mutation: gql`
+          mutation {
             verifyToken(token:"${token}")
             {
               payload
@@ -54,14 +54,6 @@ const actions = {
       }).then(({ data }) => {
         context.commit('setAuth', data.verifyToken)
       })
-      // .then((data) => {
-      // console.log('setUser0: ', data.payload.username)
-      // apollo.subscribe({ query: this.$gql` subscription { hello } ` })
-      //   .subscribe({
-      //     next (data) { console.log(data) },
-      //     error (error) { console.error(error) }
-      //   })
-      // })
       .catch(() => {
         context.commit('purgeAuth')
       })

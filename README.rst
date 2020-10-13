@@ -64,20 +64,19 @@ This brings up both Django and PostgreSQL. The first time it is run it might tak
 
 Open a terminal at the project root and run the following for local development::
 
-    $ export COMPOSE_FILE=local.yml
-    $ docker-compose build
+    $ docker-compose -f local.yml build
 
 Execute Management Commands
 ---------------------------
 
 As with any shell command that we wish to run in our container, this is done using the ``run --rm`` command: ::
 
-    $ docker-compose run --rm django python manage.py migrate
-    $ docker-compose run --rm django python manage.py createsuperuser
-    $ docker-compose run --rm django python manage.py collectstatic
+    $ docker-compose -f local.yml run --rm django python manage.py migrate
+    $ docker-compose -f local.yml run --rm django python manage.py createsuperuser
+    $ docker-compose -f local.yml run --rm django python manage.py collectstatic
 
-    $ docker-compose run --rm quasar npm i
-    $ docker-compose run --rm quasar npm rebuild node-sass
+    $ docker-compose -f local.yml run --rm quasar npm i
+    $ docker-compose -f local.yml run --rm quasar npm rebuild node-sass
 
 Here, ``django`` is the target service we are executing the commands against.
 
@@ -86,7 +85,7 @@ Build the Stack
 
 Open a terminal at the project root and run the following for local development::
 
-    $ docker-compose up
+    $ docker-compose -f local.yml up
 
 Run on
 

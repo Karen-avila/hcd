@@ -100,7 +100,7 @@ AUTH_USER_MODEL = "core.User"
 GRAPHQL_JWT = {
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_EXPIRATION_DELTA': timedelta(days=1),
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=5),
+    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=1),
 }
 GRAPHENE = {
     'SCHEMA': 'config.schema.schema',

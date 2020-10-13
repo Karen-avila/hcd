@@ -53,8 +53,8 @@ export default {
   data () {
     return {
       form: {
-        username: 'jaga1',
-        password: 'jaga123_',
+        username: '',
+        password: '',
         remember: true
       },
       isPwd: 'password'

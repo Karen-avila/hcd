@@ -26,7 +26,6 @@ class UserNode(BaseNode):
             'id': ['exact'],
             'username': ['exact', 'icontains', 'istartswith'],
             'email': ['exact', 'icontains', 'istartswith'],
-            'visibleUsername': ['exact', 'icontains', 'istartswith'],
         }
         interfaces = (graphene.relay.Node, )
         connection_class = ConnectionBase

@@ -43,10 +43,10 @@ export default {
       return this.$apollo
         .mutate({
           mutation: gql`
-            mutation {
-              qudagetdirectory {
-                directory {
-                  getStructure(path:"${path}")
+            mutation{
+              qudagetdirectory{
+                directory{
+                  structure(path:"${path}")
                 }
               }
             }

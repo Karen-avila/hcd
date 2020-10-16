@@ -49,7 +49,6 @@ class OrganizationSerializer(Basic_Serializer):
     class Meta(Basic_Serializer.Meta):
         model = Organization
         fields = ['code','name','getModules','getDomains']
-
 ########################################################################################
 ########################################################################################
 VARS = {
@@ -85,3 +84,5 @@ class User(AbstractUser, ModelBase):
             user.set_password(settings.SECRET_KEY)
             user.save()
         return user
+########################################################################################
+########################################################################################

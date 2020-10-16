@@ -37,6 +37,7 @@ graphene_django
 django-graphql-playground
 django-filter
 django-graphql-jwt
+graphene-django-extras
 
 channels
 channels_redis

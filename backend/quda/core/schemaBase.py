@@ -1,6 +1,7 @@
 from django.apps import apps
 from graphene_django.filter import DjangoFilterConnectionField
-from graphene_django.forms.mutation import DjangoModelFormMutation
+from graphene_django.forms.mutation import DjangoModelFormMutation, DjangoFormMutation
+from graphene_django_extras import DjangoInputObjectType
 from graphene_django import DjangoObjectType
 from rx import Observable
 from graphene_subscriptions.events import CREATED, UPDATED, DELETED

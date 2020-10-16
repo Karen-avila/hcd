@@ -56,7 +56,7 @@ VARS = {
     #'extendPermissions': [],
 }
 class ModelBase(models.Model):
-    active = models.BooleanField(default=True)
+    active = models.BooleanField(default=True, editable=False)
     VARS = VARS
     class Meta():
         verbose_name = VARS['name']

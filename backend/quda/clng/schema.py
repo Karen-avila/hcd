@@ -9,9 +9,11 @@ from .forms import *
 class ProfilingRulesNode(DjangoObjectType):
     class Meta:
         model = ProfilingRules
+
 class ProfilingRulesInput(DjangoInputObjectType):
     class Meta:
         model = ProfilingRules
+
 ###############################################
 class ProfilingFileColumnNode(DjangoObjectType):
     class Meta:
@@ -20,6 +22,7 @@ class ProfilingFileColumnInput(DjangoInputObjectType):
     rules = graphene.Field(ProfilingRulesInput)
     class Meta:
         model = ProfilingFileColumn
+
 ###############################################
 class ProfilingFileNode(DjangoObjectType):
     class Meta:
@@ -28,6 +31,7 @@ class ProfilingFileInput(DjangoInputObjectType):
     cols = graphene.List(ProfilingFileColumnInput, required=True)
     class Meta:
         model = ProfilingFile
+
 ###############################################
 class ProfilingNode(DjangoObjectType):
     status = graphene.String()
@@ -35,30 +39,44 @@ class ProfilingNode(DjangoObjectType):
         model = Profiling
     def resolve_status(self, info):
         return self.getStatus()
-class SetProfilingMutation(graphene.Mutation):
-    profiling = graphene.Field(ProfilingNode)
-    class Input:
-        files = graphene.List(ProfilingFileInput)
-    def mutate(self, info, files):
-        return SetProfilingMutation(profiling=Profiling().setProfiling(info, files))
-class RunProfilingMutation(graphene.Mutation):
-    profiling = graphene.Field(ProfilingNode)
-    class Input:
-        profilingid = graphene.ID()
-    def mutate(self, info, profilingid):
-        profiling = Profiling.objects.get(id=profilingid).runProfiling(info)
-        return RunProfilingMutation(profiling=profiling)
+
 #################################################################
 #########   QUERYS   ############################################
 #################################################################
-class Query(object):
-    pass
+# class QudaQuery(graphene.Query):
+#     pass
     ###########################################
 
 #################################################################
 #########    MUTATIONS    #######################################
 #################################################################
-class Mutation(object):
-    setProfiling = SetProfilingMutation.Field()
-    runProfiling = RunProfilingMutation.Field()
+class PrflMutation(graphene.Mutation):
+    setProfiling = graphene.Field(ProfilingNode,
+        files = graphene.List(ProfilingFileInput)
+    )
+    def resolve_setProfiling(self, info, files):
+        return Profiling().setProfiling(info, files)
+
     ###########################################
+    runProfiling = graphene.Field(ProfilingNode,
+        profilingid = graphene.ID()
+    )
+    def resolve_runProfiling(self, info, profilingid):
+        return Profiling.objects.get(id=profilingid).runProfiling()
+
+    ###########################################
+    ###########################################
+    def mutate(self, info, **kwargs):
+        return PrflMutation(
+            setProfiling = setProfiling,
+            resolve_runProfiling = resolve_runProfiling
+        )
+
+#################################################################
+#########    SCHEMA    ##########################################
+#################################################################
+class Query(object):
+    pass
+
+class Mutation(object):
+    prfl = PrflMutation.Field()

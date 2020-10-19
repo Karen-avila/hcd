@@ -5,8 +5,7 @@ from quda.quda.models import File
 import csv
 from django.utils import timezone
 
-########################################################################################
-########################################################################################
+
 VARS = {
     'model': 'ProfilingRules',
     'name': 'Regla de perfilamiento',
@@ -63,7 +62,7 @@ class Profiling(ModelBase):
                 profilingFileColumn = ProfilingFileColumn(**col)
                 profilingFileColumn.save()
         return self
-    def runProfiling(self, info):
+    def runProfiling(self):
         self.initialDateTime = timezone.now()
         self.save()
         for profilingFileColumn in ProfilingFileColumn.objects.filter(profilingFile__profiling=self):
@@ -138,7 +137,6 @@ class ProfilingFileColumn(ModelBase):
             editable=False
         )
     columnIndex = models.IntegerField(default=0)
-    ########  COUNTER OF RULES
     blanks = models.IntegerField(default=0)
     VARS = VARS
     class Meta(ModelBase.Meta):

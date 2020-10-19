@@ -1,12 +1,12 @@
 import quda.core.schema
 import quda.quda.schema
-import quda.profiling.schema
+import quda.prfl.schema
 
 import graphene
 
 class Query(
         quda.core.schema.Query,
-        quda.profiling.schema.Query,
+        quda.prfl.schema.Query,
         graphene.ObjectType
     ):
     pass
@@ -14,7 +14,7 @@ class Query(
 class Mutation(
         quda.core.schema.Mutation,
         quda.quda.schema.Mutation,
-        quda.profiling.schema.Mutation,
+        quda.prfl.schema.Mutation,
         graphene.ObjectType
     ):
     pass

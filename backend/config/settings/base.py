@@ -75,6 +75,8 @@ LOCAL_APPS = [
     "quda.core.apps.CoreConfig",
     "quda.quda.apps.QudaConfig",
     "quda.prfl.apps.ProfilingConfig",
+    "quda.clng.apps.CleaningConfig",
+    "quda.mtch.apps.MatchingConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

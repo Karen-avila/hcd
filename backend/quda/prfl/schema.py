@@ -54,14 +54,14 @@ class Query(object):
 #################################################################
 
 class Mutation(object):
-    setProfiling = graphene.Field(ProfilingNode,
+    prflSetProfiling = graphene.Field(ProfilingNode,
         files = graphene.List(ProfilingFileInput)
     )
     def resolve_setProfiling(self, info, files):
         return Profiling().setProfiling(info, files)
 
     ###########################################
-    runProfiling = graphene.Field(ProfilingNode,
+    prflSunProfiling = graphene.Field(ProfilingNode,
         profilingid = graphene.ID()
     )
     def resolve_runProfiling(self, info, profilingid):

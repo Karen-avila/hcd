@@ -68,8 +68,8 @@ class PrflMutation(graphene.Mutation):
     ###########################################
     def mutate(self, info, **kwargs):
         return PrflMutation(
-            runProfiling,
-            setProfiling
+            runProfiling=self.runProfiling(),
+            setProfiling=self.setProfiling()
         )
 
 #################################################################

@@ -64,13 +64,6 @@ class PrflMutation(graphene.Mutation):
     def resolve_runProfiling(self, info, profilingid):
         return Profiling.objects.get(id=profilingid).runProfiling()
 
-    ###########################################
-    ###########################################
-    def mutate(self, info, **kwargs):
-        return PrflMutation(
-            runProfiling=self.runProfiling(),
-            setProfiling=self.setProfiling()
-        )
 
 #################################################################
 #########    SCHEMA    ##########################################

@@ -60,8 +60,8 @@ class Mutation(object):
     def resolve_prflSetProfiling(self, info, files):
         return Profiling().setProfiling(info, files)
     ###########################################
-    prflSunProfiling = graphene.Field(ProfilingNode,
+    prflRunProfiling = graphene.Field(ProfilingNode,
         profilingid = graphene.ID()
     )
-    def resolve_prflSunProfiling(self, info, profilingid):
+    def resolve_prflRunProfiling(self, info, profilingid):
         return Profiling.objects.get(id=profilingid).runProfiling()

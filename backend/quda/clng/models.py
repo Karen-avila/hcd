@@ -11,10 +11,10 @@ class BaseRule(ModelBase):
         return "BaseRule {0}".format(self.id)
 
 class CleaningRules(ModelBase):
-    content_type = models.ForeignKey('ContentType', on_delete=models.CASCADE)
-    description = modles.TextField()
-    name = modles.CharField(max_length=100)
-    code = modles.CharField(max_length=10)
+    #content_type = models.ForeignKey('ContentType', on_delete=models.CASCADE)
+    description = models.TextField()
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=10)
     def __str__(self):
         return "CleaningRules {0}".format(self.id)
     def initCleaningRules(self):

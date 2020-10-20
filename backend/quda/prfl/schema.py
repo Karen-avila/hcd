@@ -57,12 +57,11 @@ class Mutation(object):
     prflSetProfiling = graphene.Field(ProfilingNode,
         files = graphene.List(ProfilingFileInput)
     )
-    def resolve_setProfiling(self, info, files):
+    def resolve_prflSetProfiling(self, info, files):
         return Profiling().setProfiling(info, files)
-
     ###########################################
     prflSunProfiling = graphene.Field(ProfilingNode,
         profilingid = graphene.ID()
     )
-    def resolve_runProfiling(self, info, profilingid):
+    def resolve_prflSunProfiling(self, info, profilingid):
         return Profiling.objects.get(id=profilingid).runProfiling()

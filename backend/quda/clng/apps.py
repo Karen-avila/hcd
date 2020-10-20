@@ -4,4 +4,8 @@ class CleaningConfig(AppConfig):
     name = "quda.clng"
     verbose_name = ("LIMPIEZA")
     def ready(self):
-        pass
+        try:
+            from .models import CleaningRules
+            CleaningRules.initCleaningRules()
+        except:
+            pass

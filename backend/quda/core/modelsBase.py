@@ -26,6 +26,8 @@ APP = 'core'
 
 def MakePermissions(VARS):
     permissions = []
+    if not VARS:
+        return permissions
     if not 'excludePermissions' in VARS:
         exclude_permissions = []
     else:

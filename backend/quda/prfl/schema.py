@@ -46,11 +46,14 @@ class ProfilingNode(DjangoObjectType):
 # class QudaQuery(graphene.Query):
 #     pass
     ###########################################
+class Query(object):
+    pass
 
 #################################################################
 #########    MUTATIONS    #######################################
 #################################################################
-class PrflMutation(graphene.Mutation):
+
+class Mutation(object):
     setProfiling = graphene.Field(ProfilingNode,
         files = graphene.List(ProfilingFileInput)
     )
@@ -63,13 +66,3 @@ class PrflMutation(graphene.Mutation):
     )
     def resolve_runProfiling(self, info, profilingid):
         return Profiling.objects.get(id=profilingid).runProfiling()
-
-
-#################################################################
-#########    SCHEMA    ##########################################
-#################################################################
-class Query(object):
-    pass
-
-class Mutation(object):
-    prfl = PrflMutation.Field()

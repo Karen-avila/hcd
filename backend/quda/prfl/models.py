@@ -1,10 +1,9 @@
 from quda.core.modelsBase import *
-from graphql import GraphQLError
 from django.conf import settings
 from quda.quda.models import File
-import csv
 from django.utils import timezone
-
+from dateutil.parser import parse
+import re
 
 VARS = {
     'model': 'ProfilingRules',
@@ -12,10 +11,13 @@ VARS = {
     'plural': 'Reglas de perfilamiento',
 }
 class ProfilingRules(ModelBase):
+    checkNull = models.BooleanField(default=False)
     checkBlank = models.BooleanField(default=False)
-    checkFloat = models.BooleanField(default=False)
+    checkUnique = models.BooleanField(default=False) #Check osv
     checkInt = models.BooleanField(default=False)
+    checkFloat = models.BooleanField(default=False)
     checkDate = models.BooleanField(default=False)
+    checkString	= models.BooleanField(default=False)
     VARS = VARS
     class Meta(ModelBase.Meta):
         verbose_name = VARS['name']
@@ -23,9 +25,36 @@ class ProfilingRules(ModelBase):
         permissions = MakePermissions(VARS)
     def __str__(self):
         return "Regla de perfilamiento: {0}".format(self.id)
+    def ifIsNull(self, value):
+        if not value:
+            return True
+        return False
     def ifIsBlank(self, value):
         if str(value).strip() == '':
             return True
+        return False
+    def ifIsInt(self, value):
+        try:
+            int(value)
+            return True
+        except:
+            return False
+    def ifIsFloat(self, value):
+        try:
+            float(value)
+            return True
+        except:
+            return False
+    def ifIsDate(self, value):
+        try:
+            parse(value,
+                tzinfos=timezone.get_default_timezone(),
+                fuzzy=False,
+                fuzzy_with_tokens=False
+            )
+            return True
+        except:
+            pass
         return False
 ########################################################################################
 ########################################################################################
@@ -137,7 +166,13 @@ class ProfilingFileColumn(ModelBase):
             editable=False
         )
     columnIndex = models.IntegerField(default=0)
+    nulls = models.IntegerField(default=0)
     blanks = models.IntegerField(default=0)
+    uniques = models.IntegerField(default=0)
+    ints = models.IntegerField(default=0)
+    floats = models.IntegerField(default=0)
+    dates = models.IntegerField(default=0)
+    strings	= models.IntegerField(default=0)
     VARS = VARS
     class Meta(ModelBase.Meta):
         verbose_name = VARS['name']
@@ -152,8 +187,49 @@ class ProfilingFileColumn(ModelBase):
             quotechar = self.profilingFile.quotechar,
         )
         for row in file:
+
+            row[self.columnIndex] or None:
+
             if self.profilingRule.checkBlank:
-                if self.profilingRule.ifIsBlank(row[self.columnIndex]):
+                if self.profilingRule.ifIsBlank(rowValue):
                     self.blanks += 1
+                elif self.profilingRule.checkInt:
+                    if self.profilingRule.ifIsInt(rowValue):
+                        self.ints += 1
+                    elif self.profilingRule.checkFloat:
+                        if self.profilingRule.ifIsFloat(rowValue):
+                            self.floats += 1
+                        elif self.profilingRule.checkDate:
+                            if self.profilingRule.ifIsDate(rowValue):
+                                self.dates += 1
+                            elif self.profilingRule.checkNull:
+                                if self.profilingRule.ifIsNull(rowValue):
+                                    self.nulls += 1
+                                elif self.profilingRule.checkString:
+                                    self.strings += 1
         self.save()
+    def getPercentBlank(self):
+        return self.profilingFile.getRows()/self.blanks
+    def getPercentInts(self):
+        return self.profilingFile.getRows()/self.ints
+    def getPercentFloats(self):
+        return self.profilingFile.getRows()/self.floats
+    def getPercentDates(self):
+        return self.profilingFile.getRows()/self.dates
+    def getPercentNulls(self):
+        return self.profilingFile.getRows()/self.nulls
+    def getDataType(self):
+        pass
+    def getLongMax(self):
+        pass
+    def getLongMin(self):
+        pass
+    def getValMax(self):
+        pass
+    def getValMin(self):
+        pass
+    def getMedia(self):
+        pass
+    def getDesvEstandar(self):
+        pass
 

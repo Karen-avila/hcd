@@ -166,13 +166,13 @@ class ProfilingFileColumn(ModelBase):
             editable=False
         )
     columnIndex = models.IntegerField(default=0)
-    nulls = models.IntegerField(default=0)
+    ##### Contadores
     blanks = models.IntegerField(default=0)
-    uniques = models.IntegerField(default=0)
     ints = models.IntegerField(default=0)
     floats = models.IntegerField(default=0)
     dates = models.IntegerField(default=0)
     strings	= models.IntegerField(default=0)
+    #####
     VARS = VARS
     class Meta(ModelBase.Meta):
         verbose_name = VARS['name']
@@ -187,37 +187,38 @@ class ProfilingFileColumn(ModelBase):
             quotechar = self.profilingFile.quotechar,
         )
         for row in file:
-
-            row[self.columnIndex] or None:
-
+            rowValue = row[self.columnIndex] or None
             if self.profilingRule.checkBlank:
                 if self.profilingRule.ifIsBlank(rowValue):
                     self.blanks += 1
-                elif self.profilingRule.checkInt:
-                    if self.profilingRule.ifIsInt(rowValue):
-                        self.ints += 1
-                    elif self.profilingRule.checkFloat:
-                        if self.profilingRule.ifIsFloat(rowValue):
-                            self.floats += 1
-                        elif self.profilingRule.checkDate:
-                            if self.profilingRule.ifIsDate(rowValue):
-                                self.dates += 1
-                            elif self.profilingRule.checkNull:
-                                if self.profilingRule.ifIsNull(rowValue):
-                                    self.nulls += 1
-                                elif self.profilingRule.checkString:
-                                    self.strings += 1
+            if self.profilingRule.checkInt:
+                if self.profilingRule.ifIsInt(rowValue):
+                    self.ints += 1
+            if self.profilingRule.checkFloat:
+                if self.profilingRule.ifIsFloat(rowValue):
+                    self.floats += 1
+            if self.profilingRule.checkDate:
+                if self.profilingRule.ifIsDate(rowValue):
+                    self.dates += 1
+            if self.profilingRule.checkString:
+                # if self.profilingRule.ifIsString(rowValue):
+                    self.strings += 1
+            # if self.profilingRule.checkNull:
+            #     if self.profilingRule.ifIsNull(rowValue):
+            #         self.nulls += 1
         self.save()
+    ##
     def getPercentBlank(self):
-        return self.profilingFile.getRows()/self.blanks
+        return self.profilingFile.getRows()/self.blanks*100
     def getPercentInts(self):
-        return self.profilingFile.getRows()/self.ints
+        return self.profilingFile.getRows()/self.ints*100
     def getPercentFloats(self):
-        return self.profilingFile.getRows()/self.floats
+        return self.profilingFile.getRows()/self.floats*100
     def getPercentDates(self):
-        return self.profilingFile.getRows()/self.dates
-    def getPercentNulls(self):
-        return self.profilingFile.getRows()/self.nulls
+        return self.profilingFile.getRows()/self.dates*100
+    def getPercentStrings(self):
+        return self.profilingFile.getRows()/self.strings*100
+    ####
     def getDataType(self):
         pass
     def getLongMax(self):
@@ -228,8 +229,17 @@ class ProfilingFileColumn(ModelBase):
         pass
     def getValMin(self):
         pass
-    def getMedia(self):
-        pass
-    def getDesvEstandar(self):
-        pass
+    # def getMedia(self):
+    #     pass
+    # def getDesvEstandar(self):
+    #     pass
 
+# class KeyFileColumn(models.Model):
+#     profilingFileColumn = models.ForeignKey('ProfilingFileColumn',
+#             on_delete=models.CASCADE,
+#             related_name='+',
+#             editable=False
+#         )
+#     createdDate = models.DateField(auto_now_add=True)
+#     key = models.CharField(max_length=250)
+#     count = models.PositiveIntegerField(default=0)

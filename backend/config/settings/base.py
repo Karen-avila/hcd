@@ -39,7 +39,17 @@ ORGANIZATION = env("ORGANIZATION")
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL")}
+
+DATABASES = {
+    "default": env.db("DATABASE_URL"),
+    "mongodb": {
+        'ENGINE': 'djongo',
+        'NAME': 'mongo',
+        'CLIENT': {
+            'host': 'mongo://mongo:27017',
+        }
+    },
+}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # URLS

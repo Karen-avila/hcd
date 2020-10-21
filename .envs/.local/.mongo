@@ -1,0 +1,7 @@
+# MongoDB
+# ------------------------------------------------------------------------------
+MONGO_HOST=mongo
+MONGO_PORT=27017
+MONGO_DB=hcd
+MONGO_INITDB_ROOT_USERNAME=PWFeSirWlNbhefYoUJaYecUURTQisuhc
+MONGO_INITDB_ROOT_PASSWORD=rtVOg3S2AsqbRtkAmuXjy60UsDsCE5Yw7igZiHvsBIfHUD6Hm5RTqPI2sMYwML6y

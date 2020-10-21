@@ -44,3 +44,5 @@ channels_redis
 graphene-subscriptions
 
 pyspark
+
+djongo

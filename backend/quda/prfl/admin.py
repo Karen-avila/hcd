@@ -15,4 +15,10 @@ class ProfilingFileAdmin(BaseAdmin):
 
 @admin.register(ProfilingFileColumn)
 class ProfilingFileColumnAdmin(BaseAdmin):
-    pass
+    readonly_fields = [
+        'blanks',
+        'ints',
+        'floats',
+        'dates',
+        'strings',
+    ]

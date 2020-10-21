@@ -42,13 +42,6 @@ ORGANIZATION = env("ORGANIZATION")
 
 DATABASES = {
     "default": env.db("DATABASE_URL"),
-    "mongodb": {
-        'ENGINE': 'djongo',
-        'NAME': 'mongo',
-        'CLIENT': {
-            'host': 'mongo://mongo:27017',
-        }
-    },
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 

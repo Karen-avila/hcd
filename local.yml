@@ -27,8 +27,8 @@ services:
     depends_on:
       - redis
       - postgres
-      - mongo
-      - mongo-express
+      # - mongo
+      # - mongo-express
     volumes:
       - ./backend:/app:z
     working_dir: /app

@@ -11,9 +11,7 @@ VARS = {
     'plural': 'Reglas de perfilamiento',
 }
 class ProfilingRules(ModelBase):
-    checkNull = models.BooleanField(default=False)
     checkBlank = models.BooleanField(default=False)
-    checkUnique = models.BooleanField(default=False) #Check osv
     checkInt = models.BooleanField(default=False)
     checkFloat = models.BooleanField(default=False)
     checkDate = models.BooleanField(default=False)
@@ -127,7 +125,7 @@ VARS = {
     'plural': 'Archivos de Perfilamiento',
 }
 class ProfilingFile(File):
-    profiling = models.ForeignKey('Profiling', on_delete=models.CASCADE, related_name='+', null=True, blank=True)
+    profiling = models.ForeignKey('Profiling', on_delete=models.CASCADE, related_name='+', null=True, blank=True, editable=False)
     initialDateTime = models.DateTimeField( null=True, blank=True, editable=False)
     finalDateTime = models.DateTimeField(null=True, blank=True, editable=False)
     VARS = VARS
@@ -167,11 +165,11 @@ class ProfilingFileColumn(ModelBase):
         )
     columnIndex = models.IntegerField(default=0)
     ##### Contadores
-    blanks = models.IntegerField(default=0)
-    ints = models.IntegerField(default=0)
-    floats = models.IntegerField(default=0)
-    dates = models.IntegerField(default=0)
-    strings	= models.IntegerField(default=0)
+    blanks = models.IntegerField(default=0, editable=False)
+    ints = models.IntegerField(default=0, editable=False)
+    floats = models.IntegerField(default=0, editable=False)
+    dates = models.IntegerField(default=0, editable=False)
+    strings	= models.IntegerField(default=0, editable=False)
     #####
     VARS = VARS
     class Meta(ModelBase.Meta):
@@ -220,6 +218,7 @@ class ProfilingFileColumn(ModelBase):
         return self.profilingFile.getRows()/self.strings*100
     ####
     def getDataType(self):
+
         pass
     def getLongMax(self):
         pass
@@ -233,13 +232,3 @@ class ProfilingFileColumn(ModelBase):
     #     pass
     # def getDesvEstandar(self):
     #     pass
-
-# class KeyFileColumn(models.Model):
-#     profilingFileColumn = models.ForeignKey('ProfilingFileColumn',
-#             on_delete=models.CASCADE,
-#             related_name='+',
-#             editable=False
-#         )
-#     createdDate = models.DateField(auto_now_add=True)
-#     key = models.CharField(max_length=250)
-#     count = models.PositiveIntegerField(default=0)

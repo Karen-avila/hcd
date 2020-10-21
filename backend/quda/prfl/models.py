@@ -26,7 +26,7 @@ class ProfilingRules(ModelBase):
     def __str__(self):
         return "Regla de perfilamiento: {0}".format(self.id)
     def ifIsNull(self, value):
-        if value:
+        if not value:
             return True
         return False
     def ifIsBlank(self, value):
@@ -187,27 +187,26 @@ class ProfilingFileColumn(ModelBase):
             quotechar = self.profilingFile.quotechar,
         )
         for row in file:
-            rowValue = row[self.columnIndex] or None
+
+            row[self.columnIndex] or None:
+
             if self.profilingRule.checkBlank:
                 if self.profilingRule.ifIsBlank(rowValue):
                     self.blanks += 1
-            elif self.profilingRule.checkInt:
-                if self.profilingRule.ifIsInt(rowValue):
-                    self.ints += 1
-            elif self.profilingRule.checkFloat:
-                if self.profilingRule.ifIsFloat(rowValue):
-                    self.floats += 1
-            elif self.profilingRule.checkDate:
-                if self.profilingRule.ifIsDate(rowValue):
-                    self.dates += 1
-            elif self.profilingRule.checkNull:
-                if self.profilingRule.ifIsNull(rowValue):
-                    self.nulls += 1
-            elif self.profilingRule.checkNull:
-                if self.profilingRule.ifIsNull(rowValue):
-                    self.nulls += 1
-            elif self.profilingRule.checkString:
-                self.strings += 1
+                elif self.profilingRule.checkInt:
+                    if self.profilingRule.ifIsInt(rowValue):
+                        self.ints += 1
+                    elif self.profilingRule.checkFloat:
+                        if self.profilingRule.ifIsFloat(rowValue):
+                            self.floats += 1
+                        elif self.profilingRule.checkDate:
+                            if self.profilingRule.ifIsDate(rowValue):
+                                self.dates += 1
+                            elif self.profilingRule.checkNull:
+                                if self.profilingRule.ifIsNull(rowValue):
+                                    self.nulls += 1
+                                elif self.profilingRule.checkString:
+                                    self.strings += 1
         self.save()
     def getPercentBlank(self):
         return self.profilingFile.getRows()/self.blanks

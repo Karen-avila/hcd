@@ -93,24 +93,12 @@ export default {
     },
     beforeTransition (newStep, oldStep) {
       if (newStep === 2 && oldStep === 1) {
-        this.profilingFiles = this.selectedFiles.map(async file => {
-          console.log(await this.getHeaders(file).then(({ data }) => { return data }))
-          return {
-            path: file,
-            getHeaders: await this.getHeaders(file),
-            haveHeaders: true
-          }
+        this.profilingFiles = this.selectedFiles.map(file => {
+          return { path: file, getHeaders: this.getHeaders(file), haveHeaders: true }
         })
       }
     },
     getHeaders (file) {
-      console.log(`mutation{
-              qudaFileGetHeaders(
-                filename: "${file}"
-                sep: ","
-                encoding: "Latin1"
-              )
-            }`)
       return this.$apollo
         .mutate({
           mutation: this.$gql`mutation{
@@ -120,8 +108,8 @@ export default {
                 encoding: "Latin1"
               )
             }`
-        }).then(data => {
-          return data
+        }).then(({ data }) => {
+          return data.qudaFileGetHeaders
         }).catch((error) => {
           console.error('ProfilingAdd, getHeaders: ', error)
         })

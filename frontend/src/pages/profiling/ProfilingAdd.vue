@@ -15,12 +15,19 @@
                 q-btn.float-right(color='secondary')
                   q-icon(left='', size='2em', name='add')
                   div NUEVO PERFILAMIENTO
-            .text-subtitle2 por John Doe
+            .text-subtitle2 ambiente Desarrollo
           q-separator
-          q-stepper(v-model='step', ref='stepper', color='primary', animated='')
+          q-stepper(
+            v-model='step'
+            ref='stepper'
+            color='primary'
+            animated=''
+            @before-transition='beforeTransition'
+          )
             q-step(
               :name='1'
-              title='Selecciona un archivo'
+              title='SELECCIONA'
+              caption='Elige 1 o mas archivos'
               icon='create_new_folder'
               :done='step > 1'
             )
@@ -32,9 +39,24 @@
               q-card.bg-blue-grey-1(flat=true, )
                 TreeFiles.q-pa-md(
                   :selectedFiles.sync="selectedFiles"
+                  :path="path"
                 )
-            q-step(:name='2', title='Create an ad group', caption='Optional', icon='create_new_folder', :done='step > 2')
-              | An ad group contains one or more ads which target a shared set of keywords.
+            q-step(
+              :name='2'
+              title='VALIDA'
+              caption='Revisa las cabeceras'
+              icon='file_copy'
+              :done='step > 2'
+            )
+              p Archivos seleccionados ({{selectedFiles.length}}):
+                span.text-weight-bolder
+                  template(v-for="file in selectedFiles")
+                    span.q-pa-xs {{file.split('/').pop()}}
+              q-card.my-card.q-mb-sm(flat='', bordered='' v-for='file in profilingFiles')
+                q-card-section
+                  .text-h6 {{file}}
+                q-card-section.q-pt-none
+                  | {{file}}
             q-step(:name='3', title='Ad template', icon='create_new_folder', disable='')
               | This step won't show up because it is disabled.
             q-step(:name='4', title='Create an ad', icon='add_comment')
@@ -44,7 +66,7 @@
             template(v-slot:navigation='')
               q-stepper-navigation
                 q-btn(@click='$refs.stepper.next()', color='primary', :label="step === 4 ? 'Finish' : 'Continuar'" :disabled="validatorNext()")
-                q-btn.q-ml-sm(v-if='step > 1', flat='', color='primary', @click='$refs.stepper.previous()', label='Back')
+                q-btn.q-ml-sm(v-if='step > 1', flat='', color='primary', @click='$refs.stepper.previous()', label='Regresar')
 </template>
 
 <script>
@@ -57,7 +79,9 @@ export default {
   data () {
     return {
       step: 1,
-      selectedFiles: []
+      selectedFiles: [],
+      profilingFiles: [],
+      path: '/app/temp/'
     }
   },
   methods: {
@@ -66,11 +90,41 @@ export default {
         if (this.selectedFiles.length > 0) return false
       }
       return true
-    }
-  },
-  watch: {
-    selectedFiles (newValue) {
-      console.log(newValue)
+    },
+    beforeTransition (newStep, oldStep) {
+      if (newStep === 2 && oldStep === 1) {
+        this.profilingFiles = this.selectedFiles.map(async file => {
+          console.log(await this.getHeaders(file).then(({ data }) => { return data }))
+          return {
+            path: file,
+            getHeaders: await this.getHeaders(file),
+            haveHeaders: true
+          }
+        })
+      }
+    },
+    getHeaders (file) {
+      console.log(`mutation{
+              qudaFileGetHeaders(
+                filename: "${file}"
+                sep: ","
+                encoding: "Latin1"
+              )
+            }`)
+      return this.$apollo
+        .mutate({
+          mutation: this.$gql`mutation{
+              qudaFileGetHeaders(
+                filename: "${file}"
+                sep: ","
+                encoding: "Latin1"
+              )
+            }`
+        }).then(data => {
+          return data
+        }).catch((error) => {
+          console.error('ProfilingAdd, getHeaders: ', error)
+        })
     }
   }
 }

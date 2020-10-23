@@ -11,7 +11,7 @@ const state = {
 }
 
 const getters = {
-  currentUser (state) { return state.user },
+  currentUser (state) { return state.user.replace(`${process.env.ORGANIZATION}__`, '') },
   isAuthenticated (state) { return state.isAuthenticated },
   errors (state) { return state.errors }
 }

@@ -19,12 +19,12 @@ import gql from 'graphql-tag'
 export default {
   name: 'TreeFiles',
   props: [
+    'path',
     'selectedFiles'
   ],
   data () {
     return {
       files: [],
-      path: '/app/temp/',
       ticked: []
     }
   },
@@ -39,21 +39,19 @@ export default {
         done(data)
       })
     },
-    getDirectory (path) {
+    getDirectory (dirPath) {
       return this.$apollo
         .mutate({
-          mutation: gql`
-            mutation{
-              qudaFileGetDirectory(path:"/app/temp")
-            }
-          `
+          mutation: gql`mutation{
+              qudaFileGetDirectory(path:"${dirPath}")
+            }`
         }).then(({ data }) => {
-          return JSON.parse(data.qudagetdirectory.directory.getStructure).directory.map(node => {
+          return JSON.parse(data.qudaFileGetDirectory).directory.map(node => {
             node.name = node.label
-            node.label = path + node.label
+            node.label = dirPath + node.label
             node.header = 'generic'
             node.lazy = (node.type === 'directory')
-            node.path = path
+            node.path = dirPath
             node.icon = (node.type === 'directory') ? 'folder' : 'insert_drive_file'
             node.noTick = (node.type === 'directory')
             node.iconColor = 'secondary'

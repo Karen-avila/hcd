@@ -9,20 +9,21 @@ from .forms import *
 class ProfilingFileNode(DjangoObjectType):
     class Meta:
         model = ProfilingFile
+        description = "Layout del archivo de perfilamiento."
 class ProfilingFileInput(graphene.InputObjectType):
     filename = graphene.String(
         required=True,
         description="Ruta absoluta donde se encuentra el archivo; ej. '/app/temp/file.csv'"
     )
-    sep = graphene.String(default_value=",")
-    encoding = graphene.String(default_value="latin1")
+    sep = graphene.String(default_value=",",description="Caracter utilizado como separador de los datos entre cada columna; ej. '^'")
+    encoding = graphene.String(default_value="latin1",description="Metodo de codificación de caracteres; ej. 'latin1'")
     class Meta:
         description = "Forma para leer un archivo CSV"
 
 
 ###############################################
 class ProfilingNode(DjangoObjectType):
-    getProfilingFiles = graphene.List(ProfilingFileNode)
+    getProfilingFiles = graphene.List(ProfilingFileNode , description="Layout de informacion sobre la configuracion y ejecucion del archivo de perfilamiento.")
     class Meta:
         model = Profiling
     def resolve_getProfilingFiles(root, info):

@@ -12,8 +12,8 @@ VARS = {
 }
 class File(ModelBase):
     filename = models.CharField(max_length=500, help_text="Nombre del archivo con 'path' completo")
-    sep = models.CharField(max_length=1, default=',')
-    encoding = models.CharField(max_length=50, default='latin1')
+    sep = models.CharField(max_length=1, default=',', help_text="Caracter utilizado como separador de los datos entre cada columna; ej. '^'")
+    encoding = models.CharField(max_length=50, default='latin1', help_text="Metodo de codificación de caracteres; ej. 'latin1'")
     VARS = VARS
     class Meta(ModelBase.Meta):
         verbose_name = VARS['name']

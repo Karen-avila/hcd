@@ -16,10 +16,10 @@ VARS = {
     'plural': 'Perfilamientos',
 }
 class Profiling(ModelBase):
-    user = models.ForeignKey('core.User', null=True, on_delete=models.SET_NULL, related_name='+')
-    creationDateTime = models.DateTimeField(auto_now_add=True)
-    initialDateTime = models.DateTimeField(null=True, blank=True)
-    finalDateTime = models.DateTimeField(null=True, blank=True)
+    user = models.ForeignKey('core.User', null=True, on_delete=models.SET_NULL, related_name='+', help_text="Referencia de integridad con el usuario que configuro el perfilamiento.")
+    creationDateTime = models.DateTimeField(auto_now_add=True, help_text="Fecha y hora de creacion de la configuracion del perfilamiento.")
+    initialDateTime = models.DateTimeField(null=True, blank=True, help_text="Fecha y hora de inicio de la ejecucion del proceso para el perfilamiento configurado.")
+    finalDateTime = models.DateTimeField(null=True, blank=True, help_text="Fecha y hora de termino de la ejecucion del proceso para el perfilamiento configurado.")
     VARS = VARS
     class Meta(ModelBase.Meta):
         verbose_name = VARS['name']
@@ -53,19 +53,19 @@ VARS = {
     'plural': 'Archivos de Perfilamiento',
 }
 class ProfilingFile(File):
-    profiling = models.ForeignKey('Profiling', on_delete=models.CASCADE, related_name='+', null=True, blank=True, editable=False)
-    initialDateTime = models.DateTimeField( null=True, blank=True, editable=False)
-    finalDateTime = models.DateTimeField(null=True, blank=True, editable=False)
-    analysis = models.TextField(null=True, blank=True)
+    profiling = models.ForeignKey('Profiling', on_delete=models.CASCADE, related_name='+', null=True, blank=True, editable=False, help_text="Referencia de integridad del perfilamiento con el archivo.")
+    initialDateTime = models.DateTimeField( null=True, blank=True, editable=False , help_text="Fecha y hora de inicio de la ejecucion del procesamiento del archivo.")
+    finalDateTime = models.DateTimeField(null=True, blank=True, editable=False, help_text="Fecha y hora de termino de la ejecucion del procesamiento del archivo.")
+    analysis = models.TextField(null=True, blank=True, help_text="Informacion referente al tiempo de ejecucion y generacion del analisis del archivo.")
     table = models.TextField(null=True, blank=True)
-    variables = models.TextField(null=True, blank=True)
+    variables = models.TextField(null=True, blank=True, help_text="Informacion estadistica referente a las columnas del archivo analisado.")
     scatter = models.TextField(null=True, blank=True)
-    correlations = models.TextField(null=True, blank=True)
-    missing = models.TextField(null=True, blank=True)
-    messages = models.TextField(null=True, blank=True)
+    correlations = models.TextField(null=True, blank=True, help_text="Informacion estadistica del a correlacion de 2 o mas columnas del archivo a analizar.")
+    missing = models.TextField(null=True, blank=True, help_text="Informacion estadistica de los registros vacios o nulos por columna.")
+    messages = models.TextField(null=True, blank=True, help_text="Mensajes informativos referente a la composicion estadistica de los datos de cada columna del archivo.")
     package = models.TextField(null=True, blank=True)
     sample = models.TextField(null=True, blank=True)
-    duplicates = models.TextField(null=True, blank=True)
+    duplicates = models.TextField(null=True, blank=True, help_text="Informacion estadistica de los registros duplicados por columna.")
     VARS = VARS
     class Meta(ModelBase.Meta):
         verbose_name = VARS['name']

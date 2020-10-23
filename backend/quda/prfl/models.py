@@ -81,8 +81,9 @@ class ProfilingFile(File):
         self.save()
         return self
     def makeProfiling(self):
-        df = self.getFile()
+        df = self.getFile(self.filename, self.sep, self.encoding)
         profile = ProfileReport(df, explorative=True, config_file="/app/config/pandas/pandasProfiling.min.yaml")
         profiling = json.loads(profile.to_json())
         self.__dict__.update(**profiling)
+        profile.to_file(str(self.id))
         return self

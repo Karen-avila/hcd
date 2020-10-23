@@ -6,53 +6,30 @@ from .forms import *
 #################################################################
 #########   TYPES or NODES   ####################################
 #################################################################
-class ProfilingRulesNode(DjangoObjectType):
-    class Meta:
-        model = ProfilingRules
-
-class ProfilingRulesInput(DjangoInputObjectType):
-    class Meta:
-        model = ProfilingRules
-
-###############################################
-class ProfilingFileColumnNode(DjangoObjectType):
-    class Meta:
-        model = ProfilingFileColumn
-class ProfilingFileColumnInput(DjangoInputObjectType):
-    rules = graphene.Field(ProfilingRulesInput)
-    class Meta:
-        model = ProfilingFileColumn
-
-###############################################
 class ProfilingFileNode(DjangoObjectType):
     class Meta:
         model = ProfilingFile
 class ProfilingFileInput(DjangoInputObjectType):
-    cols = graphene.List(ProfilingFileColumnInput, required=True)
     class Meta:
         model = ProfilingFile
 
 ###############################################
 class ProfilingNode(DjangoObjectType):
-    status = graphene.String()
+    getProfilingFiles = graphene.List(ProfilingFileNode)
     class Meta:
         model = Profiling
-    def resolve_status(self, info):
-        return self.getStatus()
+    def resolve_getProfilingFiles(root, info):
+        return ProfilingFile.objects.filter(profiling=root)
 
 #################################################################
 #########   QUERYS   ############################################
 #################################################################
-# class QudaQuery(graphene.Query):
-#     pass
-    ###########################################
 class Query(object):
     pass
 
 #################################################################
 #########    MUTATIONS    #######################################
 #################################################################
-
 class Mutation(object):
     prflSetProfiling = graphene.Field(ProfilingNode,
         files = graphene.List(ProfilingFileInput)

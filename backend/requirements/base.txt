@@ -43,8 +43,9 @@ channels
 channels_redis
 graphene-subscriptions
 
-numpy
 pandas
 pandas-profiling[notebook]
+beautifulsoup4
+urllib3
 
 pyspark

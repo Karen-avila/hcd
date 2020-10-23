@@ -15,45 +15,25 @@ class FileNode(DjangoObjectType):
 #################################################################
 #########   QUERYS   ############################################
 #################################################################
-# class QudaQuery(graphene.Query):
-#     pass
-    ###########################################
+class Query(object):
+    pass
 
 #################################################################
 #########    MUTATIONS    #######################################
 #################################################################
-class QudaMutation(graphene.Mutation):
+class Mutation(object):
     qudaFileGetDirectory = graphene.JSONString(
         path=graphene.String(default_value="/app/temp/"),
         typeFile=graphene.String(default_value="local")
     )
     def resolve_qudaFileGetDirectory(self, info, path, typeFile):
         return File().getDirectory(path, typeFile)
-
     ###########################################
     qudaFileGetHeaders = graphene.List(graphene.String,
         filename=graphene.String(),
-        newline=graphene.String(default_value=''),
+        sep=graphene.String(default_value=','),
         encoding=graphene.String(default_value='Latin1'),
-        delimiter=graphene.String(default_value=','),
-        quotechar=graphene.String(default_value=',')
     )
-    def resolve_qudaFileGetHeaders(self, info, filename, newline, encoding, delimiter, quotechar):
-        return File().getHeaders(filename, newline, encoding, delimiter, quotechar)
+    def resolve_qudaFileGetHeaders(self, info, filename, sep, encoding,):
+        return File().getHeaders(filename, sep, encoding)
 
-    ###########################################
-    ###########################################
-    def mutate(self, info, **kwargs):
-        return QudaMutation(
-            qudaFileGetDirectory = qudaFileGetDirectory,
-            qudaFileGetHeaders = qudaFileGetHeaders
-        )
-
-#################################################################
-#########    SCHEMA    ##########################################
-#################################################################
-class Query(object):
-    pass
-
-class Mutation(object):
-    quda = QudaMutation.Field()

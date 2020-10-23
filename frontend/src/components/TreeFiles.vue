@@ -44,11 +44,7 @@ export default {
         .mutate({
           mutation: gql`
             mutation{
-              qudagetdirectory{
-                directory{
-                  structure(path:"${path}")
-                }
-              }
+              qudaFileGetDirectory(path:"/app/temp")
             }
           `
         }).then(({ data }) => {

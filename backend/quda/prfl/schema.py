@@ -12,6 +12,8 @@ class ProfilingFileNode(DjangoObjectType):
 class ProfilingFileInput(DjangoInputObjectType):
     class Meta:
         model = ProfilingFile
+        description = "Modelo de un archivo"
+        fields = ['filename', 'sep', 'encoding']
 
 ###############################################
 class ProfilingNode(DjangoObjectType):
@@ -32,13 +34,15 @@ class Query(object):
 #################################################################
 class Mutation(object):
     prflSetProfiling = graphene.Field(ProfilingNode,
-        files = graphene.List(ProfilingFileInput)
+        files = graphene.List(ProfilingFileInput),
+        description = "Configura el perfilamiento a partir de 1 o mas archivos"
     )
     def resolve_prflSetProfiling(self, info, files):
         return Profiling().setProfiling(info, files)
     ###########################################
     prflRunProfiling = graphene.Field(ProfilingNode,
-        profilingid = graphene.ID()
+        profilingid = graphene.ID(),
+        description = "Ejecuta el perfilamiento por cada uno de los archivos que tiene configurado"
     )
     def resolve_prflRunProfiling(self, info, profilingid):
         return Profiling.objects.get(id=profilingid).runProfiling()

@@ -53,5 +53,5 @@ class Query(object):
 #########    MUTATIONS    #######################################
 #################################################################
 class Mutation(object):
-    kerberosAuth = ObtainJSONWebToken.Field()
-    verifyToken = graphql_jwt.Verify.Field()
+    kerberosAuth = ObtainJSONWebToken.Field(description="Regresa el JWT de un usuario con credenciales válidas")
+    verifyToken = graphql_jwt.Verify.Field(description="Actualiza el JWT si este tiene una sesión activa")

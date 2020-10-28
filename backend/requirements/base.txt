@@ -29,10 +29,6 @@ django-imagekit
 django-localflavor
 django-mptt
 
-django-kerberos
-kerberos
-requests-kerberos
-
 graphene_django
 django-graphql-playground
 django-filter
@@ -45,7 +41,5 @@ graphene-subscriptions
 
 pandas
 pandas-profiling[notebook]
-beautifulsoup4
-urllib3
 
 pyspark

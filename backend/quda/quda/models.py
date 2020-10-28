@@ -46,3 +46,14 @@ class File(ModelBase):
         return self.getFile(filename, sep, encoding, header).head()
     def getSamples(self, filename, sep, encoding, header):
         return self.getFile(filename, sep, encoding, header).sample(n=10, random_state=5).values.tolist()
+
+"""
+class Mask(ModelBase):
+    name String 150
+    regex Text
+    isValid Boolen False
+    isDefault
+    def validation
+        return True
+    def apply
+"""

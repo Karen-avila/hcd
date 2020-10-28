@@ -52,13 +52,14 @@
                 q-card.q-mb-md(
                   flat=false
                   bordered=true
-                  v-for='file in profilingFiles'
+                  v-for='(file, index) in profilingFiles'
                   v-bind:data="file"
                   v-bind:key="file.path"
                 )
                   q-card-section
                     HeadersFiles(
                       :file.sync="file"
+                      :index.sync="index"
                     )
             q-step(:name='3', title='Ad template', icon='create_new_folder', disable='')
               | This step won't show up because it is disabled.
@@ -102,6 +103,8 @@ export default {
           return {
             path: file,
             headers: [],
+            data: [],
+            error: null,
             haveHeaders: true,
             separator: ',',
             codification: 'Latin1'

@@ -1,10 +1,10 @@
 <template lang='pug'>
   div
-    template(v-if="file.headers.length < 1 && !file.errors")
+    template(v-if="file.headers.length < 1 && file.data.length < 1 && !file.error")
       q-spinner.q-mr-md(color='primary', size='1rem', :thickness='10')
       span.q-mr-sm Descargando:
       span.text-weight-bold {{file.path.split('/').pop()}}
-    template(v-if="file.headers.length > 1 && !file.errors")
+    template(v-if="file.headers.length > 1 && file.data.length > 1 && !file.error")
       p
         q-toggle.absolute-top-right.q-mr-md(
           :label='`${file.haveHeaders ? "Tiene encabezados" : "No tiene encabezados"}`'
@@ -17,15 +17,15 @@
         bordered=false
         flat=true
         title=''
-        :data='file.data'
-        :columns='file.headers'
+        :data='this.file.data'
+        :columns='this.file.headers'
         row-key='name'
         separator='vertical'
         hide-bottom=true,
         virtual-scroll
       )
-    template(v-if="this.file.errors")
-      span.text-negative Error: {{this.file.errors}}
+    template(v-if="file.error")
+      span.text-negative {{this.file.error}}
       p.text-weight-bold {{file.path.split('/').pop()}}
       q-form()
         .q-gutter-md.row.items-start
@@ -45,7 +45,7 @@
             label='Descargar'
             type='button'
             color='primary'
-            @click='getHeaders()'
+            @click='updateTable()'
           )
 </template>
 
@@ -53,19 +53,25 @@
 export default {
   name: 'HeaderFiles',
   props: [
-    'file'
+    'file',
+    'index'
   ],
   data () {
     return {
     }
   },
   mounted () {
-    this.getHeaders()
-    this.getSamples()
+    setTimeout(() => {
+      this.updateTable()
+    }, (this.index + 1) * 1000)
   },
   methods: {
+    async updateTable () {
+      await this.getHeaders()
+      await this.getSamples()
+    },
     getHeaders () {
-      this.file.errors = null
+      this.file.error = null
       return this.$apollo
         .mutate({
           mutation: this.$gql`mutation{
@@ -77,19 +83,20 @@ export default {
               )
             }`
         }).then(({ data }) => {
-          this.file.headers = data.qudaFileGetHeaders.map(header => {
+          this.file.headers = data.qudaFileGetHeaders.map((header, index) => {
             return {
               align: 'center',
-              label: header
+              label: header,
+              field: index
             }
           })
         }).catch((error) => {
-          this.file.errors = 'Error: No se pudo abrir el archivo, intenta de nuevo cambiando la separacion o la codificación'
+          this.file.error = 'Error: No se pudo abrir el archivo, intenta de nuevo cambiando la separacion o la codificación'
           console.error('ProfilingAdd, getHeaders: ', error)
         })
     },
     getSamples () {
-      this.file.errors = null
+      this.file.error = null
       return this.$apollo
         .mutate({
           mutation: this.$gql`mutation{
@@ -101,10 +108,15 @@ export default {
               )
             }`
         }).then(({ data }) => {
-          this.file.data = data.qudaFileGetSamples
-          console.log(data.qudaFileGetSamples)
+          this.file.data = data.qudaFileGetSamples.map(row => {
+            const dict = {}
+            row.map((field, i) => {
+              dict[i] = field
+            })
+            return dict
+          })
         }).catch((error) => {
-          // this.file.errors = 'Error: No se pudo abrir el archivo, intenta de nuevo cambiando la separacion o la codificación'
+          this.file.error = 'Error: No se pudo abrir el archivo, intenta de nuevo cambiando la separacion o la codificación'
           console.error('ProfilingAdd, getSamples: ', error)
         })
     }

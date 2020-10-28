@@ -38,3 +38,14 @@ class Mutation(object):
     )
     def resolve_qudaFileGetHeaders(self, info, filename, sep, encoding, header):
         return File().getHeaders(filename, sep, encoding, header)
+    ###########################################
+    qudaFileGetSamples = graphene.List(
+        graphene.List(graphene.String),
+        filename=graphene.String(description="Ruta absoluta del archivo."),
+        sep=graphene.String(default_value=",", description="Caracter separador del archivo"),
+        encoding=graphene.String(default_value='Latin1', description="Codificación del archivo"),
+        header=graphene.Boolean(default_value=True, description="Tiene encabezados?"),
+        description = "Obtiene las primeros N filas del archivo"
+    )
+    def resolve_qudaFileGetSamples(self, info, filename, sep, encoding, header):
+        return File().getSamples(filename, sep, encoding, header)

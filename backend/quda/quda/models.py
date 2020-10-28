@@ -2,6 +2,7 @@ from quda.core.modelsBase import *
 import pandas as pd
 import csv
 import os
+import json
 
 ########################################################################################
 ########################################################################################
@@ -43,3 +44,5 @@ class File(ModelBase):
         return pd.read_csv(filename, sep=sep, encoding=encoding)
     def getHeaders(self, filename, sep, encoding, header):
         return self.getFile(filename, sep, encoding, header).head()
+    def getSamples(self, filename, sep, encoding, header):
+        return self.getFile(filename, sep, encoding, header).sample(n=10, random_state=5).values.tolist()

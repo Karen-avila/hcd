@@ -1,62 +1,51 @@
 <template lang='pug'>
   div
-    template(v-if="file.headers.length < 1 && !error")
+    template(v-if="file.headers.length < 1 && !file.errors")
       q-spinner.q-mr-md(color='primary', size='1rem', :thickness='10')
       span.q-mr-sm Descargando:
       span.text-weight-bold {{file.path.split('/').pop()}}
-    template(v-if="file.headers.length > 1 && !error")
+    template(v-if="file.headers.length > 1 && !file.errors")
       p
-        span.text-weight-bold {{file.path.split('/').pop()}}
-        q-toggle(
+        q-toggle.absolute-top-right.q-mr-md(
           :label='`${file.haveHeaders ? "Tiene encabezados" : "No tiene encabezados"}`'
           v-model='file.haveHeaders'
+          left-label
         )
+        span.text-weight-bold {{file.path.split('/').pop()}}
       q-table.q-mt-lg(
         dense=true
         bordered=false
         flat=true
         title=''
-        :data='data'
-        :columns='columns'
+        :data='file.data'
+        :columns='file.headers'
         row-key='name'
-        :separator='separator'
+        separator='vertical'
         hide-bottom=true,
         virtual-scroll
       )
-    template(v-if="error")
+    template(v-if="this.file.errors")
+      span.text-negative Error: {{this.file.errors}}
       p.text-weight-bold {{file.path.split('/').pop()}}
-      p.text-negative Error: {{error}}
       q-form()
-        .q-pb-md
-          .q-gutter-md.row.items-start
-            q-input(
-              clearable=''
-              label='Separador'
-              clear-icon='close'
-              dense=true
-              v-model='file.separator'
-            )
-            q-input(
-              clearable=''
-              label='Codificación'
-              clear-icon='close'
-              dense=true
-              v-model='file.codification'
-            )
-        div
+        .q-gutter-md.row.items-start
+          q-input(
+            clearable=''
+            label='Separador'
+            clear-icon='close'
+            v-model='file.separator'
+          )
+          q-input(
+            clearable=''
+            label='Codificación'
+            clear-icon='close'
+            v-model='file.codification'
+          )
           q-btn.q-mr-md(
-            label='Descargar de nuevo'
+            label='Descargar'
             type='button'
             color='primary'
             @click='getHeaders()'
-            size="sm"
-          )
-          q-btn(
-            label='Eliminar'
-            type='button'
-            color='negative'
-            @click='getHeaders()'
-            size="sm"
           )
 </template>
 
@@ -68,50 +57,61 @@ export default {
   ],
   data () {
     return {
-      separator: 'vertical',
-      columns: [],
-      error: false,
-      data: []
     }
   },
   mounted () {
     this.getHeaders()
+    this.getSamples()
   },
   methods: {
     getHeaders () {
-      this.error = false
-      const sep = this.file.separator ? `sep: "${this.file.separator}"` : ''
-      const encoding = this.file.encoding ? `encoding: "${this.file.codification}"` : ''
+      this.file.errors = null
       return this.$apollo
         .mutate({
           mutation: this.$gql`mutation{
               qudaFileGetHeaders(
                 filename: "${this.file.path}"
-                ${sep}
-                ${encoding}
+                ${this.file.separator ? `sep: "${this.file.separator}"` : ''}
+                ${this.file.encoding ? `encoding: "${this.file.codification}"` : ''}
+                ${this.file.haveHeaders ? '' : 'header: false'}
               )
             }`
         }).then(({ data }) => {
-          this.file.headers = data.qudaFileGetHeaders
-          this.columns = this.file.headers.map(header => {
+          this.file.headers = data.qudaFileGetHeaders.map(header => {
             return {
-              name: header,
               align: 'center',
-              label: header,
-              field: header,
-              sortable: false
+              label: header
             }
           })
-          return data
         }).catch((error) => {
-          this.error = 'Error: No se pudo abrir el archivo, intenta de nuevo cambiando la separacion o la codificación'
+          this.file.errors = 'Error: No se pudo abrir el archivo, intenta de nuevo cambiando la separacion o la codificación'
           console.error('ProfilingAdd, getHeaders: ', error)
+        })
+    },
+    getSamples () {
+      this.file.errors = null
+      return this.$apollo
+        .mutate({
+          mutation: this.$gql`mutation{
+              qudaFileGetSamples(
+                filename: "${this.file.path}"
+                ${this.file.separator ? `sep: "${this.file.separator}"` : ''}
+                ${this.file.encoding ? `encoding: "${this.file.codification}"` : ''}
+                ${this.file.haveHeaders ? '' : 'header: false'}
+              )
+            }`
+        }).then(({ data }) => {
+          this.file.data = data.qudaFileGetSamples
+          console.log(data.qudaFileGetSamples)
+        }).catch((error) => {
+          // this.file.errors = 'Error: No se pudo abrir el archivo, intenta de nuevo cambiando la separacion o la codificación'
+          console.error('ProfilingAdd, getSamples: ', error)
         })
     }
   },
   watch: {
     'file.haveHeaders' (value) {
-      this.$emit('update:selectedFiles', value)
+      this.getHeaders()
     }
   }
 }

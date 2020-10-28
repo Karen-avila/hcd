@@ -20,7 +20,6 @@ class ProfilingFileInput(graphene.InputObjectType):
     class Meta:
         description = "Forma para leer un archivo CSV"
 
-
 ###############################################
 class ProfilingNode(DjangoObjectType):
     getProfilingFiles = graphene.List(ProfilingFileNode , description="Layout de informacion sobre la configuracion y ejecucion del archivo de perfilamiento.")

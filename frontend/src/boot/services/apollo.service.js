@@ -5,7 +5,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
-import JwtService from '@/core/services/jwt.service'
+import JwtService from '@/boot/services/jwt.service'
 
 const GRAPHQL_URL = process.env.APOLLOHTTP
 const GRAPHQLWS_URL = process.env.APOLLOWS
@@ -51,8 +51,3 @@ const apolloClient = new ApolloClient({
 export const apolloProvider = new VueApollo({
   defaultClient: apolloClient
 })
-
-export default ({ app, Vue }) => {
-  Vue.use(VueApollo)
-  app.apolloProvider = apolloProvider
-}

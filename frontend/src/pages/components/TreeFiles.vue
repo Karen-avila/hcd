@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
 export default {
   name: 'TreeFiles',
   props: [
@@ -42,7 +41,7 @@ export default {
     getDirectory (dirPath) {
       return this.$apollo
         .mutate({
-          mutation: gql`mutation{
+          mutation: this.$gql`mutation{
               qudaFileGetDirectory(path:"${dirPath}")
             }`
         }).then(({ data }) => {
@@ -65,7 +64,6 @@ export default {
   watch: {
     ticked (newValue) {
       this.$emit('update:selectedFiles', newValue)
-      this.$emit('update:selectedFilesNames', newValue)
     }
   }
 }

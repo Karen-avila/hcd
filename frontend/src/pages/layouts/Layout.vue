@@ -33,7 +33,7 @@ q-layout(view='hHr lpr fFr')
 
 <script>
 import { mapGetters } from 'vuex'
-import RigthAside from '@/layouts/aside/RigthAside.vue'
+import RigthAside from '@/pages/layouts/aside/RigthAside.vue'
 export default {
   components: {
     RigthAside

@@ -31,13 +31,15 @@ class File(ModelBase):
                 dictionary['type'] = "file"
             files.append(dictionary)
         return {'directory':files, 'path': path, 'typeFile': typeFile}
-    def getFile(self, filename, sep, encoding):
+    def getFile(self, filename, sep, encoding, header=True):
         if not filename:
             filename = self.filename
         if not sep:
             sep = self.sep
         if not encoding:
             encoding = self.encoding
+        if not header:
+            return pd.read_csv(filename, sep=sep, encoding=encoding, header=None)
         return pd.read_csv(filename, sep=sep, encoding=encoding)
-    def getHeaders(self, filename, sep, encoding):
-        return self.getFile(filename, sep, encoding).head()
+    def getHeaders(self, filename, sep, encoding, header):
+        return self.getFile(filename, sep, encoding, header).head()

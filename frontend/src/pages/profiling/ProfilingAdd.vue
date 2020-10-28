@@ -48,15 +48,18 @@
               icon='file_copy'
               :done='step > 2'
             )
-              p Archivos seleccionados ({{selectedFiles.length}}):
-                span.text-weight-bolder
-                  template(v-for="file in selectedFiles")
-                    span.q-pa-xs {{file.split('/').pop()}}
-              q-card.my-card.q-mb-sm(flat='', bordered='' v-for='file in profilingFiles')
-                q-card-section
-                  .text-h6 {{file}}
-                q-card-section.q-pt-none
-                  | {{file}}
+              template(v-if='profilingFiles.length > 0')
+                q-card.q-mb-md(
+                  flat=false
+                  bordered=true
+                  v-for='file in profilingFiles'
+                  v-bind:data="file"
+                  v-bind:key="file.path"
+                )
+                  q-card-section
+                    HeadersFiles(
+                      :file.sync="file"
+                    )
             q-step(:name='3', title='Ad template', icon='create_new_folder', disable='')
               | This step won't show up because it is disabled.
             q-step(:name='4', title='Create an ad', icon='add_comment')
@@ -70,11 +73,13 @@
 </template>
 
 <script>
-import TreeFiles from '@/components/TreeFiles.vue'
+import TreeFiles from '@/pages/components/TreeFiles.vue'
+import HeadersFiles from './components/HeadersFiles.vue'
 export default {
   name: 'profilingAdd',
   components: {
-    TreeFiles
+    TreeFiles,
+    HeadersFiles
   },
   data () {
     return {
@@ -94,25 +99,15 @@ export default {
     beforeTransition (newStep, oldStep) {
       if (newStep === 2 && oldStep === 1) {
         this.profilingFiles = this.selectedFiles.map(file => {
-          return { path: file, getHeaders: this.getHeaders(file), haveHeaders: true }
+          return {
+            path: file,
+            headers: [],
+            haveHeaders: true,
+            separator: ',',
+            codification: 'Latin1'
+          }
         })
       }
-    },
-    getHeaders (file) {
-      return this.$apollo
-        .mutate({
-          mutation: this.$gql`mutation{
-              qudaFileGetHeaders(
-                filename: "${file}"
-                sep: ","
-                encoding: "Latin1"
-              )
-            }`
-        }).then(({ data }) => {
-          return data.qudaFileGetHeaders
-        }).catch((error) => {
-          console.error('ProfilingAdd, getHeaders: ', error)
-        })
     }
   }
 }

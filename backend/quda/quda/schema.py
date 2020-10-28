@@ -33,7 +33,8 @@ class Mutation(object):
         filename=graphene.String(description="Ruta absoluta del archivo."),
         sep=graphene.String(default_value=",", description="Caracter separador del archivo .csv entre cada columna ej. ','"),
         encoding=graphene.String(default_value='Latin1', description="Metodo de codificación de caracteres; ej. 'latin1'"),
+        header=graphene.Boolean(default_value=True, description="Tiene encabezados?"),
         description = "Obtiene los encabezados de un archivo, se usa para saber si un archivo se lee de forma correcta."
     )
-    def resolve_qudaFileGetHeaders(self, info, filename, sep, encoding,):
-        return File().getHeaders(filename, sep, encoding)
+    def resolve_qudaFileGetHeaders(self, info, filename, sep, encoding, header):
+        return File().getHeaders(filename, sep, encoding, header)

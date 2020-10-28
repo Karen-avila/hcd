@@ -1,5 +1,5 @@
-import { apolloService } from '@/core/services/apollo.service'
-import JwtService from '@/core/services/jwt.service'
+import { apolloService } from '@/boot/plugins/apollo'
+import JwtService from '@/boot/services/jwt.service'
 import gql from 'graphql-tag'
 
 const apollo = apolloService.defaultClient

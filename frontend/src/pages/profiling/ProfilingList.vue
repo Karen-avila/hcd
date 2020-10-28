@@ -45,12 +45,8 @@
 </template>
 
 <script>
-import List from '@/components/List.vue'
 export default {
   name: 'profilingList',
-  components: {
-    List
-  },
   data () {
     return {
     }

@@ -63,7 +63,7 @@ export default {
   mounted () {
     setTimeout(() => {
       this.updateTable()
-    }, (this.index + 1) * 1000)
+    }, (this.index + 1) * 2000)
   },
   methods: {
     async updateTable () {

@@ -49,8 +49,8 @@
               :done='step > 2'
             )
               template(v-if='profilingFiles.length > 0')
-                q-card.q-mb-md(
-                  flat=false
+                q-card.bg-grey-2.q-mb-md(
+                  flat=true
                   bordered=true
                   v-for='(file, index) in profilingFiles'
                   v-bind:data="file"

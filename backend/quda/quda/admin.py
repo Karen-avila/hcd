@@ -4,3 +4,7 @@ from .models import *
 @admin.register(File)
 class FileAdmin(BaseAdmin):
     pass
+
+@admin.register(Mask)
+class MaskAdmin(BaseAdmin):
+    pass

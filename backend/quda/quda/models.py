@@ -47,13 +47,33 @@ class File(ModelBase):
     def getSamples(self, filename, sep, encoding, header):
         return self.getFile(filename, sep, encoding, header).sample(n=10, random_state=5).values.tolist()
 
-"""
+########################################################################################
+########################################################################################
+VARS = {
+    'model': 'Mask',
+    'name': 'Mascara',
+    'plural': 'Mascaras',
+}
 class Mask(ModelBase):
-    name String 150
-    regex Text
-    isValid Boolen False
-    isDefault
-    def validation
-        return True
-    def apply
-"""
+    organzation = models.ForeignKey('core.Organization', null=True, on_delete=models.SET_NULL, related_name='+')
+    user = models.ForeignKey('core.User', null=True, on_delete=models.SET_NULL, related_name='+')
+    name = models.CharField(null=False, max_length=50, help_text="Nombre de la expresion regular")
+    regex = models.TextField(help_text="Expresion regular")
+    isValid = models.BooleanField(default=False, help_text="Es valida la expresion regular?")
+    isDefault = models.BooleanField(default=False, help_text="Se puede modificar?")
+    VARS = VARS
+    class Meta(ModelBase.Meta):
+        verbose_name = VARS['name']
+        verbose_name_plural = VARS['plural']
+        permissions = MakePermissions(VARS)
+    def __str__(self):
+        return "Mascara {0}".format(self.id)
+    def validRegex(self,regex):
+        try:
+            re.compile(self.regex)
+            self.isValid = True
+            self.save()
+            return True
+        except re.error:
+            pass
+        return False

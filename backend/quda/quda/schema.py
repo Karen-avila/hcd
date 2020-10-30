@@ -11,6 +11,11 @@ class FileNode(DjangoObjectType):
         model = File
 ###############################################
 
+class MaskNode(DjangoObjectType):
+    class Meta:
+        model = Mask
+###############################################
+
 #################################################################
 #########   QUERYS   ############################################
 #################################################################
@@ -29,6 +34,7 @@ class Mutation(object):
     def resolve_qudaFileGetDirectory(self, info, path, typeFile):
         return File().getDirectory(path, typeFile)
     ###########################################
+
     qudaFileGetHeaders = graphene.List(graphene.String,
         filename=graphene.String(description="Ruta absoluta del archivo."),
         sep=graphene.String(default_value=",", description="Caracter separador del archivo .csv entre cada columna ej. ','"),
@@ -39,6 +45,7 @@ class Mutation(object):
     def resolve_qudaFileGetHeaders(self, info, filename, sep, encoding, header):
         return File().getHeaders(filename, sep, encoding, header)
     ###########################################
+
     qudaFileGetSamples = graphene.List(
         graphene.List(graphene.String),
         filename=graphene.String(description="Ruta absoluta del archivo."),

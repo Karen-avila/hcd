@@ -12,7 +12,7 @@
           left-label
         )
         span.text-weight-bold {{file.path.split('/').pop()}}
-      q-table.q-mt-lg(
+      q-table.q-mt-lg.bg-blue-grey-1(
         dense=true
         bordered=false
         flat=true

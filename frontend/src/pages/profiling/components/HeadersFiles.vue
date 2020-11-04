@@ -23,7 +23,7 @@
             q-tooltip(content-class='bg-accent' anchor="top middle" self="bottom middle") Ver Tabla
           q-tab(name="type" label="" icon="spellcheck")
             q-tooltip(content-class='bg-accent' anchor="top middle" self="bottom middle") Forzar datos
-      q-card.card-file.bg-grey-2.q-mt-sm.q-mb-xl
+      q-card.card-file.bg-grey-2.q-mt-sm.q-mb-lg
         q-table.bg-grey-2(
           v-if="tab === 'table'"
           dense=true
@@ -43,7 +43,13 @@
           p Puedes elegir una opción para forzar el perfilamiento a ese tipo de dato
           .row
             .col-md-6.q-pa-xs(v-for="header in file.headers")
-
+              q-select(
+                dense=true
+                filled=''
+                v-model='header.type'
+                :options='dataTypes'
+                :label='header.label'
+              )
     template(
       v-if="file.error"
       align="center"
@@ -52,7 +58,7 @@
         span {{file.path.split('/').pop()}}
         q-space
         span {{file.error}}
-      q-card.card-file.bg-grey-2.q-mt-xs.q-mb-xl
+      q-card.card-file.bg-grey-2.q-mt-xs.q-mb-lg
         .absolute-center
           q-form.q-gutter-md.row
             q-input(

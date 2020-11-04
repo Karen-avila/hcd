@@ -1,76 +1,66 @@
 <template lang='pug'>
-  .q-pa-md
-    q-breadcrumbs.text-grey(active-color='primary')
+  div
+    q-breadcrumbs.text-primary.q-pa-sm(active-color='primary')
       template(v-slot:separator='')
         q-icon(size='1.2em', name='arrow_forward', color='accent')
       q-breadcrumbs-el(label='Inicio', icon='home', :to="{ name: 'dashboard'}")
       q-breadcrumbs-el(label='Perfilamiento', icon='widgets' :to="{ name: 'profilingList'}")
-      q-breadcrumbs-el(label='Agregar')
-    .row
-      .q-pa-md.col-12
-        q-card.my-card
-          q-card-section.bg-primary.text-white
-            .text-h6 Nuevo Perfilamiento
-              // router-link(:to="{ name: 'dashboard'}")
-                q-btn.float-right(color='secondary')
-                  q-icon(left='', size='2em', name='add')
-                  div NUEVO PERFILAMIENTO
-            .text-subtitle2 ambiente Desarrollo
-          q-separator
-          q-stepper(
-            v-model='step'
-            ref='stepper'
-            color='primary'
-            animated=''
-            @before-transition='beforeTransition'
+      q-breadcrumbs-el.text-weight-bolder(label='NUEVO PERFILAMIENTO')
+    q-stepper(
+      v-model='step'
+      ref='stepper'
+      color='primary'
+      animated=true
+      done-color="primary"
+      active-color="primary"
+      inactive-color="secondary"
+      @before-transition='beforeTransition'
+      flat=true
+    )
+      q-step(
+        :name='1'
+        title='SELECCIÓN'
+        caption='de archivos'
+        icon='create_new_folder'
+        :done='step > 1'
+      )
+        p.text-h6 Selecciona 1 o mas archivo
+        span Seleccionados ({{selected.length}}):
+        q-badge.q-ml-xs(
+          align='middle'
+          v-for="file in selected"
+        ) {{file.split('/').pop()}}
+        TreeFiles.q-mt-md(
+          :selected.sync="selected"
+          :path="path"
+        )
+      q-step(
+        :name='2'
+        title='VALIDA'
+        caption='Revisa las cabeceras'
+        icon='file_copy'
+        :done='step > 2'
+      )
+        template(v-if='prflFiles.length > 0')
+          p.text-h6 Configura las cabeceras y tipos de dato
+          HeadersFiles(
+            v-for='(file, index) in prflFiles'
+            v-bind:data="file"
+            v-bind:key="file.path"
+            :file.sync="file"
+            :index="index"
           )
-            q-step(
-              :name='1'
-              title='SELECCIONA'
-              caption='Elige 1 o mas archivos'
-              icon='create_new_folder'
-              :done='step > 1'
-            )
-              p Archivos seleccionados ({{selectedFiles.length}}):
-                span.text-weight-bolder
-                  template(v-for="file in selectedFiles")
-                    span.q-pa-xs {{file.split('/').pop()}}
-              p.text-weight-bold Selecciona uno o más archivos de la lista:
-              q-card.bg-blue-grey-1(flat=true, )
-                TreeFiles.q-pa-md(
-                  :selectedFiles.sync="selectedFiles"
-                  :path="path"
-                )
-            q-step(
-              :name='2'
-              title='VALIDA'
-              caption='Revisa las cabeceras'
-              icon='file_copy'
-              :done='step > 2'
-            )
-              template(v-if='profilingFiles.length > 0')
-                q-card.bg-grey-2.q-mb-md(
-                  flat=true
-                  bordered=true
-                  v-for='(file, index) in profilingFiles'
-                  v-bind:data="file"
-                  v-bind:key="file.path"
-                )
-                  q-card-section
-                    HeadersFiles(
-                      :file.sync="file"
-                      :index.sync="index"
-                    )
-            q-step(:name='3', title='Ad template', icon='create_new_folder', disable='')
-              | This step won't show up because it is disabled.
-            q-step(:name='4', title='Create an ad', icon='add_comment')
-              | Try out different ad text to see what brings in the most customers, and learn how to
-              | enhance your ads using features like ad extensions. If you run into any problems with
-              | your ads, find out how to tell if they're running and how to resolve approval issues.
-            template(v-slot:navigation='')
-              q-stepper-navigation
-                q-btn(@click='$refs.stepper.next()', color='primary', :label="step === 4 ? 'Finish' : 'Continuar'" :disabled="validatorNext()")
-                q-btn.q-ml-sm(v-if='step > 1', flat='', color='primary', @click='$refs.stepper.previous()', label='Regresar')
+      q-step(
+        :name='3'
+        title='Programa'
+        caption='Hora de procesamiento'
+        icon='update'
+      )
+        span {{prflFiles}}
+      template(v-slot:navigation='')
+        q-stepper-navigation
+          q-btn(@click='$refs.stepper.next()', color='primary', :label="step === 3 ? 'Programar perfilamiento' : 'Continuar'" :disabled="validatorNext()")
+          q-btn.q-ml-sm(v-if='step > 1', flat='', color='primary', @click='$refs.stepper.previous()', label='Regresar')
 </template>
 
 <script>
@@ -85,21 +75,24 @@ export default {
   data () {
     return {
       step: 1,
-      selectedFiles: [],
-      profilingFiles: [],
+      selected: [],
+      prflFiles: [],
       path: '/app/temp/'
     }
   },
   methods: {
     validatorNext () {
       if (this.step === 1) {
-        if (this.selectedFiles.length > 0) return false
+        if (this.selected.length <= 0) return true
       }
-      return true
+      if (this.step === 2) {
+        // this.profilingFiles.find(file => file.headers.length > 0)
+      }
+      return false
     },
     beforeTransition (newStep, oldStep) {
       if (newStep === 2 && oldStep === 1) {
-        this.profilingFiles = this.selectedFiles.map(file => {
+        this.prflFiles = this.selected.map(file => {
           return {
             path: file,
             headers: [],

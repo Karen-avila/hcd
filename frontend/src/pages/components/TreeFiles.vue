@@ -1,17 +1,15 @@
 <template lang="pug">
-  div
-    q-tree(
-      :nodes="files"
-      node-key='label'
-      tick-strategy='leaf'
-      :ticked.sync="ticked"
-      default-expand-all
-      @lazy-load='onLazyLoad'
-    )
-      template(v-slot:header-generic='prop')
-        .row.items-center.q-py-xs
-          q-icon.q-mr-sm(:name='prop.node.icon' color='secondary')
-          span {{ prop.node.name }}
+  q-tree.bg-grey-2.q-pa-md(
+    :nodes="files"
+    node-key='label'
+    tick-strategy='leaf'
+    :ticked.sync="ticked"
+    default-expand-all
+    @lazy-load='onLazyLoad'
+  )
+    template(v-slot:header-generic='prop')
+      q-icon(:name='prop.node.icon' :color='prop.node.iconColor')
+      span {{ prop.node.name }}
 </template>
 
 <script>
@@ -19,12 +17,12 @@ export default {
   name: 'TreeFiles',
   props: [
     'path',
-    'selectedFiles'
+    'selected'
   ],
   data () {
     return {
       files: [],
-      ticked: []
+      ticked: this.selected
     }
   },
   mounted () {
@@ -62,8 +60,8 @@ export default {
     }
   },
   watch: {
-    ticked (newValue) {
-      this.$emit('update:selectedFiles', newValue)
+    ticked (value) {
+      this.$emit('update:selected', value)
     }
   }
 }

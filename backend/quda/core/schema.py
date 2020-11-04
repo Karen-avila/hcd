@@ -6,17 +6,17 @@ import graphql_jwt
 #################################################################
 #########   TYPES or NODES   ####################################
 #################################################################
-class SiteNode(DjangoObjectType):
+class SiteNode(BaseNode):
     class Meta:
         model = Site
 
 ###############################################
-class ModuleNode(DjangoObjectType):
+class ModuleNode(BaseNode):
     class Meta:
         model = Module
 
 ###############################################
-class OrganizationNode(DjangoObjectType):
+class OrganizationNode(BaseNode):
     class Meta:
         model = Organization
 

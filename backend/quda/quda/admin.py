@@ -5,6 +5,6 @@ from .models import *
 class FileAdmin(BaseAdmin):
     pass
 
-@admin.register(Mask)
-class MaskAdmin(BaseAdmin):
+@admin.register(DataType)
+class DataTypeAdmin(BaseAdmin):
     pass

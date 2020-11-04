@@ -1,6 +1,6 @@
 <template lang="pug">
 q-layout(view='hHr lpr fFr')
-  q-header.bg-dark.text-white(elevated=false height-hint='98')
+  q-header.bg-primary(elevated=false height-hint='98')
     q-toolbar
       q-toolbar-title.text-subtitle1.text-weight-light
         q-avatar.q-mr-md

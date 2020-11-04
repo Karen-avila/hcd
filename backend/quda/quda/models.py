@@ -50,14 +50,15 @@ class File(ModelBase):
 ########################################################################################
 ########################################################################################
 VARS = {
-    'model': 'Mask',
-    'name': 'Mascara',
-    'plural': 'Mascaras',
+    'model': 'DataType',
+    'name': 'Tipo de Dato',
+    'plural': 'Tipos de Dato',
 }
-class Mask(ModelBase):
-    organzation = models.ForeignKey('core.Organization', null=True, on_delete=models.SET_NULL, related_name='+')
-    user = models.ForeignKey('core.User', null=True, on_delete=models.SET_NULL, related_name='+')
-    name = models.CharField(null=False, max_length=50, help_text="Nombre de la expresion regular")
+class DataType(ModelBase):
+    organzation = models.ForeignKey('core.Organization', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    user = models.ForeignKey('core.User',blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    name = models.CharField(max_length=50, help_text="Nombre de la mascara")
+    code = models.CharField(max_length=50, help_text="Código de la mascara")
     regex = models.TextField(help_text="Expresion regular")
     isValid = models.BooleanField(default=False, help_text="Es valida la expresion regular?")
     isDefault = models.BooleanField(default=False, help_text="Se puede modificar?")

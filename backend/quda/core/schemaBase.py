@@ -10,7 +10,6 @@ from django_filters import FilterSet, OrderingFilter
 import graphene
 
 class BaseNode(DjangoObjectType):
-    getProperties = graphene.String(source='getProperties')
     class Meta:
         abstract = True
     @classmethod

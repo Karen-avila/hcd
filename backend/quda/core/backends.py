@@ -4,7 +4,6 @@ import pexpect
 
 class CoreBackend(ModelBackend):
     def authenticate(self, request, **kwargs):
-        return None
         try:
             organization, username = kwargs['username'].split('__', 1)
             proc = pexpect.spawn(("kinit {0}").format(username))

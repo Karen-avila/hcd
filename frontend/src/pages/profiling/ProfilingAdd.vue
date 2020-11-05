@@ -29,6 +29,8 @@
         q-badge.q-ml-xs(
           align='middle'
           v-for="file in selected"
+          v-bind:data="file"
+          v-bind:key="file"
         ) {{file.split('/').pop()}}
         TreeFiles.q-mt-md(
           :selected.sync="selected"
@@ -57,6 +59,14 @@
         icon='update'
       )
         span {{prflFiles}}
+        q-btn(
+          ref="btnSetProfiling"
+          color='primary'
+          size='md'
+          @click="setProfiling"
+        )
+          q-icon(left='', size='2em', name='update')
+          div Programar perfilamiento
       template(v-slot:navigation='')
         q-stepper-navigation
           q-btn(@click='$refs.stepper.next()', color='primary', :label="step === 3 ? 'Programar perfilamiento' : 'Continuar'" :disabled="validatorNext()")
@@ -104,6 +114,34 @@ export default {
           }
         })
       }
+    },
+    async setProfiling () {
+      // this.$refs.btnSetProfiling.disable = true
+      let inputfiles = ''
+      await this.prflFiles.map(file => {
+        if (!file.error) {
+          inputfiles += `{
+            filename: "${file.path}"
+            sep: "${file.separator}"
+            encoding: "${file.codification}"
+            haveHeaders: "${file.haveHeaders}"
+          },`
+        }
+      })
+      this.$apollo
+        .mutate({
+          mutation: this.$gql`mutation{
+              prflSetProfiling(
+                files:[${inputfiles}]
+              ){
+                id
+              }
+            }`
+        }).then(({ data }) => {
+          console.log(data)
+        }).catch((error) => {
+          console.error('ProfilingAdd, setProfiling: ', error)
+        })
     }
   }
 }

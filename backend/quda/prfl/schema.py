@@ -1,45 +1,51 @@
 from quda.core.schemaBase import *
 from quda.core.schema import UserNode
+from quda.quda.schema import FileInput
 from .models import *
 from .forms import *
 
 #################################################################
 #########   TYPES or NODES   ####################################
 #################################################################
-class ProfilingFileNode(DjangoObjectType):
+class ProfilingFileNode(BaseNode):
     class Meta:
         model = ProfilingFile
         description = "Layout del archivo de perfilamiento."
-class ProfilingFileInput(graphene.InputObjectType):
-    filename = graphene.String(
-        required=True,
-        description="Ruta absoluta donde se encuentra el archivo; ej. '/app/temp/file.csv'"
-    )
-    sep = graphene.String(default_value=",",description="Caracter utilizado como separador de los datos entre cada columna; ej. '^'")
-    encoding = graphene.String(default_value="latin1",description="Metodo de codificación de caracteres; ej. 'latin1'")
-    class Meta:
-        description = "Forma para leer un archivo CSV"
+
 
 ###############################################
-class ProfilingNode(DjangoObjectType):
-    getProfilingFiles = graphene.List(ProfilingFileNode , description="Layout de informacion sobre la configuracion y ejecucion del archivo de perfilamiento.")
+class ProfilingNode(BaseNode):
+    getProfilingFiles = graphene.List(ProfilingFileNode,
+        source="getProfilingFiles",
+        description="Layout de informacion sobre la configuracion y ejecucion del archivo de perfilamiento."
+    )
+    getLenFiles = graphene.Int(
+        source="getLenFiles"
+    )
     class Meta:
+        filter_fields = {
+            'id': ['exact', 'icontains', 'istartswith'],
+            'user': ['exact'],
+        }
+        interfaces = (graphene.relay.Node,)
+        connection_class = ConnectionBase
         model = Profiling
-    def resolve_getProfilingFiles(root, info):
-        return ProfilingFile.objects.filter(profiling=root)
 
-#################################################################
+
 #########   QUERYS   ############################################
 #################################################################
 class Query(object):
-    pass
+    prflProfilingQuery = DjangoFilterConnectionField(ProfilingNode)
+    prflProfiling = graphene.relay.Node.Field(ProfilingNode)
+
 
 #################################################################
 #########    MUTATIONS    #######################################
 #################################################################
 class Mutation(object):
+    ###########################################
     prflSetProfiling = graphene.Field(ProfilingNode,
-        files = graphene.List(ProfilingFileInput),
+        files = graphene.List(FileInput),
         description = "Configura el perfilamiento a partir de 1 o mas archivos"
     )
     def resolve_prflSetProfiling(self, info, files):

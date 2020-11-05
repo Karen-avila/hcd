@@ -5,12 +5,24 @@ class CoreConfig(AppConfig):
     verbose_name = ("CORE")
     def ready(self):
         try:
-            from .models import Organization
+            from .models import Organization, User
             from django.conf import settings
             def defineFirstOrganization():
                 if not Organization.objects.filter(code=settings.ORGANIZATION).first():
-                    Organization.objects.get_or_create(code=settings.ORGANIZATION, name=settings.ORGANIZATION)
+                    Organization.objects.create(code=settings.ORGANIZATION, name=settings.ORGANIZATION)
+            def createFirstUser():
+                if not User.objects.filter(organization__code=settings.ORGANIZATION).first():
+                    organization = Organization.objects.filter(code=settings.ORGANIZATION).first()
+                    user = User.objects.create(
+                        username=settings.ORGANIZATION + '__admin',
+                        organization=organization,
+                        is_superuser=True,
+                        is_staff=True
+                    )
+                    user.set_password('admin')
+                    user.save()
             defineFirstOrganization()
+            createFirstUser()
         except Exception as e:
             pass
         try:

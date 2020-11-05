@@ -3,5 +3,5 @@
 set -o errexit
 set -o nounset
 
-rm -rf './celerybeat.pid'
-celery -A config.celery_app beat -l INFO
+rm -rf '/app/docs/logs/celerybeat.pid'
+celery -A config.celery_app beat -l INFO --pidfile='/app/docs/logs/celerybeat.pid'

@@ -1,45 +1,43 @@
-pytz==2020.1    # https://github.com/stub42/pytz  Configuracion de zonas horaricas
-python-slugify==4.0.1    # https://github.com/un33k/python-slugify  Manipulacion de caracteres en codificacion unicode
-Pillow==7.2.0    # https://github.com/python-pillow/Pillow  Optimizacion y manipulacion de imagenes
-argon2-cffi==20.1.0     # https://github.com/hynek/argon2_cffi  Almacenamiento seguro de contraseñas
-whitenoise==5.2.0    # https://github.com/evansd/whitenoise  Administracion de archivos estaticos
-redis==3.5.3    # https://github.com/andymccurdy/redis-py  Manipulacion de datos clave-valor en memoria
-hiredis==1.1.0    # https://github.com/redis/hiredis-py  Análisis del protocolo en hiredis
-celery==4.4.6    # https://github.com/celery/celery  Ejecucion de tareas asincronas
-django-celery-beat==2.0.0    # https://github.com/celery/django-celery-beat  Alamacenamiento y administracion de la ejecucion de tareas
-flower==0.9.5    # https://github.com/mher/flower  Monitoreo y administracion de clusters
+# Python Base
+# ------------------------------------------------------------------------------
+pytz==2020.1    # https://github.com/stub42/pytz
+python-slugify==4.0.1    # https://github.com/un33k/python-slugify
+Pillow==7.2.0    # https://github.com/python-pillow/Pillow
+argon2-cffi==20.1.0     # https://github.com/hynek/argon2_cffi
+whitenoise==5.2.0    # https://github.com/evansd/whitenoise
+redis==3.5.3    # https://github.com/andymccurdy/redis-py
+hiredis==1.1.0    # https://github.com/redis/hiredis-py
+celery==4.4.6    # https://github.com/celery/celery
+django-celery-beat==2.0.0    # https://github.com/celery/django-celery-beat
+flower==0.9.5    # https://github.com/mher/flower
 
 # Django
 # ------------------------------------------------------------------------------
-django==3.0.10    # https://www.djangoproject.com/  Framework para el desarrollo de aplicaciones web con python
-django-environ==0.4.5    # https://github.com/joke2k/django-environ  Administrador de variables de entorno en django
-django-model-utils==4.0.0    # https://github.com/jazzband/django-model-utils  Administracion de propiedades del modelo en django
-django-allauth==0.42.0    # https://github.com/pennersr/django-allauth  Administra la autenticación y registro de cuentas
-django-crispy-forms==1.9.2    # https://github.com/django-crispy-forms/django-crispy-forms  Administracion y utilizacion de formularios
-django-redis==4.12.1    # https://github.com/jazzband/django-redis  Administracion de tiempos de respuesta del frontend
+django==3.0.10    # https://www.djangoproject.com/
+django-environ==0.4.5    # https://github.com/joke2k/django-environ
+django-model-utils==4.0.0    # https://github.com/jazzband/django-model-utils
+django-allauth==0.42.0    # https://github.com/pennersr/django-allauth
+django-crispy-forms==1.9.2    # https://github.com/django-crispy-forms/django-crispy-forms
+django-redis==4.12.1    # https://github.com/jazzband/django-redis
 
 # Django REST Framework
 # ------------------------------------------------------------------------------
-djangorestframework==3.11.1    # https://github.com/encode/django-rest-framework  Framework de python para el desarrollo de servicios rest
-django-cors-headers==3.5.0    # https://github.com/adamchainz/django-cors-headers  Administra los encabezados del servidor necesarios para el intercambio de recursos
+djangorestframework==3.11.1    # https://github.com/encode/django-rest-framework
+django-cors-headers==3.5.0    # https://github.com/adamchainz/django-cors-headers
 
 # Third_apps
 # ------------------------------------------------------------------------------
-django-imagekit    # https://www.imgix.com Manipulacion de imagenes
-django-localflavor    # https://github.com/django/django-localflavor Catalogo de para la validacion de conformacion de datos de diferentes paises
-django-mptt    # https://github.com/django-mptt/django-mptt  Almacenamiento de datos jerarquicos en base de datos (trees)
-
-graphene_django    # https://github.com/graphql-python/graphene-django Api entre frontend y backend para la transferencia de datos
-django-graphql-playground    # https://github.com/jaydenwindle/django-graphql-playground IDE para mejores flujos de trabajo de desarrollo con graphql
-django-filter    # https://github.com/carltongibson/django-filter Filtrado dinamico en los querys de modelos
-django-graphql-jwt    # https://github.com/flavors/django-graphql-jwt Autenticación jwt para Django GraphQL
-graphene-django-extras    # https://github.com/eamigo86/graphene-django-extras extencion de modelos de graphql
-
-channels    # https://github.com/django/channels Administracion de la comunicacion con websockets
-channels_redis    # https://github.com/django/channels_redis Manejo de redis como repositorio de almacenamiento
-graphene-subscriptions    # https://github.com/jaydenwindle/graphene-subscriptions  Soporte para la creacion y eliminacion de suscripciones con sokets
-
-pandas    # https://github.com/pandas-dev/pandas Herramienta para analisis de datos
-pandas-profiling[notebook]    # https://github.com/pandas-profiling/pandas-profiling Generacion de reportes sobre la informacion estadistica del perfilamiento de una fuente de datos
-
-pyspark    # https://github.com/apache/spark/tree/master/python/pyspark Motor para la ejecusion de tareas en paralelo utilizando clusters
+django-imagekit==4.0.2    # https://www.imgix.com Manipulacion de imagene
+django-localflavor==3.0.1    # https://github.com/django/django-localflavor
+django-mptt==0.11.0    # https://github.com/django-mptt/django-mptt
+graphene_django==2.13.0    # https://github.com/graphql-python/graphene-django
+django-graphql-playground==1.0   # https://github.com/jaydenwindle/django-graphql-playground
+django-filter==2.4.0    # https://github.com/carltongibson/django-filter
+django-graphql-jwt==0.3.1    # https://github.com/flavors/django-graphql-jwt
+graphene-django-extras==0.4.9    # https://github.com/eamigo86/graphene-django-extras
+channels==2.4.0   # https://github.com/django/channels
+channels_redis==3.2.0    # https://github.com/django/channels_redis
+graphene-subscriptions==1.0.2    # https://github.com/jaydenwindle/graphene-subscriptions
+pandas==1.1.4    # https://github.com/pandas-dev/pandas
+pandas-profiling[notebook]==2.9.0    # https://github.com/pandas-profiling/pandas-profiling
+pyspark==3.0.1    # https://github.com/apache/spark/tree/master/python/pyspark

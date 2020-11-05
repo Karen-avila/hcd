@@ -3,7 +3,7 @@ FROM python:3.8-slim-buster
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-COPY ./backend/krb5.conf /etc/krb5.conf
+COPY ./backend/config/kerberos/krb5.conf /etc/krb5.conf
 
 RUN apt-get update \
   # dependencies for building Python packages

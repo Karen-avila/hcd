@@ -10,6 +10,26 @@ class FileNode(BaseNode):
     class Meta:
         model = File
 
+class FileInput(graphene.InputObjectType):
+    filename = graphene.String(
+        required=True,
+        description="Ruta absoluta donde se encuentra el archivo; ej. '/app/temp/file.csv'"
+    )
+    sep = graphene.String(
+        default_value=",",
+        description="Caracter utilizado como separador de los datos entre cada columna; ej. '^'"
+    )
+    encoding = graphene.String(
+        default_value="latin1",
+        description="Metodo de codificación de caracteres; ej. 'latin1'"
+    )
+    haveHeaders = graphene.Boolean(
+        default_value=True,
+        description="Tiene encabezados?"
+    )
+    class Meta:
+        description = "Forma para leer un archivo CSV"
+
 ###############################################
 class DataTypeNode(BaseNode):
     class Meta:
@@ -44,11 +64,11 @@ class Mutation(object):
         filename=graphene.String(description="Ruta absoluta del archivo."),
         sep=graphene.String(default_value=",", description="Caracter separador del archivo .csv entre cada columna ej. ','"),
         encoding=graphene.String(default_value='Latin1', description="Metodo de codificación de caracteres; ej. 'latin1'"),
-        header=graphene.Boolean(default_value=True, description="Tiene encabezados?"),
+        haveHeaders=graphene.Boolean(default_value=True, description="Tiene encabezados?"),
         description = "Obtiene los encabezados de un archivo, se usa para saber si un archivo se lee de forma correcta."
     )
-    def resolve_qudaFileGetHeaders(self, info, filename, sep, encoding, header):
-        return File().getHeaders(filename, sep, encoding, header)
+    def resolve_qudaFileGetHeaders(self, info, filename, sep, encoding, haveHeaders):
+        return File().getHeaders(filename, sep, encoding, haveHeaders)
 
     ###########################################
     qudaFileGetSamples = graphene.List(
@@ -56,12 +76,11 @@ class Mutation(object):
         filename=graphene.String(description="Ruta absoluta del archivo."),
         sep=graphene.String(default_value=",", description="Caracter separador del archivo"),
         encoding=graphene.String(default_value='Latin1', description="Codificación del archivo"),
-        header=graphene.Boolean(default_value=True, description="Tiene encabezados?"),
+        haveHeaders=graphene.Boolean(default_value=True, description="Tiene encabezados?"),
         description = "Obtiene las primeros N filas del archivo"
     )
-    def resolve_qudaFileGetSamples(self, info, filename, sep, encoding, header):
-        return File().getSamples(filename, sep, encoding, header)
+    def resolve_qudaFileGetSamples(self, info, filename, sep, encoding, haveHeaders):
+        return File().getSamples(filename, sep, encoding, haveHeaders)
 
     ###########################################
     qudaDataTypeQuery = DjangoFilterConnectionField(DataTypeNode)
-    #svbussiness = graphene.relay.Node.Field(BussinessNode)

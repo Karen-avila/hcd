@@ -8,7 +8,7 @@ volumes:
 services:
 
   nginx:
-    container_name: nginx
+    container_name: nginx_master
     image: nginx:alpine
     ports:
       - "8001:80"
@@ -22,15 +22,14 @@ services:
     restart: on-failure
 
   django: &django
-    container_name: django
+    container_name: django_master
     image: hcd_local_django
     depends_on:
       - redis
       - postgres
-      # - mongo
-      # - mongo-express
     volumes:
       - ./backend:/app:z
+      - ./temp/backend:/app/docs:z
     working_dir: /app
     env_file:
       - ./.envs/.local/.django
@@ -43,7 +42,7 @@ services:
     command: /start
 
   quasar:
-    container_name: quasar
+    container_name: quasar_master
     image: hcd_local_quasar
     working_dir: /app
     volumes:
@@ -63,7 +62,7 @@ services:
       context: .
       dockerfile: ./docker/production/postgres/Dockerfile
     image: hcd_local_postgres
-    container_name: postgres
+    container_name: postgres_master
     volumes:
       - local_postgres_data:/var/lib/postgresql/data:Z
       - local_postgres_data_backups:/backups:z
@@ -71,29 +70,12 @@ services:
       - ./.envs/.local/.postgres
 
   redis:
-    container_name: redis
+    container_name: redis_master
     image: redis:5.0
-
-  mongo:
-    container_name: mongo
-    image: mongo:4.2
-    restart: always
-    env_file:
-      - ./.envs/.local/.mongo
-
-  mongo-express:
-    container_name: mongo-express
-    image: mongo-express:0.54
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: PWFeSirWlNbhefYoUJaYecUURTQisuhc
-      ME_CONFIG_MONGODB_ADMINPASSWORD: rtVOg3S2AsqbRtkAmuXjy60UsDsCE5Yw7igZiHvsBIfHUD6Hm5RTqPI2sMYwML6y
 
   celeryworker:
     <<: *django
-    container_name: celeryworker
+    container_name: celeryworker_master
     image: hcd_local_celeryworker
     depends_on:
       - redis
@@ -104,7 +86,7 @@ services:
 
   celerybeat:
     <<: *django
-    container_name: celerybeat
+    container_name: celerybeat_master
     image: hcd_local_celerybeat
     depends_on:
       - redis
@@ -115,7 +97,7 @@ services:
 
   flower:
     <<: *django
-    container_name: flower
+    container_name: flower_master
     image: hcd_local_flower
     depends_on:
       - celeryworker
@@ -124,16 +106,8 @@ services:
       - "5555:5555"
     command: /start-flower
 
-  spark:
-    container_name: spark
-    image: jupyter/pyspark-notebook:4a112c0f11eb
-    ports:
-      - "8888:8888"
-      - "4040:4040"
-      - "4041:4041"
-
   portainer:
-    container_name: portainer
+    container_name: portainer_master
     image: portainer/portainer-ce
     command: -H unix:///var/run/docker.sock
     volumes:

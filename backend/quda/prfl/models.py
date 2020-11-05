@@ -45,6 +45,10 @@ class Profiling(ModelBase):
             self.finalDateTime = timezone.now()
             self.save()
         return self
+    def getProfilingFiles(self):
+        return ProfilingFile.objects.filter(profiling=self)
+    def getLenProfilingFiles(self):
+        return self.getProfilingFiles().count()
 ########################################################################################
 ########################################################################################
 VARS = {
@@ -87,3 +91,4 @@ class ProfilingFile(File):
         self.__dict__.update(**profiling)
         profile.to_file("/app/temp/profiling/" + str(self.id))
         return self
+

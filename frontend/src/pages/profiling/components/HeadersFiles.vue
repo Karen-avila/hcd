@@ -127,7 +127,7 @@ export default {
                 filename: "${this.file.path}"
                 ${this.file.separator ? `sep: "${this.file.separator}"` : ''}
                 ${this.file.encoding ? `encoding: "${this.file.codification}"` : ''}
-                ${this.file.haveHeaders ? '' : 'header: false'}
+                ${this.file.haveHeaders ? '' : 'haveHeaders: false'}
               )
             }`
         }).then(({ data }) => {
@@ -153,7 +153,7 @@ export default {
                 filename: "${this.file.path}"
                 ${this.file.separator ? `sep: "${this.file.separator}"` : ''}
                 ${this.file.encoding ? `encoding: "${this.file.codification}"` : ''}
-                ${this.file.haveHeaders ? '' : 'header: false'}
+                ${this.file.haveHeaders ? '' : 'haveHeaders: false'}
               )
             }`
         }).then(({ data }) => {

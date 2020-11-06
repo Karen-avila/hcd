@@ -1,14 +1,14 @@
 version: '3'
 
 volumes:
-  portainer_data: {}
-  local_postgres_data: {}
-  local_postgres_data_backups: {}
+  m_portainer_data: {}
+  m_postgres_data: {}
+  m_postgres_data_backups: {}
 
 services:
 
   nginx:
-    container_name: nginx_master
+    container_name: nginx
     image: nginx:alpine
     ports:
       - "8001:80"
@@ -22,14 +22,14 @@ services:
     restart: on-failure
 
   django: &django
-    container_name: django_master
+    container_name: django
     image: hcd_local_django
     depends_on:
       - redis
       - postgres
     volumes:
       - ./backend:/app:z
-      - ./temp/backend:/app/docs:z
+      - ./temp/backend/files:/app/temp/files:z
     working_dir: /app
     env_file:
       - ./.envs/.local/.django
@@ -42,7 +42,7 @@ services:
     command: /start
 
   quasar:
-    container_name: quasar_master
+    container_name: quasar
     image: hcd_local_quasar
     working_dir: /app
     volumes:
@@ -62,20 +62,20 @@ services:
       context: .
       dockerfile: ./docker/production/postgres/Dockerfile
     image: hcd_local_postgres
-    container_name: postgres_master
+    container_name: postgres
     volumes:
-      - local_postgres_data:/var/lib/postgresql/data:Z
-      - local_postgres_data_backups:/backups:z
+      - m_postgres_data:/var/lib/postgresql/data:Z
+      - m_postgres_data_backups:/backups:z
     env_file:
       - ./.envs/.local/.postgres
 
   redis:
-    container_name: redis_master
+    container_name: redis
     image: redis:5.0
 
   celeryworker:
     <<: *django
-    container_name: celeryworker_master
+    container_name: celeryworker
     image: hcd_local_celeryworker
     depends_on:
       - redis
@@ -86,7 +86,7 @@ services:
 
   celerybeat:
     <<: *django
-    container_name: celerybeat_master
+    container_name: celerybeat
     image: hcd_local_celerybeat
     depends_on:
       - redis
@@ -97,7 +97,7 @@ services:
 
   flower:
     <<: *django
-    container_name: flower_master
+    container_name: flower
     image: hcd_local_flower
     depends_on:
       - celeryworker
@@ -107,12 +107,12 @@ services:
     command: /start-flower
 
   portainer:
-    container_name: portainer_master
+    container_name: portainer
     image: portainer/portainer-ce
     command: -H unix:///var/run/docker.sock
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
+      - m_portainer_data:/data
     ports:
       - 9000:9000
       - 8009:8009

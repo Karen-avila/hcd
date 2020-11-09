@@ -5,9 +5,9 @@ class CoreConfig(AppConfig):
     verbose_name = ("CORE")
     def ready(self):
         try:
+            from .models import Organization, User
+            from django.conf import settings
             if settings.DEBUG:
-                from .models import Organization, User
-                from django.conf import settings
                 def defineFirstOrganization():
                     if not Organization.objects.filter(code=settings.ORGANIZATION).first():
                         Organization.objects.create(code=settings.ORGANIZATION, name=settings.ORGANIZATION)

@@ -1,9 +1,9 @@
 version: '3'
 
 volumes:
-  m_portainer_data: {}
-  m_postgres_data: {}
-  m_postgres_data_backups: {}
+  portainer_data: {}
+  postgres_data: {}
+  postgres_data_backups: {}
 
 services:
 
@@ -29,7 +29,7 @@ services:
       - postgres
     volumes:
       - ./backend:/app:z
-      - ./temp/backend/files:/app/temp/files:z
+      - ./temp/backend:/app/temp:z
     working_dir: /app
     env_file:
       - ./.envs/.local/.django
@@ -64,8 +64,8 @@ services:
     image: hcd_local_postgres
     container_name: postgres
     volumes:
-      - m_postgres_data:/var/lib/postgresql/data:Z
-      - m_postgres_data_backups:/backups:z
+      - postgres_data:/var/lib/postgresql/data:Z
+      - postgres_data_backups:/backups:z
     env_file:
       - ./.envs/.local/.postgres
 
@@ -112,7 +112,7 @@ services:
     command: -H unix:///var/run/docker.sock
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - m_portainer_data:/data
+      - portainer_data:/data
     ports:
       - 9000:9000
       - 8009:8009

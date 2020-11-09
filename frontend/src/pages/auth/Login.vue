@@ -53,8 +53,8 @@ export default {
   data () {
     return {
       form: {
-        username: '',
-        password: '',
+        username: `${process.env.DEBUG ? 'admin' : ''}`,
+        password: `${process.env.DEBUG ? 'admin' : ''}`,
         remember: true
       },
       isPwd: 'password'
@@ -66,6 +66,7 @@ export default {
       'isAuthenticated'
     ])
   },
+  created () {},
   methods: {
     validate () {
       if (this.$refs.form.validate()) return 1

@@ -50,6 +50,7 @@ module.exports = function (/* ctx */) {
         APOLLOHTTP: process.env.APOLLOHTTP ? process.env.APOLLOHTTP : 'http://localhost:8002/graphql',
         APOLLOWS: process.env.APOLLOWS ? process.env.APOLLOWS : 'ws://localhost:8002/graphql',
         ORGANIZATION: process.env.ORGANIZATION ? process.env.ORGANIZATION : 'hcd',
+        DEBUG: process.env.DEBUG ? process.env.DEBUG : false,
       },
 
       // transpile: false,

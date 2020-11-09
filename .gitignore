@@ -277,5 +277,6 @@ tags
 .idea
 package-lock.json
 frontend/.quasar/
-backend/quda/media/
-backend/quda/staticfiles/
+temp/backend/files/
+backend/static/media/
+backend/static/staticfiles/

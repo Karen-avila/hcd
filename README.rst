@@ -57,8 +57,19 @@ Prerequisites
 
 .. _`installation instructions`: https://docs.docker.com/install/#supported-platforms
 
+CSV Files to work
+-------------
+
+Copy your CSV files in /temp/backend/files before run build
+
 Build the Stack
 -------------
+
+This brings up both Django and PostgreSQL. The first time it is run it might take a while to get started, but subsequent runs will occur quickly.
+
+Open a terminal at the project root and run the following for local development::
+
+    $ docker-compose -f local.yml build
 
 This brings up both Django and PostgreSQL. The first time it is run it might take a while to get started, but subsequent runs will occur quickly.
 

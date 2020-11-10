@@ -29,7 +29,7 @@ services:
       - postgres
     volumes:
       - ./backend:/app:z
-      - ./temp/backend:/app/temp:z
+      - ./files/backend:/app/static/files:z
     working_dir: /app
     env_file:
       - ./.envs/.local/.django

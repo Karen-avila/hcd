@@ -1,7 +1,7 @@
 # General
 # ------------------------------------------------------------------------------
 USE_DOCKER=yes
-IPYTHONDIR=/app/temp/.ipython
+IPYTHONDIR=/app/static/files/.ipython
 ORGANIZATION=hcd
 
 # Redis

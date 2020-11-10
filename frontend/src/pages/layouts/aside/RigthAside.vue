@@ -37,7 +37,7 @@
     background-position: right;
   }
   .q-drawer--right {
-    border-left: 3px solid #b38e5d;
+    border-left: 3px solid #bc955c;
   }
 </style>
 

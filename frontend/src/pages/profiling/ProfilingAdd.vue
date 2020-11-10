@@ -87,7 +87,7 @@ export default {
       step: 1,
       selected: [],
       prflFiles: [],
-      path: '/app/temp/files'
+      path: '/app/static/files/files/'
     }
   },
   methods: {

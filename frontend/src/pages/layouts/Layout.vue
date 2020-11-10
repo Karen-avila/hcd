@@ -4,8 +4,8 @@ q-layout(view='hHr lpr fFr')
     q-toolbar
       q-toolbar-title.text-subtitle1.text-weight-light
         q-avatar.q-mr-md
-          img(src='~assets/img/dashboard/logo.png')
-        | Instituto Mexicano del Seguro Social
+          // img(src='~assets/img/dashboard/logo.png')
+          // | Instituto Mexicano del Seguro Social
       q-btn.q-mr-md(flat='' round='' dense='' icon='home')
         q-tooltip(content-class='bg-accent') INICIO
       q-btn.q-mr-md(flat='' round='' dense='' icon='account_box')
@@ -21,7 +21,7 @@ q-layout(view='hHr lpr fFr')
     router-view
   q-footer.bg-footer.text-white
     q-toolbar
-      span.q-mb-sm
+      // span.q-mb-sm
         | HERRAMIENTA DE CALIDAD DE DATOS | {{new Date().getFullYear()}}
 </template>
 

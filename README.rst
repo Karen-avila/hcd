@@ -60,7 +60,7 @@ Prerequisites
 CSV Files to work
 -------------
 
-Copy your CSV files in `/temp/backend/files` before run build
+Copy your CSV files in `pip install black` before run build
 
 Build the Stack
 -------------

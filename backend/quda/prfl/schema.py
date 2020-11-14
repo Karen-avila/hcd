@@ -10,7 +10,12 @@ from .forms import *
 class ProfilingFileNode(BaseNode):
     class Meta:
         model = ProfilingFile
+        filter_fields = {
+            'id': ['exact',],
+        }
         description = "Layout del archivo de perfilamiento."
+        interfaces = (graphene.relay.Node,)
+        connection_class = ConnectionBase
 
 
 ###############################################
@@ -19,31 +24,32 @@ class ProfilingNode(BaseNode):
         source="getProfilingFiles",
         description="Layout de informacion sobre la configuracion y ejecucion del archivo de perfilamiento."
     )
-    getLenFiles = graphene.Int(
-        source="getLenFiles"
+    getLenProfilingFiles = graphene.Int(
+        source="getLenProfilingFiles"
     )
     class Meta:
+        model = Profiling
         filter_fields = {
             'id': ['exact', 'icontains', 'istartswith'],
-            'user': ['exact'],
+            'user__username': ['exact', 'icontains'],
         }
         interfaces = (graphene.relay.Node,)
         connection_class = ConnectionBase
-        model = Profiling
 
 
+#################################################################
 #########   QUERYS   ############################################
 #################################################################
 class Query(object):
     prflProfilingQuery = DjangoFilterConnectionField(ProfilingNode)
-    prflProfiling = graphene.relay.Node.Field(ProfilingNode)
+    prflProfilingFileQuery = DjangoFilterConnectionField(ProfilingFileNode)
+    prflProfilingFile = graphene.relay.Node.Field(ProfilingFileNode)
 
 
 #################################################################
 #########    MUTATIONS    #######################################
 #################################################################
 class Mutation(object):
-    ###########################################
     prflSetProfiling = graphene.Field(ProfilingNode,
         files = graphene.List(FileInput),
         description = "Configura el perfilamiento a partir de 1 o mas archivos"
@@ -51,9 +57,11 @@ class Mutation(object):
     def resolve_prflSetProfiling(self, info, files):
         return Profiling().setProfiling(info, files)
     ###########################################
+
     prflRunProfiling = graphene.Field(ProfilingNode,
         profilingid = graphene.ID(),
         description = "Ejecuta el perfilamiento por cada uno de los archivos que tiene configurado"
     )
     def resolve_prflRunProfiling(self, info, profilingid):
         return Profiling.objects.get(id=profilingid).runProfiling()
+    ###########################################

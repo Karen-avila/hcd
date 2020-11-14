@@ -1,12 +1,13 @@
 from quda.core.modelsBase import *
 from django.conf import settings
-from quda.quda.models import File
+from quda.quda.models import File, TypeHeaderFile, DataType
 from django.utils import timezone
 
 from pandas_profiling import ProfileReport
 import pandas as pd
 
 import json
+import base64 ### REVISAR
 
 ########################################################################################
 ########################################################################################
@@ -31,9 +32,14 @@ class Profiling(ModelBase):
         self.user = info.context.user
         self.save()
         for file in files:
+            datatypes = file.pop('datatypes')
             file['profiling'] = self
-            profilingFile = ProfilingFile(**file)
-            profilingFile.save()
+            profilingFile = ProfilingFile.objects.create(**file)
+            for datatype in datatypes:
+                datatype['file'] = profilingFile
+                datatype['dataType'] = base64.b64decode(datatype['dataType']).decode("utf-8") ### REVISAR
+                datatype['dataType'] = DataType.objects.get(id = datatype['dataType'].split(':')[1]) ### REVISAR
+                TypeHeaderFile.objects.create(**datatype)
         return self
     def runProfiling(self):
         if not self.initialDateTime:

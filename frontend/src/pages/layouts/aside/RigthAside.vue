@@ -27,6 +27,11 @@
             q-icon(name='dashboard')
           q-item-section
             | Igualar
+        q-item.q-ma-sm.navigation-item(active-class='tab-active', :to="{ name: 'dataTypeList' }", exact='', clickable='', v-ripple='')
+          q-item-section(avatar='')
+            q-icon(name='dashboard')
+          q-item-section
+            | Configuración
 </template>
 
 <style>

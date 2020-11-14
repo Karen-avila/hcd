@@ -8,3 +8,7 @@ class FileAdmin(BaseAdmin):
 @admin.register(DataType)
 class DataTypeAdmin(BaseAdmin):
     pass
+
+@admin.register(TypeHeaderFile)
+class TypeHeaderFileAdmin(BaseAdmin):
+    pass

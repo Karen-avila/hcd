@@ -9,7 +9,46 @@ import os
 class FileNode(BaseNode):
     class Meta:
         model = File
+        filter_fields = {
+            'id': ['exact'],
+        }
+        interfaces = (graphene.relay.Node,)
+        connection_class = ConnectionBase
 
+###############################################
+class DataTypeNode(BaseNode):
+    class Meta:
+        model = DataType
+        filter_fields = {
+            'id': ['exact'],
+            'isDefault': ['exact'],
+        }
+        interfaces = (graphene.relay.Node,)
+        connection_class = ConnectionBase
+
+###############################################
+class TypeHeaderFileNode(BaseNode):
+    class Meta:
+        model = TypeHeaderFile
+        filter_fields = {
+            'id': ['exact'],
+        }
+        interfaces = (graphene.relay.Node,)
+        connection_class = ConnectionBase
+
+class TypeHeaderFileInput(graphene.InputObjectType):
+    dataType = graphene.ID(
+        description = "Id de Tipo de Dato"
+    ) ### REVISAR
+    index = graphene.Int(
+        default_value=",",
+        description="Index del header al que se aplica el tipado"
+    )
+    headerName = graphene.String(
+        description="Nombre del header al que se aplica el tipado"
+    )
+
+###############################################
 class FileInput(graphene.InputObjectType):
     filename = graphene.String(
         required=True,
@@ -27,25 +66,19 @@ class FileInput(graphene.InputObjectType):
         default_value=True,
         description="Tiene encabezados?"
     )
+    datatypes = graphene.List(
+        TypeHeaderFileInput,
+        required=False,
+        description="Tiene encabezados?"
+    )
     class Meta:
         description = "Forma para leer un archivo CSV"
-
-###############################################
-class DataTypeNode(BaseNode):
-    class Meta:
-        model = DataType
-        filter_fields = {
-            'isDefault': ['exact'],
-        }
-        interfaces = (graphene.relay.Node,)
-        connection_class = ConnectionBase
-###############################################
 
 #################################################################
 #########   QUERYS   ############################################
 #################################################################
 class Query(object):
-    pass
+    qudaDataTypeQuery = DjangoFilterConnectionField(DataTypeNode)
 
 #################################################################
 #########    MUTATIONS    #######################################
@@ -81,6 +114,3 @@ class Mutation(object):
     )
     def resolve_qudaFileGetSamples(self, info, filename, sep, encoding, haveHeaders):
         return File().getSamples(filename, sep, encoding, haveHeaders)
-
-    ###########################################
-    qudaDataTypeQuery = DjangoFilterConnectionField(DataTypeNode)

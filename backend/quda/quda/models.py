@@ -47,6 +47,8 @@ class File(ModelBase):
         return self.getFile(filename, sep, encoding, haveHeaders).head()
     def getSamples(self, filename, sep, encoding, haveHeaders):
         return self.getFile(filename, sep, encoding, haveHeaders).sample(n=10, random_state=5).values.tolist()
+    def getTypes(self):
+        return TypeHeaderFile.objects.filter(file = self)
 
 ########################################################################################
 ########################################################################################
@@ -79,3 +81,23 @@ class DataType(ModelBase):
         except re.error:
             pass
         return False
+
+########################################################################################
+########################################################################################
+VARS = {
+    'model': 'TypeHeaderFile',
+    'name': 'Tipo de Dato en cabecera',
+    'plural': 'Tipo de Dato en cabecera',
+}
+class TypeHeaderFile(ModelBase):
+    file = models.ForeignKey('File', blank=True, null=True, on_delete=models.CASCADE, related_name='+')
+    dataType = models.ForeignKey('DataType', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    index = models.IntegerField()
+    headerName = models.CharField(max_length=250)
+    VARS = VARS
+    class Meta(ModelBase.Meta):
+        verbose_name = VARS['name']
+        verbose_name_plural = VARS['plural']
+        permissions = MakePermissions(VARS)
+    def __str__(self):
+        return "ID {0}".format(self.id)

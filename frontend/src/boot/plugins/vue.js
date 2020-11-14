@@ -8,3 +8,6 @@ Vue.prototype.$gql = gql
 
 import sweetAlert from 'sweetalert2'
 Vue.prototype.$sweetAlert = sweetAlert
+
+import moment from 'moment'
+Vue.prototype.$moment = moment

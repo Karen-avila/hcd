@@ -6,6 +6,7 @@ import graphene
 
 class Query(
         quda.core.schema.Query,
+        quda.quda.schema.Query,
         quda.prfl.schema.Query,
         graphene.ObjectType
     ):

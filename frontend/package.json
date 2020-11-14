@@ -6,7 +6,7 @@
   "author": "Gustavo Castellanos",
   "private": true,
   "scripts": {
-    "serve": "npm i && quasar dev",
+    "serve": "quasar dev",
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
@@ -21,6 +21,7 @@
     "core-js": "^3.6.5",
     "graphql": "^15.1.0",
     "graphql-tag": "^2.10.3",
+    "moment": "^2.29.1",
     "quasar": "^1.0.0",
     "subscriptions-transport-ws": "^0.9.18",
     "sweetalert2": "^9.10.12",

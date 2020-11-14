@@ -13,7 +13,7 @@
         span {{file.path.split('/').pop()}}
         q-space
         q-toggle.q-mr-md(
-          :label='`${file.haveHeaders ? "Sin encabezados" : "Con tiene encabezados"}`'
+          :label='`${file.haveHeaders ? "Contiene encabezados" : "Sin encabezados"}`'
           v-model='file.haveHeaders'
           color="white"
           left-label
@@ -172,8 +172,8 @@ export default {
     },
     async getOptions () {
       this.$apollo
-        .mutate({
-          mutation: this.$gql`mutation{
+        .query({
+          query: this.$gql`query{
             qudaDataTypeQuery(
               after: "DataTypeNode:0"
               isDefault: true
@@ -191,7 +191,8 @@ export default {
           this.dataTypes = data.qudaDataTypeQuery.edges.map(edge => {
             return {
               label: edge.node.name,
-              value: edge.node.code
+              value: edge.node.code,
+              id: edge.node.id
             }
           })
         }).catch((error) => {

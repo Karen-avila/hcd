@@ -5,7 +5,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
-import JwtService from '@/boot/services/jwt.service'
+import JwtService from '@services/jwt.service'
 
 const GRAPHQL_URL = process.env.APOLLOHTTP
 const GRAPHQLWS_URL = process.env.APOLLOWS

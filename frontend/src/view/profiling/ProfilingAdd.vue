@@ -58,18 +58,19 @@
         caption='Hora de procesamiento'
         icon='update'
       )
-        h5 ¡Éxito!, estas a punto de enviar los siguientes archivos a perfilar:
+        h5 ¡Éxito!, estas a punto de enviar los siguientes archivos a perfilar
         q-item(clickable='', v-ripple='' v-for="file in prflFiles")
           q-item-section(avatar='')
             q-avatar(:color="file.error ? 'negative' : 'positive'", text-color='white', :icon="file.error ? 'close' : 'check' ")
           q-item-section.text-subtitle2 {{file.path.split('/').pop()}}
+        .q-mb-xl
       template(v-slot:navigation='')
         q-stepper-navigation
           q-btn(@click='$refs.stepper.next()', color='primary', :label="step === 3 ? 'Programar perfilamiento' : 'Continuar'" :disabled="validatorNext()" v-if="step != 3")
           q-btn(color='primary' v-if="step === 3" icon="update" label="Programar perfilamiento" @click="setProfiling")
           q-btn.q-ml-sm(v-if='step > 1', flat='', color='primary', @click='$refs.stepper.goTo(1)', label='Cancelar')
     q-dialog(v-model='dialog', persistent='')
-      q-card
+      q-card.q-pa-md
         q-card-section.row.items-center
           q-avatar(icon='check', color='primary', text-color='white')
           span.q-ml-lg Tu Perfilamiento se envió con éxito
@@ -78,7 +79,7 @@
 </template>
 
 <script>
-import TreeFiles from '@/pages/components/TreeFiles.vue'
+import TreeFiles from '@view/components/TreeFiles.vue'
 import HeadersFiles from './components/HeadersFiles.vue'
 export default {
   name: 'ProfilingAdd',
@@ -129,6 +130,7 @@ export default {
               headerName: "${header.label}"
             },`
           }
+          return null
         })
         if (!file.error) {
           inputfiles += `
@@ -140,6 +142,7 @@ export default {
             datatypes: [${headersTypes}]
           },`
         }
+        return null
       })
       this.$apollo
         .mutate({

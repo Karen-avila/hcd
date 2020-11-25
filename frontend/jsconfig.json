@@ -9,13 +9,13 @@
         "*"
       ],
       "components/*": [
-        "src/components/*"
+        "src/view/components/*"
       ],
       "layouts/*": [
-        "src/layouts/*"
+        "src/view/layouts/*"
       ],
       "pages/*": [
-        "src/pages/*"
+        "src/view/*"
       ],
       "assets/*": [
         "src/assets/*"

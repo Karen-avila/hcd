@@ -26,7 +26,8 @@ module.exports = function (/* ctx */) {
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: [
-      'app.sass'
+      'app.sass',
+      'font.css'
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
@@ -41,16 +42,20 @@ module.exports = function (/* ctx */) {
       'roboto-font', // optional, you are not bound to it
       'material-icons' // optional, you are not bound to it
     ],
-
+    sourceFiles: {
+      rootComponent: 'src/view/App.vue',
+      router: 'src/boot/router',
+      store: 'src/boot/store',
+      indexHtmlTemplate: 'src/view/index.template.html',
+    },
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
-
       env: {
-        APOLLOHTTP: process.env.APOLLOHTTP ? process.env.APOLLOHTTP : 'http://localhost:8002/graphql',
-        APOLLOWS: process.env.APOLLOWS ? process.env.APOLLOWS : 'ws://localhost:8002/graphql',
-        ORGANIZATION: process.env.ORGANIZATION ? process.env.ORGANIZATION : 'hcd',
-        DEBUG: process.env.DEBUG ? process.env.DEBUG : false,
+        APOLLOHTTP: process.env.APOLLOHTTP,
+        APOLLOWS: process.env.APOLLOWS,
+        ORGANIZATION: process.env.ORGANIZATION,
+        DEBUG: process.env.DEBUG
       },
 
       // transpile: false,
@@ -74,7 +79,12 @@ module.exports = function (/* ctx */) {
         cfg.resolve.alias = {
           ...cfg.resolve.alias, // This adds the existing alias
           // Add your own alias like this
-          '@': path.resolve(__dirname, './src')
+          '@': path.resolve(__dirname, './src'),
+          '@view': path.resolve(__dirname, './src/view'),
+          '@store': path.resolve(__dirname, './src/boot/store'),
+          '@services': path.resolve(__dirname, './src/boot/services'),
+          '@plugins': path.resolve(__dirname, './src/boot/plugins'),
+          '@router': path.resolve(__dirname, './src/boot/router')
         }
         cfg.module.rules.push({
           test: /\.pug$/,

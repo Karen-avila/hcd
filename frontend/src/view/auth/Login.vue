@@ -1,50 +1,58 @@
 <template lang="pug">
 q-layout
   q-page-container
-    q-page.flex.bg-image.flex-center
-      q-card(v-bind:style="$q.screen.lt.sm?{'width': '80%'}:{'width':'30%'}")
+    q-page.bg-image.flex.flex-center
+      q-card.q-card-bordered.shadow-12(v-bind:style="$q.screen.lt.sm?{'width': '80%'}:{'width':'30%'}")
         q-card-section
-          q-avatar.absolute-center.shadow-10(size='103px')
+          q-avatar.absolute-center(size='103px')
             img(src='~assets/img/auth/user.png')
         q-card-section
           .text-center.q-pt-lg
             .col.text-h6.ellipsis
-              | CALIDAD DE DATOS
+              | HERRAMIENTA CALIDAD DE DATOS
         q-card-section
           template(role='alert', v-if="errors.length >= 1" v-bind:class='{ show: errors.length }')
             span.text-negative(v-for='(error, i) in errors', :key='i')
               | {{ error }}
-          q-form.q-gutter-md(
+          q-form.q-gutter-sm(
             ref='form'
             lazy-validation
             @submit.stop.prevent='onSubmit'
           )
             q-input(
-              filled=''
+              outlined=''
               v-model='form.username'
               label='Tu usuario o correo electrónico'
               lazy-rules=''
+              color='primary'
               :rules="[() => !!form.username || 'Ingresa un nombre']"
             )
             q-input(
-              filled=''
+              outlined=''
               v-model='form.password'
               :type="isPwd ? 'password' : 'text'"
               label='Tu contraseña'
               lazy-rules=''
+              color='primary'
               :rules="[() => !!form.password || 'Ingresa una contraseña']"
             )
               template(v-slot:append='')
                 q-icon.cursor-pointer(:name="isPwd ? 'visibility_off' : 'visibility'", @click='isPwd = !isPwd')
-            div
-            .col-6
-              q-item
-                q-checkbox.full-width(dense='', outlined='', v-model='form.remember', label='Recuerdame')
-            q-btn(
-              label='INGRESAR'
-              type='submmit'
-              color='primary'
-            )
+            q-item
+              q-checkbox.full-width(dense='', outlined='', v-model='form.remember', label='Recuerdame')
+            .row
+              .col-12.text-right
+                q-btn.text-capitalize(
+                  :loading='authenting'
+                  type='submit'
+                  color='accent'
+                  outline=''
+                  style='min-width: 170px'
+                )
+                  | Acceder
+                  template(v-slot:loading='')
+                    q-spinner.on-left
+                    | Verificando...
 </template>
 
 <script>
@@ -63,7 +71,8 @@ export default {
   computed: {
     ...mapGetters([
       'errors',
-      'isAuthenticated'
+      'isAuthenticated',
+      'authenting'
     ])
   },
   created () {},
@@ -87,10 +96,9 @@ export default {
 }
 </script>
 
-<style>
-  .bg-image {
-    background-image: url(~assets/img/auth/bg.png);
-    background-position: right;
-    background-size: cover;
-  }
+<style lang="sass">
+  .bg-image
+    background-image: url(~assets/img/auth/gradient.png)
+    background-position: left bottom
+    background-size: cover
 </style>

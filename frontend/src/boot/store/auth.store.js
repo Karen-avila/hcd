@@ -1,5 +1,5 @@
-import { apolloService } from '@/boot/plugins/apollo'
-import JwtService from '@/boot/services/jwt.service'
+import { apolloService } from '@plugins/apollo'
+import JwtService from '@services/jwt.service'
 import gql from 'graphql-tag'
 
 const apollo = apolloService.defaultClient
@@ -7,17 +7,22 @@ const apollo = apolloService.defaultClient
 const state = {
   errors: [],
   user: 'Anonymous User',
-  isAuthenticated: !!JwtService.getToken()
+  isAuthenticated: !!JwtService.getToken(),
+  authenting: false
 }
 
 const getters = {
   currentUser (state) { return state.user.replace(`${process.env.ORGANIZATION}__`, '') },
   isAuthenticated (state) { return state.isAuthenticated },
-  errors (state) { return state.errors }
+  errors (state) { return state.errors },
+  authenting (state) {
+    return state.authenting
+  }
 }
 
 const actions = {
   login (context, credentials) {
+    context.commit('setAuthenting', true)
     return apollo
       .mutate({
         mutation: gql`
@@ -64,15 +69,21 @@ const actions = {
 }
 
 const mutations = {
+  setAuthenting (state) {
+    state.authenting = true
+  },
   setAuth (state, token) {
     state.isAuthenticated = true
     state.user = token.payload.username
     if ('token' in token) JwtService.saveToken(token)
+    state.authenting = false
   },
   setErrors (state, error) {
     state.errors = [error]
+    state.authenting = false
   },
   purgeAuth (state) {
+    state.authenting = false
     state.isAuthenticated = false
     state.user = 'Anonymous User'
     state.errors = []

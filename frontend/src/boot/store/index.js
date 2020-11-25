@@ -10,7 +10,7 @@ Vue.use(Vuex)
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
-import auth from '@/store/auth.store'
+import auth from '@store/auth.store'
 
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({

@@ -76,11 +76,7 @@ Execute Management Commands
 
 As with any shell command that we wish to run in our container, this is done using the ``run --rm`` command: ::
 
-    $ docker-compose -f local.yml run --rm django python manage.py migrate
     $ docker-compose -f local.yml run --rm django python manage.py collectstatic
-
-    $ docker-compose -f local.yml run --rm quasar npm i
-    $ docker-compose -f local.yml run --rm quasar npm rebuild node-sass
 
 Here, ``django`` is the target service we are executing the commands against.
 

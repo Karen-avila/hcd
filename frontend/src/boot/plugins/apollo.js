@@ -1,4 +1,4 @@
-import { apolloProvider } from '@/boot/services/apollo.service'
+import { apolloProvider } from '@services/apollo.service'
 import Vue from 'vue'
 
 export const apolloService = apolloProvider

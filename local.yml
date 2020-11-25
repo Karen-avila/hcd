@@ -10,52 +10,51 @@ services:
   nginx:
     container_name: nginx
     image: nginx:alpine
+    volumes:
+      - ./backend/quda/media/:/media/
+      - ./backend/quda/staticfiles/:/static/
+      - ./nginx/local.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "8001:80"
     depends_on:
       - django
       - quasar
-    volumes:
-      - ./backend/quda/media/:/media/
-      - ./backend/quda/staticfiles/:/static/
-      - ./nginx/local.conf:/etc/nginx/nginx.conf:ro
-    restart: on-failure
 
   django: &django
-    container_name: django
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
     image: hcd_local_django
+    container_name: django
     depends_on:
       - redis
       - postgres
     volumes:
       - ./backend:/app:z
       - ./files/backend:/app/static/files:z
-    working_dir: /app
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
     ports:
       - "8002:8002"
-    build:
-      context: .
-      dockerfile: ./docker/local/django/Dockerfile
     command: /start
 
   quasar:
-    container_name: quasar
-    image: hcd_local_quasar
-    working_dir: /app
-    volumes:
-      - ./frontend:/app:z
-    env_file:
-      - ./.envs/.local/.quasar
-    ports:
-      - "8003:8003"
     build:
       context: .
       dockerfile: ./docker/local/quasar/Dockerfile
-    command: npm run serve
-    restart: on-failure
+    image: hcd_local_quasar
+    container_name: quasar
+    volumes:
+      - quasar_data:/app:z
+    env_file:
+      - ./.envs/.local/.quasar
+    volumes:
+      - ./frontend:/app:z
+      - /app/node_modules
+    command: npm run dev
+    ports:
+      - "8003:8003"
 
   postgres:
     build:
@@ -63,11 +62,11 @@ services:
       dockerfile: ./docker/production/postgres/Dockerfile
     image: hcd_local_postgres
     container_name: postgres
+    env_file:
+      - ./.envs/.local/.postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data:Z
       - postgres_data_backups:/backups:z
-    env_file:
-      - ./.envs/.local/.postgres
 
   redis:
     container_name: redis

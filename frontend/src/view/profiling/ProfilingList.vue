@@ -89,8 +89,9 @@
               v-for="file in props.row.getProfilingFiles"
               :to='{ name: "profilingFileView", params: { Id: file.id }}'
             )
-              span(
-              ) {{ file.id }} - {{ file.filename }}
+              p(
+              ) {{ file.id }}
+
 </template>
 
 <script>

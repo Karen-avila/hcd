@@ -69,7 +69,7 @@ q-layout(
           q-toolbar-title.text-caption(
           ) Bienvenido,
             span.text-weight-bold(
-            ) {{currentUser}}
+            )  {{currentUser}}
         hr
         q-scroll-area(
           style='height:100%;'

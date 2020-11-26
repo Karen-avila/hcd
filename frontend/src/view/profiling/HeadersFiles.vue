@@ -118,6 +118,7 @@
               icon='delete'
               type='button'
               color='negative'
+              @click='deleteTable'
             )
 </template>
 
@@ -131,14 +132,16 @@ export default {
   name: 'HeaderFiles',
   props: [
     'File',
-    'Index'
+    'Index',
+    'PrflFiles'
   ],
   data () {
     return {
       tab: 'table',
       dataTypes: [],
       file: this.File,
-      index: this.Index
+      index: this.Index,
+      prflFiles: this.PrflFiles
     }
   },
   mounted () {
@@ -232,6 +235,9 @@ export default {
         }).catch((error) => {
           console.error('ProfilingAdd, getHeaders: ', error)
         })
+    },
+    deleteTable () {
+      return this.$delete(this.file)
     }
   },
   watch: {

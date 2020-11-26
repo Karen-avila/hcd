@@ -3,7 +3,7 @@ q-layout
   q-page-container
     q-page.bg-image.flex.flex-center
       q-card.q-card-bordered.shadow-12.q-py-lg(
-        v-bind:style='$q.screen.lt.sm?{"width": "80%"}:{"width":"30%"}'
+        v-bind:style='$q.screen.lt.sm ? {"width": "80%"} : {"width":"30%"}'
       )
         //  q-card-section
               q-avatar.absolute-center(size='103px')
@@ -24,7 +24,7 @@ q-layout
           q-form.q-gutter-sm(
             ref='form'
             lazy-validation
-            @submit.stop.prevent='onSubmit'
+            @submit.stop.prevent='login'
           )
             q-input(
               v-model='form.username'
@@ -41,7 +41,7 @@ q-layout
               lazy-rules=''
               color='primary'
               :type="isPwd ? 'password' : 'text'"
-              :rules='[() => !!form.password || "Ingresa una contraseña"]'
+              :rules='[ () => !!form.password || "Ingresa una contraseña"]'
             )
               template(
                 v-slot:append=''
@@ -105,16 +105,15 @@ export default {
       if (this.$refs.form.validate()) return 1
       return 0
     },
-    onSubmit () {
-      if (this.validate()) {
-        this.$store.dispatch('logout')
-        const username = process.env.ORGANIZATION + '__' + this.form.username
-        const password = this.form.password
-        this.$store.dispatch('login', { username, password })
-          .then(() => {
-            if (this.isAuthenticated) this.$router.push({ name: 'dashboard' })
-          })
-      }
+    login () {
+      if (!this.validate()) return 0
+      this.$store.dispatch('logout')
+      const username = process.env.ORGANIZATION + '__' + this.form.username
+      const password = this.form.password
+      this.$store.dispatch('login', { username, password })
+        .then(() => {
+          if (this.isAuthenticated) this.$router.push({ name: 'dashboard' })
+        })
     }
   }
 }

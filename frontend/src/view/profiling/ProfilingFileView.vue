@@ -1,6 +1,7 @@
 <template lang='pug'>
-  div
-    q-breadcrumbs.text-primary.q-pa-sm(
+  div.q-pa-md
+    // BREADCRUMBS
+    q-breadcrumbs.text-primary(
       active-color='primary'
     )
       template(
@@ -16,19 +17,49 @@
         icon='home'
         :to='{ name: "dashboard"}'
       )
-      q-breadcrumbs-el.text-weight-bolder(
-        label='ARCHIVO DE PERFILAMIENTO'
+      q-breadcrumbs-el(
+        label='Archicho de Perfilamiento'
+        icon='widgets'
+        :to='{ name: "profilingList"}'
       )
+      q-breadcrumbs-el.text-weight-medium(
+      )
+    | {{profilingFile}}
 </template>
 
 <script>
 export default {
   name: 'ProfilingFileView',
-  components: {},
   data () {
-    return {}
+    return {
+      profilingFile: null
+    }
+  },
+  mounted () {
+    this.getProfilingFile()
   },
   methods: {
+    getProfilingFile () {
+      this.$apollo
+        .mutate({
+          mutation: this.$gql`
+            mutation {
+              prflProfilingFile(id: "${this.$route.params.Id}") {
+                id
+                filename
+                sep
+                encoding
+                haveHeaders
+                analysis
+                variables
+                scatter
+              }
+            }
+          `
+        }).then(({ data }) => {
+          this.profilingFile = data.prflProfilingFile
+        })
+    }
   }
 }
 </script>

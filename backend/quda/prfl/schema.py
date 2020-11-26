@@ -65,3 +65,5 @@ class Mutation(object):
     def resolve_prflRunProfiling(self, info, profilingid):
         return Profiling.objects.get(id=profilingid).runProfiling()
     ###########################################
+    prflProfilingFileQuery = DjangoFilterConnectionField(ProfilingFileNode)
+    prflProfilingFile = graphene.relay.Node.Field(ProfilingFileNode)

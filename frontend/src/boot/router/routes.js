@@ -7,8 +7,9 @@ const routes = [
     path: '', component: () => import('@view/layouts/Layout.vue'),
     children: [
       { path: '/', name: 'dashboard', component: () => import('@view/dashboard/Dashboard.vue') },
-      // { path: '/profiling/list', name: 'profilingList', component: () => import('@view/profiling/ProfilingList.vue') },
-      // { path: '/profiling/add', name: 'profilingAdd', component: () => import('@view/profiling/ProfilingAdd/ProfilingAdd.vue') },
+      { path: '/profiling/list', name: 'profilingList', component: () => import('@view/profiling/ProfilingList.vue') },
+      { path: '/profiling/add', name: 'profilingAdd', component: () => import('@view/profiling/ProfilingAdd.vue') },
+      { path: '/profilingFile/view/:Id', name: 'profilingFileView', component: () => import('@view/profiling/profilingFileView.vue') },
       // { path: '/profilingfile/view/:Id', name: 'profilingFileView', component: () => import('@view/dashboard/Dashboard.vue') },
     ]
   },

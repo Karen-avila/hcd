@@ -1,47 +1,96 @@
 <template lang='pug'>
   div
-    q-breadcrumbs.text-primary.q-pa-sm(active-color='primary')
-      template(v-slot:separator='')
-        q-icon(size='1.2em', name='arrow_forward', color='accent')
-      q-breadcrumbs-el(label='Inicio', icon='home', :to="{ name: 'dashboard'}")
-      q-breadcrumbs-el.text-weight-bolder(label='PERFILAMIENTOS')
-      q-space
-      router-link(:to="{ name: 'profilingAdd'}")
-        q-btn.float-right(
-          color='secondary'
-          size='md'
+    q-breadcrumbs.text-primary.q-pa-sm(
+      active-color='primary'
+    )
+      template(
+        v-slot:separator=''
+      )
+        q-icon(
+          size='1.2em'
+          name='arrow_forward'
+          color='accent'
         )
-          q-icon(left='', size='2em', name='add')
-          div NUEVO PERFILAMIENTO
+      q-breadcrumbs-el(
+        label='Inicio'
+        icon='home'
+        :to='{ name: "dashboard"}'
+      )
+      q-breadcrumbs-el.text-weight-medium(
+        label='PERFILAMIENTOS'
+      )
+      q-space
+      router-link(
+        :to='{ name: "profilingAdd"}'
+      )
+        q-btn.float-right(
+          color='accent'
+          size='md'
+          outline=''
+        )
+          q-icon(
+            left=''
+            size='2em'
+            name='add'
+          )
+          div(
+          ) NUEVO PERFILAMIENTO
     q-table.q-mt-lg(
-      :data='dataTable'
-      :columns='columns'
       row-key='id'
       bordered=false
       flat=true
+      :data='dataTable'
+      :columns='columns'
     )
-      template(v-slot:header='props')
-        q-tr(:props='props')
-          q-th(auto-width='')
-          q-th(v-for='col in props.cols', :key='col.name', :props='props')
-            | {{ col.label }}
-      template(v-slot:body='props')
-        q-tr(:props='props')
-          q-td(auto-width='')
+      template(
+        v-slot:header='props'
+      )
+        q-tr(
+          :props='props'
+        )
+          q-th(
+            auto-width=''
+          )
+          q-th(
+            v-for='col in props.cols'
+            :key='col.name'
+            :props='props'
+          ) {{ col.label }}
+      template(
+        v-slot:body='props'
+      )
+        q-tr(
+          :props='props'
+        )
+          q-td(
+            auto-width=''
+          )
             q-btn(
               size='sm'
               color='secondary'
               round=''
               dense=''
+              :icon='props.expand ? "remove" : "add"'
               @click='props.expand = !props.expand'
-              :icon="props.expand ? 'remove' : 'add'"
             )
-          q-td(v-for='col in props.cols', :key='col.name', :props='props')
-            | {{ col.value }}
-        q-tr(v-show='props.expand', :props='props')
-          q-td.bg-grey-3(colspan='100%')
-            router-link(:to="{ name: 'profilingFileView', params: { Id: file.id }}" v-for="file in props.row.getProfilingFiles")
-              span {{ file.id }} - {{ file.filename }}
+          q-td(
+            v-for='col in props.cols'
+            :key='col.name'
+            :props='props'
+          ) {{ col.value }}
+        q-tr(
+          v-show='props.expand'
+          :props='props'
+        )
+          q-td.bg-grey-3(
+            colspan='100%'
+          )
+            router-link(
+              v-for="file in props.row.getProfilingFiles"
+              :to='{ name: "profilingFileView", params: { Id: file.id }}'
+            )
+              span(
+              ) {{ file.id }} - {{ file.filename }}
 </template>
 
 <script>
@@ -91,7 +140,6 @@ export default {
           `
         }).then(({ data }) => {
           this.dataTable = data.prflProfilingQuery.edges.map(item => {
-            console.log(item)
             item.node.creationDateTime = item.node.creationDateTime ? this.$moment(item.node.creationDateTime).format('LL') : '-'
             item.node.finalDateTime = item.node.finalDateTime ? this.$moment(item.node.finalDateTime).format('LL') : '-'
             item.node.initialDateTime = item.node.initialDateTime ? this.$moment(item.node.initialDateTime).format('LL') : '-'

@@ -1,4 +1,3 @@
-<template lang="pug">
 q-layout(
   view='hHh lpR fFr'
 )
@@ -9,9 +8,9 @@ q-layout(
     q-toolbar
       q-toolbar-title.text-subtitle1.text-weight-light
         //  q-avatar.q-mr-md
-          img(
-            src='~assets/img/dashboard/logo.png'
-          ) Instituto Mexicano del Seguro Social
+              img(
+                src='~assets/img/dashboard/logo.png'
+              ) Instituto Mexicano del Seguro Social
       q-btn.q-mr-md(
         flat=''
         round=''
@@ -113,42 +112,3 @@ q-layout(
     q-toolbar
       //  span.q-mb-sm(
         ) HERRAMIENTA DE CALIDAD DE DATOS | {{new Date().getFullYear()}}
-</template>
-
-<style lang='sass'>
-  .bg-footer
-    background-image: url(~assets/img/dashboard/footer.svg)
-  .q-drawer--right
-    border-left: 3px solid #bc955c
-</style>
-
-<script>
-import { mapGetters } from 'vuex'
-export default {
-  components: {
-  },
-  data () {
-    return {
-      right: false
-    }
-  },
-  methods: {
-    onLogout () {
-      this.$store
-        .dispatch('logout')
-        .then(() => this.$router.push({ name: 'login' }))
-    }
-  },
-  mounted () {
-    if (!this.isAuthenticated) {
-      this.$router.push({ name: 'login' })
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'isAuthenticated',
-      'currentUser'
-    ])
-  }
-}
-</script>

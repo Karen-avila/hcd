@@ -24,7 +24,7 @@
       )
       q-breadcrumbs-el.text-weight-medium(
       )
-    | {{profilingFile}}
+    | {{profilingFile.variables}}
 </template>
 
 <script>
@@ -58,6 +58,7 @@ export default {
           `
         }).then(({ data }) => {
           this.profilingFile = data.prflProfilingFile
+          console.log(JSON.parse(this.profilingFile.variables))
         })
     }
   }

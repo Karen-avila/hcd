@@ -90,7 +90,7 @@
               :to='{ name: "profilingFileView", params: { Id: file.id }}'
             )
               p(
-              ) {{ file.id }}
+              ) {{ file.filename }}
 
 </template>
 

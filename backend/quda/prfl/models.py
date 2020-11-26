@@ -82,8 +82,8 @@ class ProfilingFile(File):
         verbose_name_plural = VARS['plural']
         permissions = MakePermissions(VARS)
     def runProfilingFile(self):
-        if self.finalDateTime:
-            return self
+        # if self.finalDateTime:
+        #     return self
         self.initialDateTime = timezone.now()
         self.save()
         self.makeProfiling()
@@ -95,6 +95,7 @@ class ProfilingFile(File):
         profile = ProfileReport(df, explorative=True, config_file="/app/config/pandas/pandasProfiling.min.yaml")
         profiling = json.loads(profile.to_json())
         self.__dict__.update(**profiling)
-        profile.to_file("/app" + str(self.id))
+        self.variables = json.dumps(self.variables, separators=(',', ':'))
+        self.save()
+        # profile.to_file("/app" + str(self.id))
         return self
-

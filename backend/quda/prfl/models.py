@@ -95,6 +95,6 @@ class ProfilingFile(File):
         profile = ProfileReport(df, explorative=True, config_file="/app/config/pandas/pandasProfiling.min.yaml")
         profiling = json.loads(profile.to_json())
         self.__dict__.update(**profiling)
-        profile.to_file("/app/temp/profiling/" + str(self.id))
+        profile.to_file("/app" + str(self.id))
         return self
 

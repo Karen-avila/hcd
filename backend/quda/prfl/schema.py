@@ -53,11 +53,12 @@ class Query(object):
 #################################################################
 class Mutation(object):
     prflSetProfiling = graphene.Field(ProfilingNode,
-        files = graphene.List(FileInput),
+        name = graphene.String(description = "Nombre del perfilamiento"),
+        files = graphene.List(FileInput, description = "Coleccion de archivos que se perfilarán"),
         description = "Configura el perfilamiento a partir de 1 o mas archivos"
     )
-    def resolve_prflSetProfiling(self, info, files):
-        return Profiling().setProfiling(info, files)
+    def resolve_prflSetProfiling(self, info, name, files):
+        return Profiling().setProfiling(info, name, files)
     ###########################################
 
     prflRunProfiling = graphene.Field(ProfilingNode,
@@ -70,3 +71,17 @@ class Mutation(object):
 
     prflProfilingFileQuery = DjangoFilterConnectionField(ProfilingFileNode)
     prflProfilingFile = graphene.relay.Node.Field(ProfilingFileNode)
+
+
+#################################################################
+#########    SUBSCRIPTIONS    ###################################
+#################################################################
+class Subscription(graphene.ObjectType):
+    prflProfiling = graphene.Field(ProfilingNode, id=graphene.ID())
+    def resolve_prflProfiling(root, info, id):
+        return root.filter(
+            lambda event:
+                event.operation == UPDATED and
+                isinstance(event.instance, Profiling) and
+                event.instance.pk == int(id)
+        ).map(lambda event: event.instance)

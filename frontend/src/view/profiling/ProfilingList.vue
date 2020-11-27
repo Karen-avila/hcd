@@ -120,6 +120,7 @@
                       label='Ver resultados'
                       size='sm'
                       icon='description'
+                      :to='{name:"profilingFileView", params: {Id:file.id}}'
                     )
 </template>
 

@@ -47,11 +47,13 @@ div.q-pa-md
     )
       p.text-h6 Estas a punto de programar un perfilamiento
       q-form(
+        ref='form'
+        lazy-validation=''
         style='max-width:800px;'
       )
         q-input(
           outlined=true
-          v-model='profiling'
+          v-model='profilingName'
           label='Nombre del perfilamiento'
           hint='Ingresa el nombre con el que identificarás este perfilamiento'
           lazy-rules=''
@@ -125,15 +127,15 @@ div.q-pa-md
     )
       q-stepper-navigation
         q-btn(
-          v-if='step != 3'
+          v-if='step != 4'
           outline=''
           color='accent'
-          @click='$refs.stepper.next()'
-          :label='step === 3 ? "Programar perfilamiento" : "Continuar"'
+          label='Continuar'
           :disabled='validatorNext()'
+          @click='$refs.stepper.next()'
         )
         q-btn(
-          v-if='step === 3'
+          v-if='step === 4'
           outline=''
           color='primary'
           icon='update'
@@ -190,18 +192,32 @@ export default {
       prflFiles: [],
       path: '/app/static/files/files/',
       dialog: false,
-      profiling: ''
+      profilingName: ''
     }
   },
   methods: {
+    validateFormProfilingName () {
+      if (this.$refs.form.validate()) return 1
+      return 0
+    },
     validatorNext () {
       if (this.step === 1) {
+        if (!this.profilingName || this.profilingName.length <= 3) return true
+      }
+      if (this.step === 2) {
         if (this.selected.length <= 0) return true
       }
       return false
     },
+    reset () {
+      this.selected = []
+      this.prflFiles = []
+    },
     beforeTransition (newStep, oldStep) {
-      if (newStep === 2 && oldStep === 1) {
+      if (newStep === 1) {
+        this.reset()
+      }
+      if (newStep === 3 && oldStep === 2) {
         this.prflFiles = this.selected.map(file => {
           return {
             path: file,
@@ -246,6 +262,7 @@ export default {
           mutation: this.$gql`
             mutation{
               prflSetProfiling(
+                name: "${this.profilingName}"
                 files:[
                   ${inputfiles}
                 ]

@@ -22,6 +22,7 @@ class Mutation(
 
 class Subscription(
         quda.core.schema.Subscription,
+        quda.prfl.schema.Subscription,
         graphene.ObjectType
     ):
     pass

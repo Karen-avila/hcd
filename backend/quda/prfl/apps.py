@@ -4,4 +4,7 @@ class ProfilingConfig(AppConfig):
     name = "quda.prfl"
     verbose_name = ("PERFILAMIENTO")
     def ready(self):
-        pass
+        try:
+            import quda.prfl.signals
+        except ImportError:
+            pass

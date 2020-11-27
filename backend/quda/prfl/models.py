@@ -30,8 +30,9 @@ class Profiling(ModelBase):
         permissions = MakePermissions(VARS)
     def __str__(self):
         return "Perfilamiento {0}".format(self.id)
-    def setProfiling(self, info, files):
+    def setProfiling(self, info, name, files):
         self.user = info.context.user
+        self.name = name
         self.save()
         for file in files:
             datatypes = file.pop('datatypes')
@@ -43,9 +44,10 @@ class Profiling(ModelBase):
                 TypeHeaderFile.objects.create(**datatype)
         return self
     def runProfiling(self):
-        if not self.initialDateTime:
-            self.initialDateTime = timezone.now()
-            self.save()
+        # self.save() # BORRAR LINEA SOLO SE USO DE EJEMPLO
+        # if not self.initialDateTime:
+        self.initialDateTime = timezone.now()
+        self.save()
         for profilingFile in ProfilingFile.objects.filter(profiling=self):
             profilingFile.runProfilingFile()
         if not self.finalDateTime:
@@ -85,7 +87,7 @@ class ProfilingFile(File):
     def runProfilingFile(self):
         # if self.finalDateTime:
         # return self
-        profilingFile = makeProfiling.delay(self.id)
+        makeProfiling.delay(self.id)
         return self
     def makeProfiling(self):
         self.initialDateTime = timezone.now()
@@ -95,7 +97,6 @@ class ProfilingFile(File):
         profiling = json.loads(profile.to_json())
         self.__dict__.update(**profiling) # REVISAR
         self.variables = json.dumps(self.variables, separators=(',', ':')) # REVISAR
-        self.save()
         self.finalDateTime = timezone.now()
         self.save()
         # profile.to_file("/app" + str(self.id))

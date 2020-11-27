@@ -3,6 +3,5 @@ from django.apps import apps
 
 @shared_task
 def makeProfiling(profilingFile):
-    profilingfile = apps.get_model('prfl', 'ProfilingFile').objects.get(id=profilingFile)
-    profilingfile.makeProfiling()
+    apps.get_model('prfl', 'ProfilingFile').objects.get(id=profilingFile).makeProfiling()
     return 'Perfilamiento {0} terminado'.format(profilingfile.id)

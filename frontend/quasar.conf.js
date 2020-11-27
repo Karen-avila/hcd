@@ -21,7 +21,8 @@ module.exports = function (/* ctx */) {
     boot: [
       'plugins/apollo',
       'plugins/vue',
-      'plugins/guard'
+      'plugins/guard',
+      'plugins/filters'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css

@@ -14,6 +14,12 @@ RUN apt-get update \
   && apt-get install -y gettext \
   # Kerberos dependencies
   && apt install -y libkrb5-dev krb5-config krb5-user \
+  # JAVA instalation
+  && mkdir -p /usr/share/man/man1\
+  && apt-get update\
+  && apt upgrade -y\
+  && apt install -y default-jre\
+  && apt install -y default-jdk\
   # cleaning up unused files
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && rm -rf /var/lib/apt/lists/*

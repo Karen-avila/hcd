@@ -18,6 +18,7 @@ import django_filters
 import json
 import datetime
 import uuid
+import base64
 
 from itertools import chain
 
@@ -71,6 +72,9 @@ class ModelBase(models.Model):
             return VARS
         except:
             return {}
+    def getBy64Id(self, id):
+        type_, id_ = base64.b64decode(id).decode("utf-8").split(':')
+        return self.__class__.objects.get(id=id_)
 
 ########################################################################################
 class Basic_Serializer(serializers.ModelSerializer):

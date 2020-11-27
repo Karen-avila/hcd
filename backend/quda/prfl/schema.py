@@ -4,6 +4,8 @@ from quda.quda.schema import FileInput
 from .models import *
 from .forms import *
 
+import base64
+
 #################################################################
 #########   TYPES or NODES   ####################################
 #################################################################
@@ -63,7 +65,8 @@ class Mutation(object):
         description = "Ejecuta el perfilamiento por cada uno de los archivos que tiene configurado"
     )
     def resolve_prflRunProfiling(self, info, profilingid):
-        return Profiling.objects.get(id=profilingid).runProfiling()
+        return Profiling().getBy64Id(profilingid).runProfiling()
     ###########################################
+
     prflProfilingFileQuery = DjangoFilterConnectionField(ProfilingFileNode)
     prflProfilingFile = graphene.relay.Node.Field(ProfilingFileNode)

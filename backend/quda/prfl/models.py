@@ -3,11 +3,12 @@ from django.conf import settings
 from quda.quda.models import File, TypeHeaderFile, DataType
 from django.utils import timezone
 
+from .tasks import makeProfiling
+
 from pandas_profiling import ProfileReport
 import pandas as pd
 
 import json
-import base64 ### REVISAR
 
 ########################################################################################
 ########################################################################################
@@ -18,6 +19,7 @@ VARS = {
 }
 class Profiling(ModelBase):
     user = models.ForeignKey('core.User', null=True, on_delete=models.SET_NULL, related_name='+', help_text="Referencia de integridad con el usuario que configuro el perfilamiento.")
+    name = models.CharField(max_length=200, null=True, blank=True)
     creationDateTime = models.DateTimeField(auto_now_add=True, help_text="Fecha y hora de creacion de la configuracion del perfilamiento.")
     initialDateTime = models.DateTimeField(null=True, blank=True, help_text="Fecha y hora de inicio de la ejecucion del proceso para el perfilamiento configurado.")
     finalDateTime = models.DateTimeField(null=True, blank=True, help_text="Fecha y hora de termino de la ejecucion del proceso para el perfilamiento configurado.")
@@ -37,8 +39,7 @@ class Profiling(ModelBase):
             profilingFile = ProfilingFile.objects.create(**file)
             for datatype in datatypes:
                 datatype['file'] = profilingFile
-                datatype['dataType'] = base64.b64decode(datatype['dataType']).decode("utf-8") ### REVISAR
-                datatype['dataType'] = DataType.objects.get(id = datatype['dataType'].split(':')[1]) ### REVISAR
+                datatype['dataType'] = DataType().getBy64Id(datatype['dataType'])
                 TypeHeaderFile.objects.create(**datatype)
         return self
     def runProfiling(self):
@@ -83,19 +84,19 @@ class ProfilingFile(File):
         permissions = MakePermissions(VARS)
     def runProfilingFile(self):
         # if self.finalDateTime:
-        #     return self
-        self.initialDateTime = timezone.now()
-        self.save()
-        self.makeProfiling()
-        self.finalDateTime = timezone.now()
-        self.save()
+        # return self
+        profilingFile = makeProfiling.delay(self.id)
         return self
     def makeProfiling(self):
+        self.initialDateTime = timezone.now()
+        self.save()
         df = self.getFile(self.filename, self.sep, self.encoding, self.haveHeaders)
-        profile = ProfileReport(df, explorative=True, config_file="/app/config/pandas/pandasProfiling.min.yaml")
+        profile = ProfileReport(df, explorative=True, config_file="/app/config/pandas/pandasProfiling.yml")
         profiling = json.loads(profile.to_json())
-        self.__dict__.update(**profiling)
-        self.variables = json.dumps(self.variables, separators=(',', ':'))
+        self.__dict__.update(**profiling) # REVISAR
+        self.variables = json.dumps(self.variables, separators=(',', ':')) # REVISAR
+        self.save()
+        self.finalDateTime = timezone.now()
         self.save()
         # profile.to_file("/app" + str(self.id))
         return self

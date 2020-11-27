@@ -35,10 +35,12 @@
           )
           div(
           ) NUEVO PERFILAMIENTO
-    q-table.q-mt-lg(
+    q-table.q-mt-sm(
       row-key='id'
       bordered=false
       flat=true
+      rows-per-page-label=50
+      :rows-per-page-options='[25, 50, 100]'
       :data='dataTable'
       :columns='columns'
     )
@@ -77,7 +79,13 @@
             v-for='col in props.cols'
             :key='col.name'
             :props='props'
-          ) {{ col.value }}
+          )
+            span(
+              v-if='col.field.includes("DateTime")'
+            ) {{col.value | DateTime}}
+            span(
+              v-else
+            ) {{col.value}}
         q-tr(
           v-show='props.expand'
           :props='props'
@@ -85,13 +93,34 @@
           q-td.bg-grey-3(
             colspan='100%'
           )
-            router-link(
-              v-for="file in props.row.getProfilingFiles"
-              :to='{ name: "profilingFileView", params: { Id: file.id }}'
+            q-markup-table.transparent(
+              flat=true
+              bordered=false
+              dense=true
             )
-              p(
-              ) {{ file.filename }}
-
+              thead
+                tr
+                  th.text-left Nombre del archivo
+                  th.text-left Status
+                  th.text-right Fecha/Hora de inicio
+                  th.text-right Fecha/Hora de terminado
+                  th.text-right Acciones
+              tbody
+                tr(
+                  v-for="file in props.row.getProfilingFiles"
+                )
+                  td.text-left {{file.filename.split('/').pop()}}
+                  td.text-right 159
+                  td.text-right {{file.initialDateTime}}
+                  td.text-right {{file.finalDateTime}}
+                  td.text-right
+                    q-btn(
+                      outline=''
+                      color='primary'
+                      label='Ver resultados'
+                      size='sm'
+                      icon='description'
+                    )
 </template>
 
 <script>
@@ -140,12 +169,7 @@ export default {
             }
           `
         }).then(({ data }) => {
-          this.dataTable = data.prflProfilingQuery.edges.map(item => {
-            item.node.creationDateTime = item.node.creationDateTime ? this.$moment(item.node.creationDateTime).format('LL') : '-'
-            item.node.finalDateTime = item.node.finalDateTime ? this.$moment(item.node.finalDateTime).format('LL') : '-'
-            item.node.initialDateTime = item.node.initialDateTime ? this.$moment(item.node.initialDateTime).format('LL') : '-'
-            return item.node
-          })
+          this.dataTable = data.prflProfilingQuery.edges.map(item => item.node)
         }).catch((error) => {
           console.error('ProfilingList, getMyProfilings: ', error)
         })

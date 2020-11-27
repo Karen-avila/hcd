@@ -14,13 +14,13 @@ variables:
   descriptions: {}
 
 # Show the description at each variable (in addition to the overview tab)
-show_variable_description: False
+show_variable_description: True
 
 # Number of workers (0=multiprocessing.cpu_count())
 pool_size: 0
 
 # Show the progress bar
-progress_bar: False
+progress_bar: True
 
 # Per variable type description settings
 vars:
@@ -60,26 +60,26 @@ sort: None
 missing_diagrams:
     bar: True
     matrix: True
-    heatmap: False
-    dendrogram: False
+    heatmap: True
+    dendrogram: True
 
 correlations:
     pearson:
-      calculate: False
-      warn_high_correlations: False
+      calculate: True
+      warn_high_correlations: True
       threshold: 0.9
     spearman:
-      calculate: False
+      calculate: True
       warn_high_correlations: False
     kendall:
-      calculate: False
+      calculate: True
       warn_high_correlations: False
     phi_k:
-      calculate: False
+      calculate: True
       warn_high_correlations: False
     cramers:
-      calculate: False
-      warn_high_correlations: False
+      calculate: True
+      warn_high_correlations: True
       threshold: 0.9
     # Deprecated: do not use
     recoded:
@@ -90,7 +90,7 @@ correlations:
 # Bivariate / Pairwise relations
 interactions:
   targets: []
-  continuous: False
+  continuous: True
 
 # For categorical
 categorical_maximum_correlation_distinct: 100
@@ -140,8 +140,8 @@ duplicates:
 
 # Configuration related to the samples area
 samples:
-    head: 0
-    tail: 0
+    head: 10
+    tail: 10
 
 # Configuration related to the rejection of variables
 reject_variables: True
@@ -175,4 +175,4 @@ html:
       theme: None
       logo: ""
       primary_color: "#235b4e"
-      full_width: True
+      full_width: False

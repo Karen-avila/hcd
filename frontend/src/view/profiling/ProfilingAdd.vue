@@ -18,8 +18,7 @@ div.q-pa-md
       :to='{ name: "dashboard"}'
     )
     q-breadcrumbs-el(
-      label='Perfilamiento'
-      icon='widgets'
+      label='Perfilamientos'
       :to='{ name: "profilingList"}'
     )
     q-breadcrumbs-el.text-weight-medium(
@@ -35,16 +34,36 @@ div.q-pa-md
     inactive-color='secondary'
     animated=true
     flat=true
-    vertical=true
+    vertical=false
     @before-transition='beforeTransition'
   )
     // STEP 1
     q-step(
-      title='SELECCIÓN'
-      caption='de archivos'
+      title='NUEVO'
+      caption='perfilamiento'
       icon='create_new_folder'
       :name='1'
       :done='step > 1'
+    )
+      p.text-h6 Estas a punto de programar un perfilamiento
+      q-form(
+        style='max-width:800px;'
+      )
+        q-input(
+          outlined=true
+          v-model='profiling'
+          label='Nombre del perfilamiento'
+          hint='Ingresa el nombre con el que identificarás este perfilamiento'
+          lazy-rules=''
+          :rules="[ val => val && val.length > 2 || 'Ingresa un nombre mayor a 3 caracteres']"
+        )
+    // STEP 2
+    q-step(
+      title='SELECCIÓN'
+      caption='de archivos'
+      icon='create_new_folder'
+      :name='2'
+      :done='step > 2'
     )
       p.text-h6 Selecciona 1 o mas archivo
       span Seleccionados ({{selected.length}}):
@@ -58,13 +77,13 @@ div.q-pa-md
         :selected.sync='selected'
         :path='path'
       )
-    // STEP 2
+    // STEP 3
     q-step(
       title='VALIDA'
       caption='Revisa las cabeceras'
       icon='file_copy'
-      :name='2'
-      :done='step > 2'
+      :name='3'
+      :done='step > 3'
     )
       template(
         v-if='prflFiles.length > 0'
@@ -77,12 +96,12 @@ div.q-pa-md
           :File.sync='file'
           :Index.sync='index'
         )
-    // STEP 3
+    // STEP 4
     q-step(
       title='Programa'
       caption='Hora de procesamiento'
       icon='update'
-      :name='3'
+      :name='4'
     )
       h5 ¡Éxito!, estas a punto de enviar los siguientes archivos a perfilar
       q-item(
@@ -170,7 +189,8 @@ export default {
       selected: [],
       prflFiles: [],
       path: '/app/static/files/files/',
-      dialog: false
+      dialog: false,
+      profiling: ''
     }
   },
   methods: {
@@ -235,7 +255,23 @@ export default {
             }
           `
         }).then(({ data }) => {
+          this.runProfiling(data.prflSetProfiling.id)
           this.dialog = true
+        }).catch((error) => {
+          console.error('ProfilingAdd, setProfiling: ', error)
+        })
+    },
+    runProfiling (id) {
+      this.$apollo
+        .mutate({
+          mutation: this.$gql`
+            mutation{
+              prflRunProfiling(profilingid: "${id}") {
+                id
+              }
+            }
+          `
+        }).then(({ data }) => {
         }).catch((error) => {
           console.error('ProfilingAdd, setProfiling: ', error)
         })

@@ -8,3 +8,5 @@ Vue.prototype.$gql = gql
 
 import moment from 'moment'
 Vue.prototype.$moment = moment
+
+Vue.prototype.$filters = Vue.options.filters

@@ -1,7 +1,6 @@
 <template lang='pug'>
 
 <div class="q-pa-md">
-  <!-- BREADCRUMBS-->
   <q-breadcrumbs class="text-primary" active-color="primary">
     <template v-slot:separator="">
       <q-icon size="1.2em" name="arrow_forward" color="accent"></q-icon>

@@ -44,20 +44,29 @@ class Profiling(ModelBase):
                 TypeHeaderFile.objects.create(**datatype)
         return self
     def runProfiling(self):
-        # self.save() # BORRAR LINEA SOLO SE USO DE EJEMPLO
-        # if not self.initialDateTime:
-        self.initialDateTime = timezone.now()
-        self.save()
+        if not self.initialDateTime:
+            self.initialDateTime = timezone.now()
+            self.save()
         for profilingFile in ProfilingFile.objects.filter(profiling=self):
             profilingFile.runProfilingFile()
+        return self
+    def terminate(self):
         if not self.finalDateTime:
             self.finalDateTime = timezone.now()
             self.save()
-        return self
+        return True
     def getProfilingFiles(self):
         return ProfilingFile.objects.filter(profiling=self)
     def getLenProfilingFiles(self):
         return self.getProfilingFiles().count()
+    def getStatus(self):
+        if self.finalDateTime:
+            return 'terminated'
+        if self.initialDateTime:
+            return 'in process'
+        if self.creationDateTime:
+            return 'ready'
+
 ########################################################################################
 ########################################################################################
 VARS = {
@@ -85,8 +94,6 @@ class ProfilingFile(File):
         verbose_name_plural = VARS['plural']
         permissions = MakePermissions(VARS)
     def runProfilingFile(self):
-        # if self.finalDateTime:
-        # return self
         makeProfiling.delay(self.id)
         return self
     def makeProfiling(self):
@@ -95,9 +102,24 @@ class ProfilingFile(File):
         df = self.getFile(self.filename, self.sep, self.encoding, self.haveHeaders)
         profile = ProfileReport(df, explorative=True, config_file="/app/config/pandas/pandasProfiling.yml")
         profiling = json.loads(profile.to_json())
-        self.__dict__.update(**profiling) # REVISAR
-        self.variables = json.dumps(self.variables, separators=(',', ':')) # REVISAR
+        self.__dict__.update(**profiling)
+        self.variables = json.dumps(self.variables, separators=(',', ':'))
         self.finalDateTime = timezone.now()
         self.save()
+        if self.ProfilingTerminated():
+            self.profiling.terminate()
         # profile.to_file("/app" + str(self.id))
         return self
+    def getStatus(self):
+        if self.finalDateTime:
+            return 'terminated'
+        if self.initialDateTime:
+            return 'in process'
+        else:
+            return 'ready'
+    def ProfilingTerminated(self):
+        if not ProfilingFile.objects.filter(profiling=self.profiling, finalDateTime__isnull=True):
+            return True
+        return False
+
+

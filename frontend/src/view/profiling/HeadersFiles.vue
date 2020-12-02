@@ -237,7 +237,7 @@ export default {
         })
     },
     deleteTable () {
-      return this.$delete(this.file)
+      return this.$delete(this.prflFiles, this.index)
     }
   },
   watch: {

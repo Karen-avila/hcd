@@ -10,6 +10,10 @@ import base64
 #########   TYPES or NODES   ####################################
 #################################################################
 class ProfilingFileNode(BaseNode):
+    getStatus = graphene.String(
+        source="getStatus",
+        description="Status del Archivo de Perfilamiento"
+    )
     class Meta:
         model = ProfilingFile
         filter_fields = {
@@ -27,7 +31,12 @@ class ProfilingNode(BaseNode):
         description="Layout de informacion sobre la configuracion y ejecucion del archivo de perfilamiento."
     )
     getLenProfilingFiles = graphene.Int(
-        source="getLenProfilingFiles"
+        source="getLenProfilingFiles",
+        description="Número de archivos en el perfilamiento"
+    )
+    getStatus = graphene.String(
+        source="getStatus",
+        description="Status del perfilamiento"
     )
     class Meta:
         model = Profiling

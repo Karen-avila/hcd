@@ -75,10 +75,11 @@
               :icon='props.expand ? "remove" : "add"'
               @click='props.expand = !props.expand'
             )
-          q-td(
+          q-td.cursor-pointer(
             v-for='col in props.cols'
             :key='col.name'
             :props='props'
+            @click='props.expand = !props.expand'
           )
             span(
               v-if='col.field.includes("DateTime")'
@@ -93,33 +94,34 @@
           q-td.bg-grey-3(
             colspan='100%'
           )
-            q-markup-table.transparent(
+            q-markup-table.q-my-md.transparent(
               flat=true
               bordered=false
               dense=true
             )
               thead
                 tr
-                  th.text-left Nombre del archivo
-                  th.text-left Status
+                  th.text-right Nombre del archivo
+                  th.text-right Status
                   th.text-right Fecha/Hora de inicio
                   th.text-right Fecha/Hora de terminado
-                  th.text-right Acciones
+                  th.text-center Acciones
               tbody
                 tr(
                   v-for="file in props.row.getProfilingFiles"
                 )
-                  td.text-left {{file.filename.split('/').pop()}}
-                  td.text-right 159
-                  td.text-right {{file.initialDateTime}}
-                  td.text-right {{file.finalDateTime}}
-                  td.text-right
+                  td.text-right {{file.filename.split('/').pop()}}
+                  td.text-right {{file.getStatus}}
+                  td.text-right {{file.initialDateTime | DateTime}}
+                  td.text-right {{file.finalDateTime | DateTime}}
+                  td.text-center
                     q-btn(
                       outline=''
                       color='primary'
                       label='Ver resultados'
                       size='sm'
                       icon='description'
+                      :disabled='!file.finalDateTime'
                       :to='{name:"profilingFileView", params: {Id:file.id}}'
                     )
 </template>
@@ -132,7 +134,7 @@ export default {
       columns: [
         { name: 'id', label: 'Folio', field: 'id', style: 'width: 10px' },
         { name: 'name', label: 'Nombre', field: 'name' },
-        { name: 'status', label: 'Status', field: 'status' },
+        { name: 'getStatus', label: 'Status', field: 'getStatus' },
         { name: 'getLenProfilingFiles', label: 'No de archivos', field: 'getLenProfilingFiles' },
         { name: 'creationDateTime', label: 'Creación', field: 'creationDateTime' },
         { name: 'initialDateTime', label: 'Inicio', field: 'initialDateTime' },
@@ -156,13 +158,18 @@ export default {
                 edges {
                   node {
                     id
+                    name
                     creationDateTime
                     initialDateTime
                     finalDateTime
                     getLenProfilingFiles
+                    getStatus
                     getProfilingFiles {
                       id
                       filename
+                      initialDateTime
+                      finalDateTime
+                      getStatus
                     }
                   }
                 }
@@ -170,7 +177,9 @@ export default {
             }
           `
         }).then(({ data }) => {
-          this.dataTable = data.prflProfilingQuery.edges.map(item => item.node)
+          this.dataTable = data.prflProfilingQuery.edges.map((item) => {
+            return item.node
+          })
         }).catch((error) => {
           console.error('ProfilingList, getMyProfilings: ', error)
         })

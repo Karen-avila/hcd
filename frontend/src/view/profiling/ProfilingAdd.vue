@@ -97,6 +97,7 @@ div.q-pa-md
           v-bind:key='file.path'
           :File.sync='file'
           :Index.sync='index'
+          :PrflFiles.sync='prflFiles'
         )
     // STEP 4
     q-step(
@@ -108,6 +109,8 @@ div.q-pa-md
       h5 ¡Éxito!, estas a punto de enviar los siguientes archivos a perfilar
       q-item(
         v-for='file in prflFiles'
+        v-bind:data='file'
+        v-bind:key='file.path'
         clickable=''
         v-ripple=''
       )

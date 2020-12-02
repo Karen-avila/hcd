@@ -97,7 +97,7 @@ q-layout(
               exact=''
               clickable=''
               v-ripple=''
-              to='/standardization'
+              to='/cleaning'
             )
               q-item-section(
                 avatar=''
@@ -106,7 +106,7 @@ q-layout(
                   name='dashboard'
                 )
               q-item-section(
-              ) Estandarización
+              ) Limpieza
   q-page-container
     router-view
   q-footer.bg-footer.text-white

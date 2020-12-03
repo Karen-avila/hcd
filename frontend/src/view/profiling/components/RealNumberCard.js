@@ -27,7 +27,10 @@ export default {
         },
         plotOptions: {
           bar: {
-            distributed: true
+            distributed: true,
+            dataLabels: {
+              position: 'top'
+            }
           }
         },
         colors: ['#691c32']

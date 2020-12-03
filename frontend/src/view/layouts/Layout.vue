@@ -51,7 +51,7 @@ q-layout(
           content-class='bg-accent'
         ) MENU
     q-toolbar.bg-secondary(
-      style="min-height: 2px;"
+      style="min-height: 5px;"
     )
   q-drawer(
     v-model='right'
@@ -59,9 +59,7 @@ q-layout(
     side='right'
     elevated=''
   )
-    .full-height.bg-primary(
-      :class='$q.dark.isActive ? "drawer_dark" : "drawer_normal"'
-    )
+    .full-height.bg-aside-right.drawer_normal
       div.text-white(
         style='height: calc(100% - 117px);padding:10px;'
       )
@@ -115,12 +113,7 @@ q-layout(
         ) HERRAMIENTA DE CALIDAD DE DATOS | {{new Date().getFullYear()}}
 </template>
 
-<style lang='sass'>
-  .bg-footer
-    background-image: url(~assets/img/dashboard/footer.svg)
-  .q-drawer--right
-    border-left: 3px solid #bc955c
-</style>
+<style src='./Layout.sass' lang='sass'></style>
 
 <script>
 import { mapGetters } from 'vuex'

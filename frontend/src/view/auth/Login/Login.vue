@@ -1,6 +1,6 @@
 <template lang='pug'>
 q-layout
-  q-page-container
+  q-page-container.bg-login
     q-page.bg-image.flex.flex-center
       q-card.q-card-bordered.shadow-12.q-py-lg(
         v-bind:style='$q.screen.lt.sm ? {"width": "80%"} : {"width":"30%"}'

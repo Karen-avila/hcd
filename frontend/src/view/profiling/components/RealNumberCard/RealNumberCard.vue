@@ -1,5 +1,3 @@
-<script src='./RealNumberCard.js'></script>
-
 <template lang="pug">
   q-card.q-my-lg.q-py-md(
     flat
@@ -228,3 +226,5 @@
                           )
                             p equis
 </template>
+
+<script src='./RealNumberCard.js'></script>

@@ -52,4 +52,6 @@ COPY ./files/backend /static/files
 
 WORKDIR /app
 
+RUN python manage.py migrate
+
 ENTRYPOINT ["/entrypoint"]

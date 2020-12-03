@@ -1,0 +1,6 @@
+/frontend/dist
+/frontend/src-bex/www
+/frontend/src-capacitor
+/frontend/src-cordova
+/frontend/.quasar
+/frontend/node_modules

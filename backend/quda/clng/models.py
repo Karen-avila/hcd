@@ -4,25 +4,6 @@ from graphql import GraphQLError
 from django.conf import settings
 from quda.quda.models import File
 
-class BaseRule(ModelBase):
-    name = models.CharField(max_length=500)
-    description = models.TextField(blank=True)
-    def __str__(self):
-        return "BaseRule {0}".format(self.id)
-
-class CleaningRules(ModelBase):
-    #content_type = models.ForeignKey('ContentType', on_delete=models.CASCADE)
-    description = models.TextField()
-    name = models.CharField(max_length=100)
-    code = models.CharField(max_length=10)
-    def __str__(self):
-        return "CleaningRules {0}".format(self.id)
-    def initCleaningRules(self):
-        #from .modelsRules import * as rules
-        return True
-
-########################################################################################
-########################################################################################
 VARS = {
     'model': 'Cleaning',
     'name': 'Limpieza',
@@ -36,6 +17,61 @@ class Cleaning(ModelBase):
         verbose_name_plural = VARS['plural']
         permissions = MakePermissions(VARS)
     def __str__(self):
-        return "Limpieza {0}".format(self.id)
+        return "Cleaning {0}".format(self.id)
+
+########################################################################################
+########################################################################################
+VARS = {
+    'model': 'CleaningFile',
+    'name': 'Archivo de Limpieza',
+    'plural': 'Archivos de limpieza',
+}
+class CleaningFile(File):
+    cleaning = models.ForeignKey('Cleaning', on_delete=models.CASCADE, related_name='+', null=True, blank=True, editable=False, help_text="Referencia de integridad del perfilamiento con el archivo.")
+    initialDateTime = models.DateTimeField( null=True, blank=True, editable=False , help_text="Fecha y hora de inicio de la ejecucion del procesamiento del archivo.")
+    finalDateTime = models.DateTimeField(null=True, blank=True, editable=False, help_text="Fecha y hora de termino de la ejecucion del procesamiento del archivo.")
+    VARS = VARS
+    class Meta(ModelBase.Meta):
+        verbose_name = VARS['name']
+        verbose_name_plural = VARS['plural']
+        permissions = MakePermissions(VARS)
+    def __str__(self):
+        return "CleaningFile {0}".format(self.id)
+########################################################################################
+########################################################################################
+
+VARS = {
+    'model': 'CleaningRule',
+    'name': 'CleaningRule',
+    'plural': 'CleaningRule',
+}
+class CleaningRule(ModelBase):
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    VARS = VARS
+    class Meta(ModelBase.Meta):
+        verbose_name = VARS['name']
+        verbose_name_plural = VARS['plural']
+        permissions = MakePermissions(VARS)
+    def __str__(self):
+        return "CleaningRule {0}".format(self.id)
+########################################################################################
+########################################################################################
+
+VARS = {
+    'model': 'CleaningFileColumn',
+    'name': 'CleaningFileColumn',
+    'plural': 'CleaningFileColumn',
+}
+class CleaningFileColumn(File):
+    cleaningFile = models.ForeignKey('CleaningFile', on_delete=models.CASCADE, related_name='+', null=True, blank=True, editable=False, help_text="")
+    cleaningRules = models.ManyToManyField(CleaningRule)
+    index = models.PositiveIntegerField()
+    VARS = VARS
+    class Meta(ModelBase.Meta):
+        verbose_name = VARS['name']
+        verbose_name_plural = VARS['plural']
+        permissions = MakePermissions(VARS)
+    def __str__(self):
+        return "CleaningFileColumn {0}".format(self.id)
 ########################################################################################
 ########################################################################################

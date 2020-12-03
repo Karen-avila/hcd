@@ -1,5 +1,10 @@
 from quda.core.modelsBase import *
-from .models import BaseRule
+
+class BaseRule(ModelBase):
+    name = models.CharField(max_length=500)
+    description = models.TextField(blank=True)
+    def __str__(self):
+        return "BaseRule {0}".format(self.id)
 
 class Trim(BaseRule):
     pass
@@ -167,7 +172,7 @@ class FormatDecimal(BaseRule):
 
 class Rpad(BaseRule):
     length = models.IntegerField(default=0)
-    caracter = models.charField(default='')
+    caracter = models.CharField(default='')
     def apply(self, value):
         return value
     def getCode(self):
@@ -179,7 +184,7 @@ class Rpad(BaseRule):
 
 class Lpad(BaseRule):
     length = models.IntegerField(default=0)
-    caracter = models.charField(default='')
+    caracter = models.CharField(default='')
     def apply(self, value):
         return value
     def getCode(self):
@@ -191,7 +196,7 @@ class Lpad(BaseRule):
 
 class ReplaceCaracter(BaseRule):
     search = models.CharField(default=0)
-    replace = models.charField(default='')
+    replace = models.CharField(default='')
     def apply(self, value):
         return value
     def getCode(self):
@@ -203,7 +208,7 @@ class ReplaceCaracter(BaseRule):
 
 class ReplaceWord(BaseRule):
     search = models.CharField(default=0)
-    replace = models.charField(default='')
+    replace = models.CharField(default='')
     def apply(self, value):
         return value
     def getCode(self):

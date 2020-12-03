@@ -277,3 +277,6 @@ frontend/.quasar/
 temp/backend/files/
 backend/static/media/
 backend/static/staticfiles/
+
+files/backend/logs/*.pid
+files/backend/.ipython/*

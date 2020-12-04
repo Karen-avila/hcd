@@ -1,12 +1,15 @@
 from quda.core.modelsBase import *
+from django.apps import apps
 
 class BaseRule(ModelBase):
     name = models.CharField(max_length=500)
     description = models.TextField(blank=True)
     def __str__(self):
         return "BaseRule {0}".format(self.id)
+    def getRule(self, name):
+        return apps.get_model('clng', name)
 
-class Trim(BaseRule):
+class TrimRule(BaseRule):
     pass
     def apply(self, value):
         return value
@@ -19,7 +22,7 @@ class Trim(BaseRule):
     def getExample(self):
         return '"Hola   mundo" => "Hola mundo"'
 
-class Ltrim(BaseRule):
+class LtrimRule(BaseRule):
     pass
     def apply(self, value):
         return value
@@ -32,7 +35,7 @@ class Ltrim(BaseRule):
     def getExample(self):
         return '"  Hola mundo" => "Hola mundo"'
 
-class Rtrim(BaseRule):
+class RtrimRule(BaseRule):
     pass
     def apply(self, value):
         return value
@@ -45,12 +48,12 @@ class Rtrim(BaseRule):
     def getExample(self):
         return '"Hola mundo    " => "hola mundo"'
 
-class Upper(BaseRule):
+class UpperRule(BaseRule):
     pass
     def apply(self, value):
         return value
     def getCode(self):
-        return 'upper
+        return 'upper'
     def getName(self):
         return 'MAYUS'
     def getDescription(sel):
@@ -58,7 +61,7 @@ class Upper(BaseRule):
     def getExample(self):
         return '"Hola mundo    " => "HOLA MUNDO"'
 
-class Lower(BaseRule):
+class LowerRule(BaseRule):
     pass
     def apply(self, value):
         return value
@@ -71,7 +74,7 @@ class Lower(BaseRule):
     def getExample(self):
         return '"Hola Mundo" => "hola mundo"'
 
-class InitCap(BaseRule):
+class InitCapRule(BaseRule):
     pass
     def apply(self, value):
         return value
@@ -84,7 +87,7 @@ class InitCap(BaseRule):
     def getExample(self):
         return '"hola mundo. saludos!." => "Hola Mundo. Saludos!."'
 
-class Length(BaseRule):
+class LengthRule(BaseRule):
     pass
     def apply(self, value):
         return value
@@ -97,7 +100,7 @@ class Length(BaseRule):
     def getExample(self):
         return '"hola mundo. saludos!." => "21"'
 
-class ParserNamed(BaseRule):
+class ParserNamedRule(BaseRule):
     pass
     def apply(self, value):
         return value
@@ -110,7 +113,7 @@ class ParserNamed(BaseRule):
     def getExample(self):
         return '"Jose Alfredo Marquez Gutierrez" => "Jose", "Alfredo", "Marquez", "Gutierrez"'
 
-class CleanAll(BaseRule):
+class CleanAllRule(BaseRule):
     pass
     def apply(self, value):
         return value
@@ -123,7 +126,7 @@ class CleanAll(BaseRule):
     def getExample(self):
         return '"*"'
 
-class ToInteger(BaseRule):
+class ToIntegerRule(BaseRule):
     pass
     def apply(self, value):
         return value
@@ -134,7 +137,7 @@ class ToInteger(BaseRule):
     def getDescription(sel):
         return ''
 
-class SubstringMatch(BaseRule):
+class SubstringMatchRule(BaseRule):
     patron = models.CharField(max_length=200)
     def apply(self, value):
         return value
@@ -147,7 +150,7 @@ class SubstringMatch(BaseRule):
     def getExample(self):
         return 'patron="mundo" : "Hola mundo" => "hola "'
 
-class Substring(BaseRule):
+class SubstringRule(BaseRule):
     init = models.IntegerField(default=0)
     end = models.IntegerField(default=0)
     def apply(self, value):
@@ -159,7 +162,7 @@ class Substring(BaseRule):
     def getDescription(sel):
         return ''
 
-class FormatDecimal(BaseRule):
+class FormatDecimalRule(BaseRule):
     decimal = models.IntegerField(default=0)
     def apply(self, value):
         return value
@@ -170,7 +173,7 @@ class FormatDecimal(BaseRule):
     def getDescription(sel):
         return ''
 
-class Rpad(BaseRule):
+class RpadRule(BaseRule):
     length = models.IntegerField(default=0)
     caracter = models.CharField(default='')
     def apply(self, value):
@@ -182,7 +185,7 @@ class Rpad(BaseRule):
     def getDescription(sel):
         return ''
 
-class Lpad(BaseRule):
+class LpadRule(BaseRule):
     length = models.IntegerField(default=0)
     caracter = models.CharField(default='')
     def apply(self, value):
@@ -194,7 +197,7 @@ class Lpad(BaseRule):
     def getDescription(sel):
         return ''
 
-class ReplaceCaracter(BaseRule):
+class ReplaceCaracterRule(BaseRule):
     search = models.CharField(default=0)
     replace = models.CharField(default='')
     def apply(self, value):
@@ -206,7 +209,7 @@ class ReplaceCaracter(BaseRule):
     def getDescription(sel):
         return ''
 
-class ReplaceWord(BaseRule):
+class ReplaceWordRule(BaseRule):
     search = models.CharField(default=0)
     replace = models.CharField(default='')
     def apply(self, value):
@@ -218,7 +221,7 @@ class ReplaceWord(BaseRule):
     def getDescription(sel):
         return ''
 
-class DateFprmat(BaseRule):
+class DateFprmatRule(BaseRule):
     inputFormat = models.CharField(default ='dd/MM/yyyy')
     outputFormat = models.CharField(default ='yyyyMMdd')
     def apply(self, value):
@@ -230,7 +233,7 @@ class DateFprmat(BaseRule):
     def getDescription(sel):
         return ''
 
-class ToDate(BaseRule):
+class ToDateRule(BaseRule):
     outputFormat = models.CharField(default ='%m/%d/%Y')
     def apply(self, value):
         return value

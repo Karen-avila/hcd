@@ -81,7 +81,6 @@ class Mutation(object):
     prflProfilingFileQuery = DjangoFilterConnectionField(ProfilingFileNode)
     prflProfilingFile = graphene.relay.Node.Field(ProfilingFileNode)
 
-
 #################################################################
 #########    SUBSCRIPTIONS    ###################################
 #################################################################

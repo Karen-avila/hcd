@@ -69,7 +69,7 @@ class FileInput(graphene.InputObjectType):
     datatypes = graphene.List(
         TypeHeaderFileInput,
         required=False,
-        description="Tiene encabezados?"
+        description="Forzar supertipado a columna"
     )
     class Meta:
         description = "Forma para leer un archivo CSV"

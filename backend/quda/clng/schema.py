@@ -11,15 +11,15 @@ class OrderedRulesInput(graphene.InputObjectType):
     columnsinRules = graphene.Field(ColumnsinRulesInput, required=False)
     order = graphene.Int()
     class Meta:
-        description = ""
+        description = "Orden de Reglas a aplicar"
 
 #################################################################
 class CleaningFileInput(FileInput):
-    destinationFileName = graphene.String()
-    orderedRules = graphene.List(OrderedRulesInput, required=False)
+    destinationFileName = graphene.String( description='Ruta donde se alojara el archivo transformado')
+    orderedRules = graphene.List(OrderedRulesInput, required=False, description='Orden de ejecucion de las reglas')
     class Meta:
-        description = ""
         only_fields = ('filename','sep','haveHeaders','destinationFileName','orderedRules',)
+        description = "Agrega la configuracion de tus archivos"
 
 #################################################################
 #########   TYPES or NODES   ####################################
@@ -66,3 +66,10 @@ class Mutation(object):
     )
     def resolve_clngSetCleaning(self, info, name, files):
         return Cleaning().setCleaning(info, name, files)
+
+    clngRunCleaning = graphene.Field(CleaningNode,
+        cleaningid = graphene.ID(),
+        description = "Ejecuta la limpieza por cada uno de los archivos que tiene configurados"
+    )
+    def resolve_clngRunCleaning(self, info, cleaningid):
+        return Cleaning().runCleaning(info,cleaningid)

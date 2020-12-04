@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, Permission, Group
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.sites.models import Site
 from django.db import models, transaction
 from django.urls import reverse

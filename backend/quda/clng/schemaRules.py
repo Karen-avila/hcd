@@ -12,7 +12,7 @@ class ColumnInput(graphene.InputObjectType):
 
 #################################################################
 class BaseRuleInput(graphene.InputObjectType):
-    column = graphene.List(ColumnInput)
+    apply_rule = graphene.Boolean(required=False, default_value=True)
 
 #################################################################
 class TrimRuleInput(BaseRuleInput):
@@ -27,8 +27,9 @@ class SubstringRuleInput(BaseRuleInput):
     init = graphene.Int()
     end = graphene.Int()
 
+#################################################################
 class ColumnsinRulesInput(graphene.InputObjectType):
     columns = graphene.List(ColumnInput, required=False)
-    trimRules = graphene.List(TrimRuleInput, required=False)
-    ltrimRules = graphene.List(LtrimRuleInput, required=False)
-    substringRules = graphene.List(SubstringRuleInput, required=False)
+    trimRule = graphene.Field(TrimRuleInput, required=False)
+    ltrimRule = graphene.Field(LtrimRuleInput, required=False)
+    substringRule = graphene.Field(SubstringRuleInput, required=False)

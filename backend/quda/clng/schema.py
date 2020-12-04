@@ -19,6 +19,7 @@ class CleaningFileInput(FileInput):
     orderedRules = graphene.List(OrderedRulesInput, required=False)
     class Meta:
         description = ""
+        only_fields = ('filename','sep','haveHeaders','destinationFileName','orderedRules',)
 
 #################################################################
 #########   TYPES or NODES   ####################################
@@ -64,5 +65,4 @@ class Mutation(object):
         description = "Configura la limpieza a partir de 1 o mas archivos"
     )
     def resolve_clngSetCleaning(self, info, name, files):
-        return Cleaning.setCleaning(info, name, files)
-
+        return Cleaning().setCleaning(info, name, files)

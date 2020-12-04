@@ -1,13 +1,13 @@
-from django.contrib.contenttypes.models import ContentType
 from quda.core.modelsBase import *
 from graphql import GraphQLError
 from django.conf import settings
 from quda.quda.models import File
+from .modelsRules import *
 
 VARS = {
     'model': 'Cleaning',
-    'name': 'Limpieza',
-    'plural': 'Limpiezas',
+    'name': 'Cleaning',
+    'plural': 'Cleaning',
 }
 class Cleaning(ModelBase):
     user = models.ForeignKey('core.User', null=True, on_delete=models.SET_NULL, related_name='+')
@@ -31,19 +31,28 @@ class Cleaning(ModelBase):
             file['cleaning'] = self
             cleaningFile = CleaningFile.objects.create(**file)
             for orderedRule in orderedRules:
-                columnsinRules = cleaningFile.pop('columnsinRules')
+                columnsinRules = orderedRule.pop('columnsinRules')
                 orderedRule['cleaningFile'] = cleaningFile
-                cleaningFileOrderedRulesInColumns = CleaningFileOrderedRulesInColumns.create(**orderedRule)
-                for column in columnsinRules.columns:
-                    cleaningFileOrderedRulesInColumns.columns.add(CleaningFileColumn.create(**column))
+                cleaningFileOrderedRulesInColumns = CleaningFileOrderedRulesInColumns.objects.create(**orderedRule)
+                columns = columnsinRules.pop('columns')
+                for column in columns:
+                    column['cleaningFile'] = cleaningFile
+                    cleaningFileOrderedRulesInColumns.columns.add(CleaningFileColumn.objects.get_or_create(**column)[0])
+                for key, value in columnsinRules.items():
+                    value.pop('apply_rule')
+                    contentType = ContentType.objects.get(app_label='clng', model=key.lower())
+                    rule = contentType.model_class().objects.create(**value)
+                    cleaningFileOrderedRulesInColumns.rules.add(
+                        CleaningFileRule.objects.get_or_create(content_type=contentType, object_id=rule.pk, cleaningFile=cleaningFile)[0]
+                    )
         return self
 
 ########################################################################################
 ########################################################################################
 VARS = {
     'model': 'CleaningFile',
-    'name': 'Archivo de Limpieza',
-    'plural': 'Archivos de limpieza',
+    'name': 'CleaningFile',
+    'plural': 'CleaningFile',
 }
 class CleaningFile(File):
     cleaning = models.ForeignKey('Cleaning', on_delete=models.CASCADE, related_name='+', null=True, blank=True, editable=False, help_text="Referencia de integridad del perfilamiento con el archivo.")
@@ -61,22 +70,22 @@ class CleaningFile(File):
 ########################################################################################
 ########################################################################################
 VARS = {
-    'model': 'CleaningRule',
-    'name': 'CleaningRule',
-    'plural': 'CleaningRule',
+    'model': 'CleaningFileOrderedRulesInColumns',
+    'name': 'CleaningFileOrderedRulesInColumns',
+    'plural': 'CleaningFileOrderedRulesInColumns',
 }
 class CleaningFileOrderedRulesInColumns(ModelBase):
-    cleaningFile = models.ForeignKey('CleaningFile', on_delete=models.CASCADE, related_name='+', null=True, blank=True, editable=False, help_text="")
+    cleaningFile = models.ForeignKey('CleaningFile', on_delete=models.CASCADE, related_name='+', editable=False, help_text="")
     order = models.PositiveIntegerField()
-    rules = models.ManyToManyField(ContentType, blank=True)
     columns = models.ManyToManyField('CleaningFileColumn', blank=True)
+    rules = models.ManyToManyField('CleaningFileRule', blank=True)
     VARS = VARS
     class Meta(ModelBase.Meta):
         verbose_name = VARS['name']
         verbose_name_plural = VARS['plural']
         permissions = MakePermissions(VARS)
     def __str__(self):
-        return "CleaningRule {0}".format(self.id)
+        return "CleaningFileOrderedRulesInColumns {0}".format(self.id)
 
 ########################################################################################
 ########################################################################################
@@ -86,6 +95,7 @@ VARS = {
     'plural': 'CleaningFileColumn',
 }
 class CleaningFileColumn(File):
+    cleaningFile = models.ForeignKey('CleaningFile', on_delete=models.CASCADE, related_name='+', editable=False, help_text="")
     index = models.PositiveIntegerField()
     name = models.CharField(max_length=250, null=True, blank=True)
     VARS = VARS
@@ -98,3 +108,20 @@ class CleaningFileColumn(File):
 
 ########################################################################################
 ########################################################################################
+VARS = {
+    'model': 'CleaningFileRule',
+    'name': 'CleaningFileRule',
+    'plural': 'CleaningFileRule',
+}
+class CleaningFileRule(File):
+    cleaningFile = models.ForeignKey('CleaningFile', on_delete=models.CASCADE, related_name='+', editable=False, help_text="")
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+    VARS = VARS
+    class Meta(ModelBase.Meta):
+        verbose_name = VARS['name']
+        verbose_name_plural = VARS['plural']
+        permissions = MakePermissions(VARS)
+    def __str__(self):
+        return "CleaningFileColumn {0}".format(self.id)

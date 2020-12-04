@@ -16,3 +16,15 @@ class CleaningFileOrderedRulesInColumnsAdmin(BaseAdmin):
 @admin.register(CleaningFileColumn)
 class CleaningFileColumnAdmin(BaseAdmin):
     pass
+
+@admin.register(CleaningFileRule)
+class CleaningFileRuleAdmin(BaseAdmin):
+    pass
+
+@admin.register(TrimRule)
+class TrimRuleAdmin(BaseAdmin):
+    pass
+
+@admin.register(SubstringRule)
+class SubstringRuleAdmin(BaseAdmin):
+    pass

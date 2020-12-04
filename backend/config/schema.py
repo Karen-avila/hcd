@@ -2,6 +2,7 @@ import quda.core.schema
 import quda.quda.schema
 import quda.prfl.schema
 import quda.clng.schema
+import quda.mtch.schema
 
 import graphene
 
@@ -18,6 +19,7 @@ class Mutation(
         quda.quda.schema.Mutation,
         quda.prfl.schema.Mutation,
         quda.clng.schema.Mutation,
+        quda.mtch.schema.Mutation,
         graphene.ObjectType
     ):
     pass

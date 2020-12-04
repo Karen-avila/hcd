@@ -41,3 +41,6 @@ graphene-subscriptions==1.0.2    # https://github.com/jaydenwindle/graphene-subs
 pandas==1.1.4    # https://github.com/pandas-dev/pandas
 pandas-profiling[notebook]==2.9.0    # https://github.com/pandas-profiling/pandas-profiling
 pyspark==3.0.1    # https://github.com/apache/spark/tree/master/python/pyspark
+
+jellyfish
+recordlinkage

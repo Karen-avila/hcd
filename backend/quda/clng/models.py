@@ -741,4 +741,3 @@ class CleaningFileRule(File):
         permissions = MakePermissions(VARS)
     def __str__(self):
         return "CleaningFileColumn {0}".format(self.id)
-

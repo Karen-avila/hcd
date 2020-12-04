@@ -87,7 +87,7 @@ class CleaningFile(File):
     def getCleaningFileOrderedRulesInColumns(self):
         return CleaningFileOrderedRulesInColumns.objects.filter(cleaningFile=self).order_by('order')
     def runCleaningFile(self):
-        #makeProfiling.delay(self.id)
+        #makeCleaningFile.delay(self.id)
         self.makeCleaningFile()
         return self
     def makeCleaningFile(self):
@@ -175,4 +175,3 @@ class CleaningFileRule(File):
         return True
     def applyRule(self, value):
         return self.content_object.apply(value)
-

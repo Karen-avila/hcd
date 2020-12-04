@@ -22,6 +22,12 @@ class Cleaning(ModelBase):
         permissions = MakePermissions(VARS)
     def __str__(self):
         return "Cleaning {0}".format(self.id)
+    def getCleaningFiles(self):
+        return CleaningFile.objects.filter(profiling=self)
+    def checkIfTerminated(self):
+        if not CleaningFile.objects.filter(cleaning=self, finalDateTime__isnull=True):
+            return True
+        return False
     def setCleaning(self, info, name, files):
         self.user = info.context.user
         self.name = name
@@ -46,6 +52,18 @@ class Cleaning(ModelBase):
                         CleaningFileRule.objects.get_or_create(content_type=contentType, object_id=rule.pk, cleaningFile=cleaningFile)[0]
                     )
         return self
+    def runCleaning(self):
+        if not self.initialDateTime:
+            self.initialDateTime = timezone.now()
+            self.save()
+        for cleaningFile in self.getCleaningFiles():
+            cleaningFile.runCleaningFile()
+    def setTerminate(self):
+        if not self.finalDateTime:
+            self.finalDateTime = timezone.now()
+            self.save()
+        return True
+
 
 ########################################################################################
 ########################################################################################
@@ -66,6 +84,23 @@ class CleaningFile(File):
         permissions = MakePermissions(VARS)
     def __str__(self):
         return "CleaningFile {0}".format(self.id)
+    def getCleaningFileOrderedRulesInColumns(self):
+        return CleaningFileOrderedRulesInColumns.objects.filter(cleaningFile=self).order_by('order')
+    def runCleaningFile(self):
+        #makeProfiling.delay(self.id)
+        self.makeCleaningFile()
+        return self
+    def makeCleaningFile(self):
+        self.initialDateTime = timezone.now()
+        self.save()
+        for cleaningFileOrderedRulesInColumns in self.getCleaningFileOrderedRulesInColumns():
+            cleaningFileOrderedRulesInColumns.makecleaningFileOrderedRulesInColumns()
+        self.finalDateTime = timezone.now()
+        self.save()
+        if self.cleaning.checkIfTerminated():
+            self.cleaning.setTerminate()
+        return self
+
 
 ########################################################################################
 ########################################################################################
@@ -86,6 +121,11 @@ class CleaningFileOrderedRulesInColumns(ModelBase):
         permissions = MakePermissions(VARS)
     def __str__(self):
         return "CleaningFileOrderedRulesInColumns {0}".format(self.id)
+    def makecleaningFileOrderedRulesInColumns(self):
+        file = self.cleaningFile.getFile(self.cleaningFile.filename, self.cleaningFile.sep, self.cleaningFile.encoding, self.cleaningFile.haveHeaders)
+        for rule in self.rules.all():
+            rule.applyInColumnFile(file, columns.all())
+
 
 ########################################################################################
 ########################################################################################
@@ -106,6 +146,7 @@ class CleaningFileColumn(File):
     def __str__(self):
         return "CleaningFileColumn {0}".format(self.id)
 
+
 ########################################################################################
 ########################################################################################
 VARS = {
@@ -125,3 +166,13 @@ class CleaningFileRule(File):
         permissions = MakePermissions(VARS)
     def __str__(self):
         return "CleaningFileColumn {0}".format(self.id)
+    def applyInColumnFile(self, file, columns):
+        if self.cleaningFile.haveHeaders:
+            file = file[1:]
+        for row in file:
+            for column in columns:
+                row[column.index] = self.applyRule(row[column.index])
+        return True
+    def applyRule(self, value):
+        return self.content_object.apply(value)
+

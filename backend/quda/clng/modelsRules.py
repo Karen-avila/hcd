@@ -11,6 +11,8 @@ class BaseRule(ModelBase):
         verbose_name = VARS['name']
         verbose_name_plural = VARS['plural']
         permissions = MakePermissions(VARS)
+    def getClassName(self):
+        return self.__class__.__name__
 
 VARS = {
     'model':'TrimRule',

@@ -39,7 +39,7 @@
           apexchart(type='bar', :options='chartOptions4', :series='series4')
           </div>
         </div>
-        <div align="right"><q-btn color="white" text-color="black" v-on:click="show = !show" label="Alternar detalles" /></div>
+        <div align="right"><q-btn color="white" text-color="black" v-on:click="show = !show" label="Alternarr detalles" /></div>
         </q-card-section>
         <q-card-section class="q-pt-none" v-if="show">
         <div class="row">

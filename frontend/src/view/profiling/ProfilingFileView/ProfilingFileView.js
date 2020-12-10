@@ -1,8 +1,16 @@
 import RealNumberCard from '@view/profiling/components/RealNumberCard/RealNumberCard.vue'
+import BooleanCard from '@view/profiling/components/BooleanCard/BooleanCard.vue'
+import CategoricalCard from '@view/profiling/components/CategoricalCard/CategoricalCard.vue'
+import DateCard from '@view/profiling/components/DateCard/DateCard.vue'
+import UrlCard from '@view/profiling/components/UrlCard/UrlCard.vue'
 export default {
   name: 'ProfilingFileView',
   components: {
-    RealNumberCard
+    RealNumberCard,
+    BooleanCard,
+    CategoricalCard,
+    DateCard,
+    UrlCard
   },
   data () {
     return {
@@ -32,6 +40,7 @@ export default {
           `
         }).then(({ data }) => {
           this.variables = JSON.parse(data.prflProfilingFile.variables)
+          console.log(JSON.parse(data.prflProfilingFile.variables))
         })
     }
   }

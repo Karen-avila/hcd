@@ -18,7 +18,7 @@
       :to='{ name: "dashboard"}'
     )
     q-breadcrumbs-el(
-      label='Archicho de Perfilamiento'
+      label='Archivo de Perfilamiento'
       icon='widgets'
       :to='{ name: "profilingList"}'
     )
@@ -28,8 +28,44 @@
     v-if='variables'
     v-for='(item, key) in variables'
   )
+    BooleanCard(
+      v-if='item.type === "Variable.TYPE_BOOL"'
+      :cardData='item'
+      :cardName='key'
+    )
+    template(
+    v-if='variables'
+    v-for='(item, key) in variables'
+  )
     RealNumberCard(
       v-if='item.type === "Variable.TYPE_NUM"'
+      :cardData='item'
+      :cardName='key'
+    )
+    template(
+    v-if='variables'
+    v-for='(item, key) in variables'
+  )
+    CategoricalCard(
+      v-if='item.type === "Variable.TYPE_CAT"'
+      :cardData='item'
+      :cardName='key'
+    )
+    template(
+    v-if='variables'
+    v-for='(item, key) in variables'
+  )
+    DateCard(
+      v-if='item.type === "Variable.DATE"'
+      :cardData='item'
+      :cardName='key'
+    )
+     template(
+    v-if='variables'
+    v-for='(item, key) in variables'
+  )
+    DateCard(
+      v-if='item.type === "Variable.Url"'
       :cardData='item'
       :cardName='key'
     )
